@@ -1,2 +1,128 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
+
+/* Self-hosted variable fonts. Vite resolves + hashes the URLs. */
+@font-face {
+	font-family: 'Manrope';
+	src: url('../lib/assets/fonts/Manrope/Manrope-Variable.woff2') format('woff2');
+	font-weight: 200 800;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Bricolage Grotesque';
+	src: url('../lib/assets/fonts/Bricolage_Grotesque/BricolageGrotesque-Variable.woff2')
+		format('woff2');
+	font-weight: 200 800;
+	font-stretch: 75% 100%;
+	font-style: normal;
+	font-display: swap;
+}
+
+@theme {
+	/* --- Fonts (loaded via Google Fonts in app.html) --- */
+	--font-sans: 'Manrope', system-ui, sans-serif;
+	--font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+
+	/* --- Brand colors --- */
+	/* prime: BigLemon yellow — CTAs, links, accents on dark */
+	--color-prime: #f2e63c;
+	--color-prime-100: #fff8b4;
+	--color-prime-200: #fff37a; /* hover state of prime */
+	--color-prime-300: #f2e63c;
+
+	/* second: deep navy — page background, text on light, dark cards */
+	--color-second: #0f1538;
+	--color-second-50: #e4e8fa;
+	--color-second-100: #d9ddf2; /* nav links on dark */
+	--color-second-200: #c3c9e8; /* body copy on dark */
+	--color-second-300: #b7bedf; /* muted copy on dark */
+	--color-second-400: #9ba2c8; /* captions on dark */
+	--color-second-450: #8e96c0; /* footer text */
+	--color-second-500: #7c84ae;
+	--color-second-550: #767c9e; /* muted copy on light */
+	--color-second-600: #4a4f72; /* body copy on light */
+	--color-second-700: #1d2a63; /* hover state of second */
+	--color-second-750: #1a2154; /* image placeholder bg on dark */
+	--color-second-800: #151c48; /* gradient partner of second */
+	--color-second-900: #0f1538;
+	--color-second-950: #0b1030; /* footer bg */
+
+	/* supporting palette */
+	--color-cream: #fffcee; /* light section bg + text on dark */
+	--color-cream-200: #f3f1dc; /* image placeholder bg on light */
+	--color-lime: #c2e23f; /* fresh-green accent (badges, checks) */
+	--color-olive: #8a8f52; /* eyebrow headings on light */
+	--color-sun: #f7b32b; /* accent: BigLemon 2 */
+	--color-mandarin: #ee7b2f; /* accent: BigOrange */
+
+	/* --- Shadows --- */
+	--shadow-glow: 0 6px 20px rgb(242 230 60 / 0.28); /* small yellow CTA */
+	--shadow-glow-lg: 0 12px 34px rgb(242 230 60 / 0.3); /* hero CTA */
+	--shadow-card: 0 8px 24px rgb(15 21 56 / 0.07); /* card hover on light */
+	--shadow-card-lg: 0 14px 34px rgb(15 21 56 / 0.09);
+
+	/* --- Radii --- */
+	--radius-card: 24px; /* content cards (22–26px in prototype) */
+	--radius-field: 12px; /* form inputs */
+
+	/* --- Tracking --- */
+	--tracking-eyebrow: 0.18em; /* section eyebrow headings */
+
+	/* --- Animations --- */
+	--animate-float: float 7.5s ease-in-out infinite; /* hero lemon */
+	--animate-spin-slow: spin-slow 44s linear infinite; /* dashed orbit ring */
+	--animate-marquee: marquee 34s linear infinite; /* yellow ticker band */
+	--animate-pulse-glow: pulse-glow 9s ease-in-out infinite; /* glow blobs */
+
+	@keyframes float {
+		0%,
+		100% {
+			transform: translateY(0) rotate(-1.5deg);
+		}
+		50% {
+			transform: translateY(-22px) rotate(1.5deg);
+		}
+	}
+	@keyframes spin-slow {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+	@keyframes marquee {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
+	@keyframes pulse-glow {
+		0%,
+		100% {
+			opacity: 0.5;
+			transform: scale(1);
+		}
+		50% {
+			opacity: 0.85;
+			transform: scale(1.08);
+		}
+	}
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+	body {
+		background-color: var(--color-second);
+		color: var(--color-cream);
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		overflow-x: hidden;
+	}
+	::selection {
+		background-color: var(--color-prime);
+		color: var(--color-second);
+	}
+}
