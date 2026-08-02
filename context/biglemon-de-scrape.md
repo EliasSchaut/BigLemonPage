@@ -9,19 +9,19 @@
 
 ## Stammdaten (aus Meta-Tags aller Seiten)
 
-| Feld | Wert |
-|---|---|
-| Firma | BigLemon Deutschland / Big Lemon |
-| Inhaber | Christopher Moravec |
-| Straße | Angelstraße 110 |
-| PLZ / Ort | 68199 Mannheim |
-| Land | Deutschland |
-| Telefon (mobil) | +49 176 26043698 |
-| E-Mail (Meta) | steff.stellberg@biglemon.de |
-| E-Mail (Kontakt/Impressum) | welcome@biglemon.de |
-| USt-IdNr. | DE 272012285 |
-| Logo/Grafik | Monika Moras (unter Verwendung von iStock-Bildern) |
-| Slogan | „Lieber Natur Pur" – Cocktails, die begeistern – Erlebe die BigLemonBar! |
+| Feld                       | Wert                                                                     |
+| -------------------------- | ------------------------------------------------------------------------ |
+| Firma                      | BigLemon Deutschland / Big Lemon                                         |
+| Inhaber                    | Christopher Moravec                                                      |
+| Straße                     | Angelstraße 110                                                          |
+| PLZ / Ort                  | 68199 Mannheim                                                           |
+| Land                       | Deutschland                                                              |
+| Telefon (mobil)            | +49 176 26043698                                                         |
+| E-Mail (Meta)              | steff.stellberg@biglemon.de                                              |
+| E-Mail (Kontakt/Impressum) | welcome@biglemon.de                                                      |
+| USt-IdNr.                  | DE 272012285                                                             |
+| Logo/Grafik                | Monika Moras (unter Verwendung von iStock-Bildern)                       |
+| Slogan                     | „Lieber Natur Pur" – Cocktails, die begeistern – Erlebe die BigLemonBar! |
 
 ---
 
@@ -65,7 +65,7 @@ Da man bei uns alles mit allem mischen kann, finden sicher auch Sie Ihren Liebli
 ## 2. Über uns
 
 **Title:** Lemonbar - Über uns
-**Meta-Description:** {{company_name}}, Café und Bar in {{city}}, bietet Cocktails, Kaffee und Kuchen, kleine Gerichte, ein interessantes Ambiente und abwechslungsreiches Programm. *(nicht ersetzte Template-Platzhalter)*
+**Meta-Description:** {{company_name}}, Café und Bar in {{city}}, bietet Cocktails, Kaffee und Kuchen, kleine Gerichte, ein interessantes Ambiente und abwechslungsreiches Programm. _(nicht ersetzte Template-Platzhalter)_
 **Keywords:** Café, Bar, Getränke, Speisen, Programm, Cocktails, Musik, Ambiente
 
 ### BigLemon: die Geschichte
@@ -93,13 +93,13 @@ Die Mitarbeiter der BigLemon freuen sich, Sie bei uns begrüßen und bewirten zu
 
 ### Team-Mitglieder (aus Bildunterschriften)
 
-| Bildunterschrift | Bild-URL |
-|---|---|
-| Die OG-Crew: Steffi, Rainer und Chriss | https://www.biglemon.de/s/cc_images/cache_2491058732.jpg |
-| Der Barkeeper eures Vertrauens: Chriss | https://www.biglemon.de/s/cc_images/cache_2491058733.jpg |
-| Unser letzter Neuzugang: Vanessa | https://www.biglemon.de/s/cc_images/cache_2491058734.jpg |
-| Jede Bar braucht eine Latina: Andrea | https://www.biglemon.de/s/cc_images/cache_2491058735.jpg |
-| Das Power Couple: Nico und Vanessa | https://www.biglemon.de/s/cc_images/cache_2491058736.jpeg |
+| Bildunterschrift                       | Bild-URL                                                  |
+| -------------------------------------- | --------------------------------------------------------- |
+| Die OG-Crew: Steffi, Rainer und Chriss | https://www.biglemon.de/s/cc_images/cache_2491058732.jpg  |
+| Der Barkeeper eures Vertrauens: Chriss | https://www.biglemon.de/s/cc_images/cache_2491058733.jpg  |
+| Unser letzter Neuzugang: Vanessa       | https://www.biglemon.de/s/cc_images/cache_2491058734.jpg  |
+| Jede Bar braucht eine Latina: Andrea   | https://www.biglemon.de/s/cc_images/cache_2491058735.jpg  |
+| Das Power Couple: Nico und Vanessa     | https://www.biglemon.de/s/cc_images/cache_2491058736.jpeg |
 
 **Genannte Personen:** Steffi, Rainer, Chriss (Barkeeper), Vanessa, Andrea, Nico
 
@@ -134,6 +134,7 @@ Leckere, frisch gepresste, bezahlbare Säfte und Cocktails für jedermann. Jeder
 Bevor unsere Cocktails und Vitaminbomben Ihre Zunge und Gaumen verwöhnen, darf Ihr Auge schon genießen, denn bei uns wird frisch von Hand gepresst und gemixt. In ihrer Vielfalt bekommen Sie ein unvergleichliches Geschmackserlebnis geboten.
 
 > **Hinweis:** Die eigentliche Getränkeliste ist auf dieser Seite nur als Bild hinterlegt (kein auslesbarer Text). Bilder:
+>
 > - https://www.biglemon.de/s/cc_images/cache_2420190636.jpg
 > - https://www.biglemon.de/s/cc_images/cache_2489825305.jpg
 
@@ -158,12 +159,12 @@ Falls Sie trotzdem kein auf Ihre Veranstaltung passendes Angebot finden können 
 
 ### Pauschalen (Tabs)
 
-| Paket | Zielgröße |
-|---|---|
-| Basic | 40–60 Personen |
+| Paket   | Zielgröße        |
+| ------- | ---------------- |
+| Basic   | 40–60 Personen   |
 | Premium | 100–150 Personen |
-| Mega | 200–250 Personen |
-| Firmen | — |
+| Mega    | 200–250 Personen |
+| Firmen  | —                |
 
 > **Hinweis:** Die Detailinhalte/Preise der vier Pakete liegen hinter JavaScript-Tabs und waren im abgerufenen HTML nicht enthalten.
 
@@ -196,27 +197,27 @@ Lassen Sie sich von uns beraten, um Ihr Event rund um Mannheim oder Frankfurt am
 
 ### Bildergalerie: Die schönsten Eindrücke aus unserer Bar
 
-Bei uns ist immer was los: Sehen Sie selbst, wie viel Freude unser Angebot unseren Gästen bereitet. *– mehr Bilder folgen –*
+Bei uns ist immer was los: Sehen Sie selbst, wie viel Freude unser Angebot unseren Gästen bereitet. _– mehr Bilder folgen –_
 
-| # | Bildtitel | Bild-URL (groß) |
-|---|---|---|
-| 1 | at work | https://www.biglemon.de/s/cc_images/cache_2489825031.JPG |
-| 2 | Deidesheim 2015 | https://www.biglemon.de/s/cc_images/cache_2489825032.JPG |
-| 3 | Messe Frankfurt 2014 | https://www.biglemon.de/s/cc_images/cache_2489825033.JPG |
-| 4 | — | https://www.biglemon.de/s/cc_images/cache_2489825034.JPG |
-| 5 | Altstadtfest Ladenburg | https://www.biglemon.de/s/cc_images/cache_2489825035.jpg |
-| 6 | Lemon Family 2011 | https://www.biglemon.de/s/cc_images/cache_2489825036.jpg |
-| 7 | Altstadtfest Ladenburg | https://www.biglemon.de/s/cc_images/cache_2489825037.jpg |
-| 8 | Museumsuferfest Frankfurt | https://www.biglemon.de/s/cc_images/cache_2489825038.jpg |
-| 9 | Nachwuchsbarkeeper 2011 | https://www.biglemon.de/s/cc_images/cache_2489825039.jpg |
-| 10 | — | https://www.biglemon.de/s/cc_images/cache_2489825040.JPG |
-| 11 | — | https://www.biglemon.de/s/cc_images/cache_2489825041.JPG |
-| 12 | — | https://www.biglemon.de/s/cc_images/cache_2489825042.jpg |
-| 13 | — | https://www.biglemon.de/s/cc_images/cache_2489825043.jpg |
-| 14 | — | https://www.biglemon.de/s/cc_images/cache_2489825044.jpg |
-| 15 | — | https://www.biglemon.de/s/cc_images/cache_2489825045.jpg |
-| 16 | — | https://www.biglemon.de/s/cc_images/cache_2489825046.jpg |
-| 17 | — | https://www.biglemon.de/s/cc_images/cache_2489825047.jpg |
+| #   | Bildtitel                 | Bild-URL (groß)                                          |
+| --- | ------------------------- | -------------------------------------------------------- |
+| 1   | at work                   | https://www.biglemon.de/s/cc_images/cache_2489825031.JPG |
+| 2   | Deidesheim 2015           | https://www.biglemon.de/s/cc_images/cache_2489825032.JPG |
+| 3   | Messe Frankfurt 2014      | https://www.biglemon.de/s/cc_images/cache_2489825033.JPG |
+| 4   | —                         | https://www.biglemon.de/s/cc_images/cache_2489825034.JPG |
+| 5   | Altstadtfest Ladenburg    | https://www.biglemon.de/s/cc_images/cache_2489825035.jpg |
+| 6   | Lemon Family 2011         | https://www.biglemon.de/s/cc_images/cache_2489825036.jpg |
+| 7   | Altstadtfest Ladenburg    | https://www.biglemon.de/s/cc_images/cache_2489825037.jpg |
+| 8   | Museumsuferfest Frankfurt | https://www.biglemon.de/s/cc_images/cache_2489825038.jpg |
+| 9   | Nachwuchsbarkeeper 2011   | https://www.biglemon.de/s/cc_images/cache_2489825039.jpg |
+| 10  | —                         | https://www.biglemon.de/s/cc_images/cache_2489825040.JPG |
+| 11  | —                         | https://www.biglemon.de/s/cc_images/cache_2489825041.JPG |
+| 12  | —                         | https://www.biglemon.de/s/cc_images/cache_2489825042.jpg |
+| 13  | —                         | https://www.biglemon.de/s/cc_images/cache_2489825043.jpg |
+| 14  | —                         | https://www.biglemon.de/s/cc_images/cache_2489825044.jpg |
+| 15  | —                         | https://www.biglemon.de/s/cc_images/cache_2489825045.jpg |
+| 16  | —                         | https://www.biglemon.de/s/cc_images/cache_2489825046.jpg |
+| 17  | —                         | https://www.biglemon.de/s/cc_images/cache_2489825047.jpg |
 
 ---
 
@@ -250,14 +251,14 @@ Angelstr. 110
 68199 Mannheim
 
 **Kontakt**
-mobil: 0176-26043698 *(Tel-Link im Quelltext abweichend: 0176-64719224)*
+mobil: 0176-26043698 _(Tel-Link im Quelltext abweichend: 0176-64719224)_
 E-Mail: welcome@biglemon.de
 
 **Registereintrag**
 Eintragung im Handelsregister.
 Registergericht: [bitte eintragen]
 Registernummer: [bitte eintragen]
-*(Platzhalter wurden nicht ausgefüllt)*
+_(Platzhalter wurden nicht ausgefüllt)_
 
 **Umsatzsteuer-ID:** DE 272012285
 
@@ -267,39 +268,39 @@ Logo und grafische Gestaltung: Monika Moras — unter Verwendung von iStock-Bild
 
 ## Aktuelles / Termine 2026
 
-*(Dieser Block erscheint identisch im Footer-Bereich jeder Seite)*
+_(Dieser Block erscheint identisch im Footer-Bereich jeder Seite)_
 
 > Wir sind auch 2026 wieder einsatzbereit! Hier könnt ihr uns dieses Jahr bereits finden.
 > Diese Liste wird durchgängig aktualisiert – vielleicht sind wir auch bald in deiner Nähe!
 
-| Datum | Veranstaltung | Ort |
-|---|---|---|
-| 08.–10.05. | Frühlingsfest | Lorsch |
-| 29.–31.05. | Schützenfest | Gummersbach |
-| 30.–31.05. | Berger Straßenfest | Frankfurt-Bergen |
-| 04.–07.06. | CSD | Düsseldorf |
-| 13.06. | Weststadtfest | Weinheim |
-| 26.–28.06. | Altstadtfest | Trier |
-| 03.–05.07. | CSD | Köln |
-| 03.–05.07. | Lanzparkfest | Lindenhof (Mannheim) |
-| 10.–11.07. | Straßenfest | Neckarrems |
-| 12.07. | CSD | Olpe |
-| 18.07. | Sommernachtsfest | Heimkirchen |
-| 24.–27.07. | CSD | Stuttgart |
-| 25.07. | CSD | Berlin |
-| 25.07. | CSD | Duisburg |
-| 31.07.–02.08. | Torbogenfest | Göllheim |
-| 12.08. | Bernemer Mittwoch | Frankfurt-Bornheim |
-| 21.–23.08. | Jazz & Joy | Worms |
-| 22.–23.08. | Kerwe | Sandhofen |
-| 28.–30.08. | Altstadtfest | Siegburg |
-| 28.–30.08. | Jubiläumsfeier | Germersheim |
-| 04.–06.09. | Altstadtfest | Brilon |
-| 11.–13.09. | Altstadtfest | Speyer |
-| 18.–20.09. | Stadtfest | Hennef |
-| 27.09. | Kerwe | Niederkirchen |
+| Datum         | Veranstaltung      | Ort                  |
+| ------------- | ------------------ | -------------------- |
+| 08.–10.05.    | Frühlingsfest      | Lorsch               |
+| 29.–31.05.    | Schützenfest       | Gummersbach          |
+| 30.–31.05.    | Berger Straßenfest | Frankfurt-Bergen     |
+| 04.–07.06.    | CSD                | Düsseldorf           |
+| 13.06.        | Weststadtfest      | Weinheim             |
+| 26.–28.06.    | Altstadtfest       | Trier                |
+| 03.–05.07.    | CSD                | Köln                 |
+| 03.–05.07.    | Lanzparkfest       | Lindenhof (Mannheim) |
+| 10.–11.07.    | Straßenfest        | Neckarrems           |
+| 12.07.        | CSD                | Olpe                 |
+| 18.07.        | Sommernachtsfest   | Heimkirchen          |
+| 24.–27.07.    | CSD                | Stuttgart            |
+| 25.07.        | CSD                | Berlin               |
+| 25.07.        | CSD                | Duisburg             |
+| 31.07.–02.08. | Torbogenfest       | Göllheim             |
+| 12.08.        | Bernemer Mittwoch  | Frankfurt-Bornheim   |
+| 21.–23.08.    | Jazz & Joy         | Worms                |
+| 22.–23.08.    | Kerwe              | Sandhofen            |
+| 28.–30.08.    | Altstadtfest       | Siegburg             |
+| 28.–30.08.    | Jubiläumsfeier     | Germersheim          |
+| 04.–06.09.    | Altstadtfest       | Brilon               |
+| 11.–13.09.    | Altstadtfest       | Speyer               |
+| 18.–20.09.    | Stadtfest          | Hennef               |
+| 27.09.        | Kerwe              | Niederkirchen        |
 
-*Ortsangaben in Klammern sind Zuordnungen aus dem Kontext, nicht wörtlich auf der Website genannt.*
+_Ortsangaben in Klammern sind Zuordnungen aus dem Kontext, nicht wörtlich auf der Website genannt._
 
 ---
 

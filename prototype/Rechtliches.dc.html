@@ -1,109 +1,453 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Impressum &amp; Datenschutz — BigLemon</title>
-<link rel="icon" type="image/png" href="assets/favicon.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<style>
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin: 0; background: #FFFCEE; font-family: 'Manrope', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-  a { color: #0F1538; }
-  a:hover { color: #4A4F72; }
-  ::selection { background: #F2E63C; color: #0F1538; }
-</style>
-</helmet>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<title>Impressum &amp; Datenschutz — BigLemon</title>
+				<link rel="icon" type="image/png" href="assets/favicon.png" />
+				<link rel="preconnect" href="https://fonts.googleapis.com" />
+				<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+				<link
+					href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					* {
+						box-sizing: border-box;
+					}
+					html {
+						scroll-behavior: smooth;
+					}
+					body {
+						margin: 0;
+						background: #fffcee;
+						font-family: 'Manrope', system-ui, sans-serif;
+						-webkit-font-smoothing: antialiased;
+					}
+					a {
+						color: #0f1538;
+					}
+					a:hover {
+						color: #4a4f72;
+					}
+					::selection {
+						background: #f2e63c;
+						color: #0f1538;
+					}
+				</style>
+			</helmet>
 
-<div style="background:#FFFCEE;color:#0F1538;min-height:100vh;display:flex;flex-direction:column">
-  <header style="position:sticky;top:0;z-index:20;background:rgba(15,21,56,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(242,230,60,.2)">
-    <div style="max-width:960px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px">
-      <a href="BigLemon.dc.html" style="display:flex;align-items:center;gap:14px;text-decoration:none">
-        <img src="assets/logo-light.png" alt="Big Lemon" style="height:42px;width:auto;display:block" />
-      </a>
-      <a href="BigLemon.dc.html" style="color:#F2E63C;font-weight:700;font-size:15px;text-decoration:none;border:1.5px solid rgba(242,230,60,.4);border-radius:999px;padding:11px 20px;min-height:44px;display:flex;align-items:center" style-hover="background:#F2E63C;color:#0F1538">Zurück zur Startseite</a>
-    </div>
-  </header>
+			<div
+				style="
+					background: #fffcee;
+					color: #0f1538;
+					min-height: 100vh;
+					display: flex;
+					flex-direction: column;
+				"
+			>
+				<header
+					style="
+						position: sticky;
+						top: 0;
+						z-index: 20;
+						background: rgba(15, 21, 56, 0.94);
+						backdrop-filter: blur(12px);
+						-webkit-backdrop-filter: blur(12px);
+						border-bottom: 1px solid rgba(242, 230, 60, 0.2);
+					"
+				>
+					<div
+						style="
+							max-width: 960px;
+							margin: 0 auto;
+							padding: 14px 20px;
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+							gap: 16px;
+						"
+					>
+						<a
+							href="BigLemon.dc.html"
+							style="display: flex; align-items: center; gap: 14px; text-decoration: none"
+						>
+							<img
+								src="assets/logo-light.png"
+								alt="Big Lemon"
+								style="height: 42px; width: auto; display: block"
+							/>
+						</a>
+						<a
+							href="BigLemon.dc.html"
+							style="
+								color: #f2e63c;
+								font-weight: 700;
+								font-size: 15px;
+								text-decoration: none;
+								border: 1.5px solid rgba(242, 230, 60, 0.4);
+								border-radius: 999px;
+								padding: 11px 20px;
+								min-height: 44px;
+								display: flex;
+								align-items: center;
+							"
+							style-hover="background:#F2E63C;color:#0F1538"
+							>Zurück zur Startseite</a
+						>
+					</div>
+				</header>
 
-  <main style="flex:1;padding:clamp(40px,6vw,76px) 20px clamp(56px,7vw,90px)">
-    <div style="max-width:960px;margin:0 auto">
-      <div style="font-size:12.5px;font-weight:800;letter-spacing:.18em;color:#8A8F52;margin-bottom:16px">RECHTLICHES</div>
-      <h1 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,50px);line-height:1.03;letter-spacing:-.03em;margin:0 0 20px">Impressum &amp; Datenschutz</h1>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px">
-        <a href="#impressum" style="border:1.5px solid rgba(15,21,56,.18);border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px;text-decoration:none;color:#0F1538;min-height:48px;display:flex;align-items:center" style-hover="background:#0F1538;color:#F2E63C">Impressum</a>
-        <a href="#datenschutz" style="border:1.5px solid rgba(15,21,56,.18);border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px;text-decoration:none;color:#0F1538;min-height:48px;display:flex;align-items:center" style-hover="background:#0F1538;color:#F2E63C">Datenschutzerklärung</a>
-      </div>
+				<main style="flex: 1; padding: clamp(40px, 6vw, 76px) 20px clamp(56px, 7vw, 90px)">
+					<div style="max-width: 960px; margin: 0 auto">
+						<div
+							style="
+								font-size: 12.5px;
+								font-weight: 800;
+								letter-spacing: 0.18em;
+								color: #8a8f52;
+								margin-bottom: 16px;
+							"
+						>
+							RECHTLICHES
+						</div>
+						<h1
+							style="
+								font-family: 'Bricolage Grotesque', sans-serif;
+								font-weight: 800;
+								font-size: clamp(30px, 4.4vw, 50px);
+								line-height: 1.03;
+								letter-spacing: -0.03em;
+								margin: 0 0 20px;
+							"
+						>
+							Impressum &amp; Datenschutz
+						</h1>
+						<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 36px">
+							<a
+								href="#impressum"
+								style="
+									border: 1.5px solid rgba(15, 21, 56, 0.18);
+									border-radius: 999px;
+									padding: 12px 22px;
+									font-weight: 700;
+									font-size: 15px;
+									text-decoration: none;
+									color: #0f1538;
+									min-height: 48px;
+									display: flex;
+									align-items: center;
+								"
+								style-hover="background:#0F1538;color:#F2E63C"
+								>Impressum</a
+							>
+							<a
+								href="#datenschutz"
+								style="
+									border: 1.5px solid rgba(15, 21, 56, 0.18);
+									border-radius: 999px;
+									padding: 12px 22px;
+									font-weight: 700;
+									font-size: 15px;
+									text-decoration: none;
+									color: #0f1538;
+									min-height: 48px;
+									display: flex;
+									align-items: center;
+								"
+								style-hover="background:#0F1538;color:#F2E63C"
+								>Datenschutzerklärung</a
+							>
+						</div>
 
-      <section id="impressum" data-screen-label="Impressum" style="scroll-margin-top:90px;margin-bottom:44px">
-        <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(24px,3vw,32px);letter-spacing:-.02em;margin:0 0 20px">Impressum</h2>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:26px;background:#fff;border:1.5px solid rgba(15,21,56,.1);border-radius:22px;padding:clamp(24px,3vw,34px)">
-          <div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;margin:0 0 12px">Angaben gemäß § 5 DDG</h3>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:0">Big Lemon Deutschland<br />Christopher Moravec<br />Angelstraße 110<br />68199 Mannheim</p>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:16px 0 0">Telefon: <a href="tel:+4917626043698" style="color:#0F1538;text-decoration:underline">0176 26043698</a><br />E-Mail: <a href="mailto:welcome@biglemon.de" style="color:#0F1538;text-decoration:underline">welcome@biglemon.de</a></p>
-          </div>
-          <div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;margin:0 0 12px">Umsatzsteuer &amp; Verantwortung</h3>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:0">USt-IdNr. gemäß § 27 a UStG: DE 272012285</p>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:16px 0 0">Verantwortlich für den Inhalt: Christopher Moravec, Adresse wie oben.</p>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:16px 0 0">Plattform der EU zur außergerichtlichen Streitbeilegung: <a href="https://ec.europa.eu/consumers/odr" style="color:#0F1538;text-decoration:underline">ec.europa.eu/consumers/odr</a>. Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
-          </div>
-        </div>
-      </section>
+						<section
+							id="impressum"
+							data-screen-label="Impressum"
+							style="scroll-margin-top: 90px; margin-bottom: 44px"
+						>
+							<h2
+								style="
+									font-family: 'Bricolage Grotesque', sans-serif;
+									font-weight: 800;
+									font-size: clamp(24px, 3vw, 32px);
+									letter-spacing: -0.02em;
+									margin: 0 0 20px;
+								"
+							>
+								Impressum
+							</h2>
+							<div
+								style="
+									display: grid;
+									grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+									gap: 26px;
+									background: #fff;
+									border: 1.5px solid rgba(15, 21, 56, 0.1);
+									border-radius: 22px;
+									padding: clamp(24px, 3vw, 34px);
+								"
+							>
+								<div>
+									<h3
+										style="
+											font-family: 'Bricolage Grotesque', sans-serif;
+											font-weight: 700;
+											font-size: 19px;
+											margin: 0 0 12px;
+										"
+									>
+										Angaben gemäß § 5 DDG
+									</h3>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 0">
+										Big Lemon Deutschland<br />Christopher Moravec<br />Angelstraße 110<br />68199
+										Mannheim
+									</p>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 16px 0 0">
+										Telefon:
+										<a href="tel:+4917626043698" style="color: #0f1538; text-decoration: underline"
+											>0176 26043698</a
+										><br />E-Mail:
+										<a
+											href="mailto:welcome@biglemon.de"
+											style="color: #0f1538; text-decoration: underline"
+											>welcome@biglemon.de</a
+										>
+									</p>
+								</div>
+								<div>
+									<h3
+										style="
+											font-family: 'Bricolage Grotesque', sans-serif;
+											font-weight: 700;
+											font-size: 19px;
+											margin: 0 0 12px;
+										"
+									>
+										Umsatzsteuer &amp; Verantwortung
+									</h3>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 0">
+										USt-IdNr. gemäß § 27 a UStG: DE 272012285
+									</p>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 16px 0 0">
+										Verantwortlich für den Inhalt: Christopher Moravec, Adresse wie oben.
+									</p>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 16px 0 0">
+										Plattform der EU zur außergerichtlichen Streitbeilegung:
+										<a
+											href="https://ec.europa.eu/consumers/odr"
+											style="color: #0f1538; text-decoration: underline"
+											>ec.europa.eu/consumers/odr</a
+										>. Wir sind nicht verpflichtet und nicht bereit, an einem
+										Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+									</p>
+								</div>
+							</div>
+						</section>
 
-      <section id="datenschutz" data-screen-label="Datenschutz" style="scroll-margin-top:90px">
-        <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(24px,3vw,32px);letter-spacing:-.02em;margin:0 0 20px">Datenschutzerklärung</h2>
-        <div style="background:#fff;border:1.5px solid rgba(15,21,56,.1);border-radius:22px;padding:clamp(24px,3vw,34px);display:flex;flex-direction:column;gap:24px">
-          <div style="background:rgba(242,230,60,.16);border-radius:14px;padding:16px 18px;font-size:14.5px;line-height:1.6;color:#4A4F72">Textgerüst — bitte vor dem Livegang mit eurem Hoster (Auftragsverarbeitungsvertrag) und ggf. anwaltlich abgleichen. Wenn Karten, Analyse-Tools oder Social-Media-Plugins dazukommen, müssen sie hier ergänzt werden.</div>
-          <div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;margin:0 0 10px">1. Verantwortlicher</h3>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:0">Big Lemon Deutschland, Christopher Moravec, Angelstraße 110, 68199 Mannheim, welcome@biglemon.de, 0176 26043698.</p>
-          </div>
-          <div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;margin:0 0 10px">2. Aufruf dieser Website (Server-Logfiles)</h3>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:0">Beim Aufruf unserer Seite werden durch unseren Hoster automatisch IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, übertragene Datenmenge, Browsertyp und Betriebssystem verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO — unser berechtigtes Interesse an einem sicheren, störungsfreien Betrieb. Die Logfiles werden nach spätestens 30 Tagen gelöscht.</p>
-          </div>
-          <div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;margin:0 0 10px">3. Anfrage- und Kontaktformular</h3>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:0">Wenn ihr uns über das Formular, per E-Mail oder telefonisch eine Anfrage schickt, verarbeiten wir die angegebenen Daten (Name, E-Mail, Telefon, Ort, Datum, Gästezahl, Nachricht) ausschließlich zur Bearbeitung der Anfrage und für Anschlussfragen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Vertrag bzw. Vertragsanbahnung), im Übrigen lit. f DSGVO. Anfragen ohne Buchung löschen wir nach zwölf Monaten; bei einer Buchung gelten die steuerlichen Aufbewahrungsfristen von bis zu zehn Jahren.</p>
-          </div>
-          <div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;margin:0 0 10px">4. Empfänger und Auftragsverarbeiter</h3>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:0">Eure Daten geben wir nicht zu Werbezwecken weiter. Zugriff haben ausschließlich unser Hosting- und E-Mail-Dienstleister auf Grundlage eines Auftragsverarbeitungsvertrags (Art. 28 DSGVO) sowie — bei einer Buchung — unser Steuerbüro.</p>
-          </div>
-          <div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;margin:0 0 10px">5. Cookies</h3>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:0">Diese Website setzt keine Tracking-Cookies und nutzt keine Analyse- oder Werbedienste. Technisch notwendige Cookies werden nur gesetzt, soweit sie für den Betrieb der Seite erforderlich sind (§ 25 Abs. 2 TDDDG).</p>
-          </div>
-          <div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;margin:0 0 10px">6. Eure Rechte</h3>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:0">Ihr habt jederzeit das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (Art. 21). Eine Nachricht an welcome@biglemon.de genügt.</p>
-          </div>
-          <div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;margin:0 0 10px">7. Beschwerderecht</h3>
-            <p style="font-size:15.5px;line-height:1.7;color:#4A4F72;margin:0">Ihr könnt sich bei einer Datenschutz-Aufsichtsbehörde beschweren, für uns zuständig ist der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Baden-Württemberg, Lautenschlagerstraße 20, 70173 Stuttgart.</p>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
+						<section
+							id="datenschutz"
+							data-screen-label="Datenschutz"
+							style="scroll-margin-top: 90px"
+						>
+							<h2
+								style="
+									font-family: 'Bricolage Grotesque', sans-serif;
+									font-weight: 800;
+									font-size: clamp(24px, 3vw, 32px);
+									letter-spacing: -0.02em;
+									margin: 0 0 20px;
+								"
+							>
+								Datenschutzerklärung
+							</h2>
+							<div
+								style="
+									background: #fff;
+									border: 1.5px solid rgba(15, 21, 56, 0.1);
+									border-radius: 22px;
+									padding: clamp(24px, 3vw, 34px);
+									display: flex;
+									flex-direction: column;
+									gap: 24px;
+								"
+							>
+								<div
+									style="
+										background: rgba(242, 230, 60, 0.16);
+										border-radius: 14px;
+										padding: 16px 18px;
+										font-size: 14.5px;
+										line-height: 1.6;
+										color: #4a4f72;
+									"
+								>
+									Textgerüst — bitte vor dem Livegang mit eurem Hoster
+									(Auftragsverarbeitungsvertrag) und ggf. anwaltlich abgleichen. Wenn Karten,
+									Analyse-Tools oder Social-Media-Plugins dazukommen, müssen sie hier ergänzt
+									werden.
+								</div>
+								<div>
+									<h3
+										style="
+											font-family: 'Bricolage Grotesque', sans-serif;
+											font-weight: 700;
+											font-size: 19px;
+											margin: 0 0 10px;
+										"
+									>
+										1. Verantwortlicher
+									</h3>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 0">
+										Big Lemon Deutschland, Christopher Moravec, Angelstraße 110, 68199 Mannheim,
+										welcome@biglemon.de, 0176 26043698.
+									</p>
+								</div>
+								<div>
+									<h3
+										style="
+											font-family: 'Bricolage Grotesque', sans-serif;
+											font-weight: 700;
+											font-size: 19px;
+											margin: 0 0 10px;
+										"
+									>
+										2. Aufruf dieser Website (Server-Logfiles)
+									</h3>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 0">
+										Beim Aufruf unserer Seite werden durch unseren Hoster automatisch IP-Adresse,
+										Datum und Uhrzeit, aufgerufene Seite, übertragene Datenmenge, Browsertyp und
+										Betriebssystem verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO —
+										unser berechtigtes Interesse an einem sicheren, störungsfreien Betrieb. Die
+										Logfiles werden nach spätestens 30 Tagen gelöscht.
+									</p>
+								</div>
+								<div>
+									<h3
+										style="
+											font-family: 'Bricolage Grotesque', sans-serif;
+											font-weight: 700;
+											font-size: 19px;
+											margin: 0 0 10px;
+										"
+									>
+										3. Anfrage- und Kontaktformular
+									</h3>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 0">
+										Wenn ihr uns über das Formular, per E-Mail oder telefonisch eine Anfrage
+										schickt, verarbeiten wir die angegebenen Daten (Name, E-Mail, Telefon, Ort,
+										Datum, Gästezahl, Nachricht) ausschließlich zur Bearbeitung der Anfrage und für
+										Anschlussfragen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Vertrag bzw.
+										Vertragsanbahnung), im Übrigen lit. f DSGVO. Anfragen ohne Buchung löschen wir
+										nach zwölf Monaten; bei einer Buchung gelten die steuerlichen
+										Aufbewahrungsfristen von bis zu zehn Jahren.
+									</p>
+								</div>
+								<div>
+									<h3
+										style="
+											font-family: 'Bricolage Grotesque', sans-serif;
+											font-weight: 700;
+											font-size: 19px;
+											margin: 0 0 10px;
+										"
+									>
+										4. Empfänger und Auftragsverarbeiter
+									</h3>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 0">
+										Eure Daten geben wir nicht zu Werbezwecken weiter. Zugriff haben ausschließlich
+										unser Hosting- und E-Mail-Dienstleister auf Grundlage eines
+										Auftragsverarbeitungsvertrags (Art. 28 DSGVO) sowie — bei einer Buchung — unser
+										Steuerbüro.
+									</p>
+								</div>
+								<div>
+									<h3
+										style="
+											font-family: 'Bricolage Grotesque', sans-serif;
+											font-weight: 700;
+											font-size: 19px;
+											margin: 0 0 10px;
+										"
+									>
+										5. Cookies
+									</h3>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 0">
+										Diese Website setzt keine Tracking-Cookies und nutzt keine Analyse- oder
+										Werbedienste. Technisch notwendige Cookies werden nur gesetzt, soweit sie für
+										den Betrieb der Seite erforderlich sind (§ 25 Abs. 2 TDDDG).
+									</p>
+								</div>
+								<div>
+									<h3
+										style="
+											font-family: 'Bricolage Grotesque', sans-serif;
+											font-weight: 700;
+											font-size: 19px;
+											margin: 0 0 10px;
+										"
+									>
+										6. Eure Rechte
+									</h3>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 0">
+										Ihr habt jederzeit das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16),
+										Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18),
+										Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf
+										Grundlage von Art. 6 Abs. 1 lit. f DSGVO (Art. 21). Eine Nachricht an
+										welcome@biglemon.de genügt.
+									</p>
+								</div>
+								<div>
+									<h3
+										style="
+											font-family: 'Bricolage Grotesque', sans-serif;
+											font-weight: 700;
+											font-size: 19px;
+											margin: 0 0 10px;
+										"
+									>
+										7. Beschwerderecht
+									</h3>
+									<p style="font-size: 15.5px; line-height: 1.7; color: #4a4f72; margin: 0">
+										Ihr könnt sich bei einer Datenschutz-Aufsichtsbehörde beschweren, für uns
+										zuständig ist der Landesbeauftragte für den Datenschutz und die
+										Informationsfreiheit Baden-Württemberg, Lautenschlagerstraße 20, 70173
+										Stuttgart.
+									</p>
+								</div>
+							</div>
+						</section>
+					</div>
+				</main>
 
-  <footer style="background:#0B1030;color:#8E96C0;padding:34px 20px">
-    <div style="max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;font-size:13.5px">
-      <span>© 2026 BigLemon Deutschland</span>
-      <a href="BigLemon.dc.html" style="color:#F2E63C;text-decoration:none;font-weight:700" style-hover="color:#FFF37A">biglemon.de</a>
-    </div>
-  </footer>
-</div>
-</x-dc>
-</body>
+				<footer style="background: #0b1030; color: #8e96c0; padding: 34px 20px">
+					<div
+						style="
+							max-width: 960px;
+							margin: 0 auto;
+							display: flex;
+							flex-wrap: wrap;
+							gap: 14px;
+							justify-content: space-between;
+							align-items: center;
+							font-size: 13.5px;
+						"
+					>
+						<span>© 2026 BigLemon Deutschland</span>
+						<a
+							href="BigLemon.dc.html"
+							style="color: #f2e63c; text-decoration: none; font-weight: 700"
+							style-hover="color:#FFF37A"
+							>biglemon.de</a
+						>
+					</div>
+				</footer>
+			</div>
+		</x-dc>
+	</body>
 </html>
