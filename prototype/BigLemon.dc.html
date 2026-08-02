@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BigLemon — Die mobile Cocktailbar für euer Fest</title>
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="apple-touch-icon" href="assets/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="./image-slot.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #0F1538; font-family: 'Manrope', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: #F2E63C; text-decoration: none; }
+  a:hover { color: #FFF37A; }
+  input, textarea, select, button { font-family: inherit; }
+  input:focus, textarea:focus, select:focus { outline: 2px solid #F2E63C; outline-offset: 1px; }
+  ::selection { background: #F2E63C; color: #0F1538; }
+  @keyframes bl-float { 0%,100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-22px) rotate(1.5deg); } }
+  @keyframes bl-spin { to { transform: rotate(360deg); } }
+  @keyframes bl-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes bl-pulse { 0%,100% { opacity: .5; transform: scale(1); } 50% { opacity: .85; transform: scale(1.08); } }
+</style>
+</helmet>
+
+<div style="background:#0F1538;color:#FFFCEE;min-height:100vh">
+
+  <header style="position:sticky;top:0;z-index:60;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(15,21,56,.82);border-bottom:1px solid rgba(242,230,60,.18)">
+    <div style="max-width:1240px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <a href="#start" style="display:flex;align-items:center;gap:14px;color:#FFFCEE;text-decoration:none">
+        <img src="assets/logo-light.png" alt="Big Lemon" style="height:44px;width:auto;display:block;flex:none" />
+        <span style="width:1px;height:26px;background:rgba(242,230,60,.3);display:block"></span>
+        <span style="font-size:9.5px;letter-spacing:.22em;color:#9BA2C8;font-weight:700;line-height:1.5;max-width:92px">MOBILE<br />COCKTAILBAR</span>
+      </a>
+
+      <sc-if value="{{ desktopNav }}" hint-placeholder-val="{{ true }}">
+        <nav style="display:flex;align-items:center;gap:28px">
+          <a href="#bar" style="color:#D9DDF2;font-size:14.5px;font-weight:600;text-decoration:none" style-hover="color:#F2E63C">Die Bar</a>
+          <a href="#drinks" style="color:#D9DDF2;font-size:14.5px;font-weight:600;text-decoration:none" style-hover="color:#F2E63C">Drinks</a>
+          <a href="#termine" style="color:#D9DDF2;font-size:14.5px;font-weight:600;text-decoration:none" style-hover="color:#F2E63C">Termine</a>
+          <a href="#bars" style="color:#D9DDF2;font-size:14.5px;font-weight:600;text-decoration:none" style-hover="color:#F2E63C">Unsere Bars</a>
+          <a href="#kontakt" style="color:#D9DDF2;font-size:14.5px;font-weight:600;text-decoration:none" style-hover="color:#F2E63C">Kontakt</a>
+          <a href="#buchen" style="background:#F2E63C;color:#0F1538;font-weight:800;font-size:14.5px;padding:11px 20px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(242,230,60,.28)" style-hover="background:#FFF37A;color:#0F1538">Bar anfragen</a>
+        </nav>
+      </sc-if>
+
+      <sc-if value="{{ mobileNav }}">
+        <button type="button" onClick="{{ toggleMenu }}" aria-label="Menü" style="width:46px;height:46px;border-radius:14px;border:1px solid rgba(242,230,60,.3);background:rgba(242,230,60,.08);color:#F2E63C;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;padding:0">
+          <span style="width:20px;height:2px;background:#F2E63C;border-radius:2px;display:block"></span>
+          <span style="width:20px;height:2px;background:#F2E63C;border-radius:2px;display:block"></span>
+          <span style="width:20px;height:2px;background:#F2E63C;border-radius:2px;display:block"></span>
+        </button>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ menuOpen }}">
+      <nav style="display:flex;flex-direction:column;gap:2px;padding:8px 16px 20px;border-top:1px solid rgba(242,230,60,.14)">
+        <a href="#bar" onClick="{{ closeMenu }}" style="color:#FFFCEE;font-size:17px;font-weight:600;padding:14px 8px;border-radius:12px;text-decoration:none">Die Bar</a>
+        <a href="#drinks" onClick="{{ closeMenu }}" style="color:#FFFCEE;font-size:17px;font-weight:600;padding:14px 8px;border-radius:12px;text-decoration:none">Drinks</a>
+        <a href="#termine" onClick="{{ closeMenu }}" style="color:#FFFCEE;font-size:17px;font-weight:600;padding:14px 8px;border-radius:12px;text-decoration:none">Termine 2026</a>
+        <a href="#galerie" onClick="{{ closeMenu }}" style="color:#FFFCEE;font-size:17px;font-weight:600;padding:14px 8px;border-radius:12px;text-decoration:none">Galerie</a>
+        <a href="#bars" onClick="{{ closeMenu }}" style="color:#FFFCEE;font-size:17px;font-weight:600;padding:14px 8px;border-radius:12px;text-decoration:none">Unsere Bars</a>
+        <a href="#kontakt" onClick="{{ closeMenu }}" style="color:#FFFCEE;font-size:17px;font-weight:600;padding:14px 8px;border-radius:12px;text-decoration:none">Kontakt</a>
+        <a href="#buchen" onClick="{{ closeMenu }}" style="margin-top:10px;background:#F2E63C;color:#0F1538;font-weight:800;font-size:16px;padding:16px;border-radius:14px;text-align:center;text-decoration:none">Bar anfragen</a>
+      </nav>
+    </sc-if>
+  </header>
+
+  <section id="start" data-screen-label="Hero" style="position:relative;overflow:hidden;padding:clamp(48px,7vw,90px) 20px clamp(60px,8vw,110px);background:#0F1538">
+    <div style="position:absolute;inset:0;background:url('assets/bar-hintergrund.jpg') center/cover no-repeat;filter:saturate(2) contrast(1.08);opacity:{{ wallOpacity }};mask-image:radial-gradient(125% 120% at 88% 26%,#000 12%,transparent 70%);-webkit-mask-image:radial-gradient(125% 120% at 88% 26%,#000 12%,transparent 70%);pointer-events:none"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,rgba(15,21,56,.93) 0%,rgba(15,21,56,.66) 44%,rgba(15,21,56,.14) 100%)"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:{{ glowOpacity }};background:radial-gradient(760px 560px at 100% 0%,rgba(242,230,60,.42),transparent 62%),radial-gradient(620px 520px at 0% 100%,rgba(194,226,63,.34),transparent 62%),radial-gradient(420px 340px at 14% 6%,rgba(255,243,122,.26),transparent 64%),radial-gradient(460px 380px at 66% 94%,rgba(242,230,60,.24),transparent 64%)"></div>
+    <div style="position:absolute;top:-160px;right:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(242,230,60,.34),transparent 68%);filter:blur(20px);animation:bl-pulse 9s ease-in-out infinite;pointer-events:none"></div>
+    <div style="position:relative;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(28px,5vw,60px);align-items:center">
+      <div>
+        <sc-if value="{{ heroSmall }}">
+          <img src="assets/lemon-frei.png" alt="Die BigLemon — mobile Cocktailbar in Zitronenform" style="width:118px;height:auto;display:block;margin:0 0 20px;filter:drop-shadow(0 14px 24px rgba(0,0,0,.45))" />
+        </sc-if>
+        <div style="display:inline-flex;align-items:center;gap:9px;padding:8px 15px 8px 10px;border-radius:999px;background:rgba(194,226,63,.12);border:1px solid rgba(194,226,63,.35);margin-bottom:22px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#C2E23F;display:block;box-shadow:0 0 12px #C2E23F"></span>
+          <span style="font-size:12.5px;font-weight:700;letter-spacing:.1em;color:#C2E23F">TERMINE 2026 — JETZT SICHERN</span>
+        </div>
+        <h1 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(40px,6.6vw,74px);line-height:.96;letter-spacing:-.035em;margin:0 0 22px;color:#FFFCEE;text-wrap:balance">Die Zitrone,<br />die euer Fest<br /><span style="color:#F2E63C">unvergesslich</span> macht.</h1>
+        <p style="font-size:clamp(16px,1.7vw,19.5px);line-height:1.65;color:#C3C9E8;max-width:520px;margin:0 0 32px;text-wrap:pretty">Eine 3 Meter große, fahrbare Riesenzitrone voller frisch gepresster Cocktails. Wir rollen an, bauen auf, mixen — und ihr habt den Hingucker, über den am Montag noch alle reden.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:38px">
+          <a href="#buchen" style="background:#F2E63C;color:#0F1538;font-weight:800;font-size:16px;padding:17px 30px;border-radius:999px;text-decoration:none;box-shadow:0 12px 34px rgba(242,230,60,.3)" style-hover="background:#FFF37A;color:#0F1538">Bar für euer Fest anfragen</a>
+          <a href="#drinks" style="border:1.5px solid rgba(255,252,238,.28);color:#FFFCEE;font-weight:700;font-size:16px;padding:16px 28px;border-radius:999px;text-decoration:none" style-hover="border-color:#F2E63C;color:#F2E63C">Drinkliste ansehen</a>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:18px;max-width:560px;border-top:1px solid rgba(255,252,238,.13);padding-top:26px">
+          <div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:30px;color:#F2E63C;line-height:1">24</div>
+            <div style="font-size:13px;color:#9BA2C8;margin-top:6px;font-weight:600">Feste in 2026</div>
+          </div>
+          <div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:30px;color:#F2E63C;line-height:1">50+</div>
+            <div style="font-size:13px;color:#9BA2C8;margin-top:6px;font-weight:600">verschiedene Cocktails</div>
+          </div>
+          <div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:30px;color:#F2E63C;line-height:1">0</div>
+            <div style="font-size:13px;color:#9BA2C8;margin-top:6px;font-weight:600">Künstliche Aromen</div>
+          </div>
+        </div>
+      </div>
+      <sc-if value="{{ heroSide }}" hint-placeholder-val="{{ true }}">
+        <div style="position:relative;display:flex;justify-content:center;align-items:center;min-height:340px">
+          <div style="position:absolute;width:min(78%,420px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(242,230,60,.35),rgba(242,230,60,0) 70%);filter:blur(8px)"></div>
+          <div style="position:absolute;width:min(70%,380px);aspect-ratio:1;border:1.5px dashed rgba(242,230,60,.3);border-radius:50%;animation:bl-spin 44s linear infinite"></div>
+          <img src="assets/lemon-frei.png" alt="Die BigLemon — mobile Cocktailbar in Zitronenform" style="position:relative;width:min(100%,430px);height:auto;display:block;animation:bl-float 7.5s ease-in-out infinite;filter:drop-shadow(0 40px 60px rgba(0,0,0,.5))" />
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <div style="background:#F2E63C;color:#0F1538;padding:15px 0;overflow:hidden;white-space:nowrap;border-top:2px solid #0F1538">
+    <div style="display:inline-flex;gap:34px;animation:bl-marquee 34s linear infinite;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px;letter-spacing:.02em;padding-right:34px">
+      <span>HOCHZEITEN</span><span>★</span><span>FIRMENFEIERN</span><span>★</span><span>GEBURTSTAGE</span><span>★</span><span>STADTFESTE</span><span>★</span><span>KERWEN</span><span>★</span><span>FESTIVALS</span><span>★</span><span>CSD</span><span>★</span><span>HOCHZEITEN</span><span>★</span><span>FIRMENFEIERN</span><span>★</span><span>GEBURTSTAGE</span><span>★</span><span>STADTFESTE</span><span>★</span><span>KERWEN</span><span>★</span><span>FESTIVALS</span><span>★</span><span>CSD</span><span>★</span>
+    </div>
+  </div>
+
+  <section id="bar" data-screen-label="Die Bar" style="scroll-margin-top:84px;padding:clamp(64px,8vw,110px) 20px;background:#FFFCEE;color:#0F1538">
+    <div style="max-width:1240px;margin:0 auto">
+      <div style="max-width:720px;margin-bottom:clamp(34px,5vw,56px)">
+        <div style="font-size:12.5px;font-weight:800;letter-spacing:.18em;color:#8A8F52;margin-bottom:16px">WARUM DIE BIGLEMON</div>
+        <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,4.6vw,54px);line-height:1.02;letter-spacing:-.03em;margin:0 0 18px;text-wrap:balance">Kein Bier. Kein Wein. Eine Attraktion, die nebenbei Drinks macht.</h2>
+        <p style="font-size:17.5px;line-height:1.65;color:#4A4F72;margin:0;text-wrap:pretty">Durch ihre auffallende Form und das extravagante Design ist die BigLemon der Hingucker auf jedem Event — von der privaten Feier bis zur Großveranstaltung. Jeder kennt sie, jeder liebt sie.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px">
+        <div style="background:#0F1538;color:#FFFCEE;border-radius:24px;padding:30px;display:flex;flex-direction:column;gap:12px;min-height:230px">
+          <div style="width:46px;height:46px;border-radius:50%;background:repeating-conic-gradient(from 12deg,#FFF8B4 0deg 36deg,#EFE24A 36deg 45deg);box-shadow:0 0 0 3px #F2E63C;margin-bottom:6px"></div>
+          <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;margin:0;letter-spacing:-.01em">Der Foto-Magnet</h3>
+          <p style="font-size:15px;line-height:1.6;color:#B7BEDF;margin:0">Eine begehbare Riesenzitrone sieht man nicht alle Tage. Wer vorbeigeht, bleibt stehen — und nimmt ein Bild mit nach Hause.</p>
+        </div>
+        <div style="background:#fff;border:1.5px solid rgba(15,21,56,.1);border-radius:24px;padding:30px;display:flex;flex-direction:column;gap:12px;min-height:230px">
+          <div style="width:46px;height:46px;border-radius:14px;background:#C2E23F;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;color:#0F1538;margin-bottom:6px">0%</div>
+          <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;margin:0;letter-spacing:-.01em">Lieber Natur pur</h3>
+          <p style="font-size:15px;line-height:1.6;color:#4A4F72;margin:0">Zitronen, Orangen und Limetten werden vor den Augen der Gäste von Hand gepresst. Keine Konzentrate, keine künstlichen Aromen.</p>
+        </div>
+        <div style="background:#fff;border:1.5px solid rgba(15,21,56,.1);border-radius:24px;padding:30px;display:flex;flex-direction:column;gap:12px;min-height:230px">
+          <div style="width:46px;height:46px;border-radius:14px;background:#F2E63C;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#0F1538;margin-bottom:6px">↻</div>
+          <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;margin:0;letter-spacing:-.01em">Wir kommen zu euch</h3>
+          <p style="font-size:15px;line-height:1.6;color:#4A4F72;margin:0">Die Bar ist fahrbar und überall einsatzbereit — Marktplatz, Festwiese, Firmenhof oder Hochzeitsgarten. Aufbau übernehmen wir.</p>
+        </div>
+        <div style="background:#fff;border:1.5px solid rgba(15,21,56,.1);border-radius:24px;padding:30px;display:flex;flex-direction:column;gap:12px;min-height:230px">
+          <div style="width:46px;height:46px;border-radius:14px;background:#0F1538;display:flex;align-items:center;justify-content:center;font-size:22px;color:#F2E63C;margin-bottom:6px">★</div>
+          <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;margin:0;letter-spacing:-.01em">Crew mit Routine</h3>
+          <p style="font-size:15px;line-height:1.6;color:#4A4F72;margin:0">Seit Jahren auf Stadtfesten, Messen und CSDs unterwegs. Wir kennen die Abläufe, halten das Tempo und bleiben auch im Andrang freundlich.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="drinks" data-screen-label="Drinks" style="position:relative;overflow:hidden;scroll-margin-top:84px;padding:clamp(64px,8vw,110px) 20px;background:linear-gradient(180deg,#0F1538,#151C48)">
+    <div style="position:absolute;inset:0;background:url('assets/bar-hintergrund.jpg') center/cover no-repeat;filter:saturate(1.45);opacity:{{ wallOpacity }};mask-image:radial-gradient(125% 115% at 50% 50%,transparent 24%,#000 86%);-webkit-mask-image:radial-gradient(125% 115% at 50% 50%,transparent 24%,#000 86%);pointer-events:none"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(95% 85% at 50% 46%,rgba(15,21,56,.84) 32%,rgba(15,21,56,.46) 100%)"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:{{ glowOpacity }};background:radial-gradient(1250px 1000px at -6% -12%,rgba(242,230,60,.5),rgba(242,230,60,.16) 46%,transparent 74%),radial-gradient(560px 460px at 100% 96%,rgba(255,243,122,.3),transparent 62%),radial-gradient(380px 320px at 84% 14%,rgba(194,226,63,.2),transparent 64%)"></div>
+    <div style="position:relative;max-width:1240px;margin:0 auto">
+      <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end;justify-content:space-between;margin-bottom:clamp(30px,4vw,48px)">
+        <div style="max-width:640px">
+          <div style="font-size:12.5px;font-weight:800;letter-spacing:.18em;color:#C2E23F;margin-bottom:16px">DIE DRINKLISTE</div>
+          <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,4.6vw,54px);line-height:1.02;letter-spacing:-.03em;margin:0 0 16px;color:#FFFCEE;text-wrap:balance">Erlaubt ist,<br />was schmeckt.</h2>
+          <p style="font-size:17px;line-height:1.65;color:#B7BEDF;margin:0;text-wrap:pretty">Bei uns lässt sich alles mit allem mischen — mit Schuss oder ohne. Eine Auswahl aus dem, was am häufigsten über die Theke geht.</p>
+        </div>
+        <a href="#buchen" style="border:1.5px solid rgba(242,230,60,.4);color:#F2E63C;font-weight:700;font-size:15px;padding:14px 24px;border-radius:999px;text-decoration:none;white-space:nowrap" style-hover="background:#F2E63C;color:#0F1538">Komplette Karte anfragen</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:20px">
+        <sc-for list="{{ drinks }}" as="d" hint-placeholder-count="6">
+          <article style="background:rgba(255,252,238,.045);border:1px solid rgba(255,252,238,.11);border-radius:22px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:rgba(242,230,60,.45);background:rgba(242,230,60,.07)">
+            <div style="position:relative;height:190px;background:#1A2154">
+              <image-slot id="{{ d.slot }}" shape="rect" placeholder="{{ d.placeholder }}"></image-slot>
+            </div>
+            <div style="padding:20px 20px 22px;display:flex;flex-direction:column;gap:9px;flex:1">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:20px;margin:0;color:#FFFCEE;letter-spacing:-.01em">{{ d.name }}</h3>
+                <span style="font-size:11px;font-weight:800;letter-spacing:.08em;padding:5px 9px;border-radius:999px;white-space:nowrap;background:{{ d.tagBg }};color:{{ d.tagColor }}">{{ d.tag }}</span>
+              </div>
+              <p style="font-size:14.5px;line-height:1.55;color:#A9B0D6;margin:0">{{ d.desc }}</p>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+      <p style="font-size:14px;color:#7C84AE;margin:26px 0 0">Alle Drinks gibt es auch alkoholfrei. Sonderwünsche? Sagt Bescheid — wir mixen fast alles.</p>
+    </div>
+  </section>
+
+  <section id="termine" data-screen-label="Termine" style="scroll-margin-top:84px;padding:clamp(64px,8vw,110px) 20px;background:#FFFCEE;color:#0F1538">
+    <div style="max-width:1240px;margin:0 auto">
+      <div style="max-width:680px;margin-bottom:clamp(30px,4vw,46px)">
+        <div style="font-size:12.5px;font-weight:800;letter-spacing:.18em;color:#8A8F52;margin-bottom:16px">AKTUELLES — SAISON 2026</div>
+        <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,4.6vw,54px);line-height:1.02;letter-spacing:-.03em;margin:0 0 16px;text-wrap:balance">Hier findet ihr uns.</h2>
+        <p style="font-size:17px;line-height:1.65;color:#4A4F72;margin:0;text-wrap:pretty">Wir sind auch 2026 wieder einsatzbereit. Die Liste wird durchgängig aktualisiert — vielleicht sind wir bald in eurer Nähe. Freie Wochenenden vergeben wir nach Eingang.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:34px">
+        <sc-for list="{{ months }}" as="m" hint-placeholder-count="5">
+          <div>
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px">
+              <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px;margin:0;letter-spacing:-.02em">{{ m.name }}</h3>
+              <span style="height:1px;background:rgba(15,21,56,.14);flex:1;display:block"></span>
+              <span style="font-size:13px;font-weight:700;color:#8A8F52">{{ m.count }}</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:12px">
+              <sc-for list="{{ m.items }}" as="e" hint-placeholder-count="4">
+                <div style="background:#fff;border:1.5px solid rgba(15,21,56,.09);border-radius:16px;padding:16px 18px;display:flex;gap:14px;align-items:center" style-hover="border-color:#F2E63C;box-shadow:0 8px 24px rgba(15,21,56,.07)">
+                  <div style="flex:none;width:60px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:14.5px;line-height:1.25;color:#0F1538;border-right:2px solid #F2E63C;padding-right:12px">{{ e.date }}</div>
+                  <div style="min-width:0">
+                    <div style="font-weight:700;font-size:15.5px;color:#0F1538;line-height:1.3">{{ e.name }}</div>
+                    <div style="font-size:13.5px;color:#767C9E;margin-top:3px">{{ e.city }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="galerie" data-screen-label="Galerie" style="position:relative;overflow:hidden;scroll-margin-top:84px;padding:clamp(64px,8vw,110px) 20px;background:#0F1538">
+    <div style="position:absolute;inset:0;background:url('assets/bar-hintergrund.jpg') center top/cover no-repeat;filter:saturate(1.45);opacity:{{ wallOpacity }};mask-image:linear-gradient(#000 0%,#000 42%,transparent 78%);-webkit-mask-image:linear-gradient(#000 0%,#000 42%,transparent 78%);pointer-events:none"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,rgba(15,21,56,.82) 0%,rgba(15,21,56,.5) 52%,rgba(15,21,56,.32) 100%)"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:{{ glowOpacity }};background:radial-gradient(680px 520px at 100% 6%,rgba(242,230,60,.38),transparent 62%),radial-gradient(520px 420px at 0% 84%,rgba(194,226,63,.3),transparent 62%),radial-gradient(340px 300px at 44% 0%,rgba(255,243,122,.2),transparent 66%)"></div>
+    <div style="position:relative;max-width:1240px;margin:0 auto">
+      <div style="max-width:640px;margin-bottom:clamp(28px,4vw,44px)">
+        <div style="font-size:12.5px;font-weight:800;letter-spacing:.18em;color:#C2E23F;margin-bottom:16px">GALERIE</div>
+        <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,4.6vw,54px);line-height:1.02;letter-spacing:-.03em;margin:0 0 16px;color:#FFFCEE;text-wrap:balance">Bei uns ist immer was los.</h2>
+        <p style="font-size:17px;line-height:1.65;color:#B7BEDF;margin:0;text-wrap:pretty">Von der Kerwe bis zur Messe Frankfurt — ein paar Eindrücke aus den letzten Saisons.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:{{ galleryCols }};grid-auto-rows:170px;gap:14px">
+        <div style="position:relative;grid-column:{{ wideSpan }};grid-row:span 2;min-height:170px">
+          <image-slot id="bl-gal-1" shape="rounded" radius="20" placeholder="Foto: Die Bar auf dem Stadtfest"></image-slot>
+        </div>
+        <div style="position:relative"><image-slot id="bl-gal-2" shape="rounded" radius="20" placeholder="Foto: Chriss beim Mixen"></image-slot></div>
+        <div style="position:relative"><image-slot id="bl-gal-3" shape="rounded" radius="20" placeholder="Foto: Altstadtfest Ladenburg"></image-slot></div>
+        <div style="position:relative;grid-row:span 2"><image-slot id="bl-gal-4" shape="rounded" radius="20" placeholder="Foto: Drinks in der Hand"></image-slot></div>
+        <div style="position:relative"><image-slot id="bl-gal-5" shape="rounded" radius="20" placeholder="Foto: Museumsuferfest Frankfurt"></image-slot></div>
+        <div style="position:relative"><image-slot id="bl-gal-6" shape="rounded" radius="20" placeholder="Foto: Die Lemon Family"></image-slot></div>
+        <div style="position:relative;grid-column:{{ wideSpan }}"><image-slot id="bl-gal-7" shape="rounded" radius="20" placeholder="Foto: Bar bei Nacht"></image-slot></div>
+        <div style="position:relative"><image-slot id="bl-gal-8" shape="rounded" radius="20" placeholder="Foto: Frisch gepresst"></image-slot></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="bars" data-screen-label="Unsere Bars" style="scroll-margin-top:84px;padding:clamp(64px,8vw,110px) 20px;background:#FFFCEE;color:#0F1538">
+    <div style="max-width:1240px;margin:0 auto">
+      <div style="max-width:700px;margin-bottom:clamp(30px,4vw,48px)">
+        <div style="font-size:12.5px;font-weight:800;letter-spacing:.18em;color:#8A8F52;margin-bottom:16px">DREI BARS, EIN TEAM</div>
+        <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,4.6vw,54px);line-height:1.02;letter-spacing:-.03em;margin:0 0 16px;text-wrap:balance">Wählt die Bar, die zu eurem Fest passt.</h2>
+        <p style="font-size:17px;line-height:1.65;color:#4A4F72;margin:0;text-wrap:pretty">Alle drei rollen mit derselben Crew und derselben Handpresse an — sie unterscheiden sich in Größe, Auftritt und Tempo. Bei der Paketauswahl könnt ihr die Bar direkt mit angeben.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:20px">
+        <sc-for list="{{ bars }}" as="b" hint-placeholder-count="3">
+          <article style="background:#fff;border:1.5px solid rgba(15,21,56,.1);border-radius:24px;overflow:hidden;display:flex;flex-direction:column" style-hover="border-color:#F2E63C;box-shadow:0 14px 34px rgba(15,21,56,.09)">
+            <div style="height:6px;background:{{ b.accent }}"></div>
+            <div style="position:relative;height:210px;background:#F3F1DC">
+              <image-slot id="{{ b.slot }}" shape="rect" placeholder="{{ b.placeholder }}"></image-slot>
+            </div>
+            <div style="padding:24px;display:flex;flex-direction:column;gap:14px;flex:1">
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:23px;margin:0;letter-spacing:-.02em">{{ b.name }}</h3>
+                <span style="font-size:11px;font-weight:800;letter-spacing:.08em;padding:5px 9px;border-radius:999px;background:{{ b.accentSoft }};color:#0F1538">{{ b.tag }}</span>
+              </div>
+              <p style="font-size:15px;line-height:1.6;color:#4A4F72;margin:0;flex:1">{{ b.pitch }}</p>
+              <div style="display:flex;flex-direction:column;gap:0;margin-top:2px">
+                <sc-for list="{{ b.specs }}" as="s" hint-placeholder-count="4">
+                  <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-top:1px solid rgba(15,21,56,.09)">
+                    <span style="font-size:13px;font-weight:700;color:#8A8F52;letter-spacing:.04em">{{ s.label }}</span>
+                    <span style="font-size:14.5px;font-weight:600;color:#0F1538;text-align:right">{{ s.value }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <button type="button" onClick="{{ b.choose }}" style="margin-top:auto;cursor:pointer;border:none;border-radius:999px;padding:15px 22px;font-weight:800;font-size:15.5px;min-height:52px;background:#0F1538;color:#F2E63C" style-hover="background:#1D2A63">{{ b.cta }}</button>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="buchen" data-screen-label="Buchung" style="scroll-margin-top:84px;padding:clamp(64px,8vw,110px) 20px;position:relative;overflow:hidden;background:linear-gradient(rgba(15,21,56,.93),rgba(15,21,56,.96)),url('assets/bar-hintergrund.jpg') center/cover">
+    <div style="position:absolute;inset:0;pointer-events:none;opacity:{{ glowOpacity }};background:radial-gradient(700px 540px at 0% 4%,rgba(242,230,60,.42),transparent 60%),radial-gradient(620px 500px at 100% 100%,rgba(255,243,122,.36),transparent 62%),radial-gradient(360px 320px at 62% 20%,rgba(194,226,63,.22),transparent 66%)"></div>
+    <div style="position:relative;max-width:1240px;margin:0 auto">
+      <div style="max-width:700px;margin-bottom:clamp(28px,4vw,44px)">
+        <div style="font-size:12.5px;font-weight:800;letter-spacing:.18em;color:#F2E63C;margin-bottom:16px">DIE BIGLEMON KOMMT ZU EUCH</div>
+        <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,4.6vw,54px);line-height:1.02;letter-spacing:-.03em;margin:0 0 16px;color:#FFFCEE;text-wrap:balance">Vier Pakete — oder ein Angebot ganz nach euren Vorstellungen.</h2>
+        <p style="font-size:17px;line-height:1.65;color:#B7BEDF;margin:0;text-wrap:pretty">Jedes Paket lässt sich nach euren Wünschen ergänzen. Passt nichts genau? Dann schickt uns die Eckdaten — wir kalkulieren ein Angebot, das auf eure Veranstaltung zugeschnitten ist.</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:26px">
+        <div>
+          <div style="font-size:12px;font-weight:800;letter-spacing:.16em;color:#8E96C0;margin-bottom:10px">1 — PAKET</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <sc-for list="{{ packages }}" as="p" hint-placeholder-count="4">
+              <button type="button" onClick="{{ p.select }}" style="cursor:pointer;border-radius:999px;padding:12px 24px;font-weight:800;font-size:15px;min-height:48px;border:1.5px solid {{ p.border }};background:{{ p.bg }};color:{{ p.color }}">{{ p.name }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:800;letter-spacing:.16em;color:#8E96C0;margin-bottom:10px">2 — BAR</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <sc-for list="{{ barChips }}" as="b" hint-placeholder-count="3">
+              <button type="button" onClick="{{ b.select }}" style="cursor:pointer;border-radius:999px;padding:12px 24px;font-weight:800;font-size:15px;min-height:48px;border:1.5px solid {{ b.border }};background:{{ b.bg }};color:{{ b.color }}">{{ b.name }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;align-items:start">
+        <div style="background:rgba(255,252,238,.055);border:1px solid rgba(242,230,60,.28);border-radius:26px;padding:clamp(26px,3.4vw,38px)">
+          <div style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#C2E23F;margin-bottom:12px">{{ active.label }}</div>
+          <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(26px,3.2vw,36px);margin:0 0 8px;color:#FFFCEE;letter-spacing:-.02em">{{ active.name }}</h3>
+          <div style="font-size:17px;color:#F2E63C;font-weight:700;margin-bottom:18px">{{ active.size }}</div>
+          <p style="font-size:16px;line-height:1.65;color:#B7BEDF;margin:0 0 24px">{{ active.desc }}</p>
+          <div style="display:flex;flex-direction:column;gap:12px;border-top:1px solid rgba(255,252,238,.13);padding-top:22px">
+            <sc-for list="{{ active.includes }}" as="inc" hint-placeholder-count="4">
+              <div style="display:flex;gap:12px;align-items:flex-start">
+                <span style="flex:none;width:20px;height:20px;border-radius:50%;background:#F2E63C;color:#0F1538;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:2px">✓</span>
+                <span style="font-size:15.5px;color:#E4E8FA;line-height:1.5">{{ inc }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:22px;padding:16px 18px;background:rgba(194,226,63,.12);border:1px solid rgba(194,226,63,.3);border-radius:14px;display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:12px;font-weight:800;letter-spacing:.14em;color:{{ activeBar.accent }}">GEWÄHLTE BAR</span>
+            <span style="font-size:16.5px;font-weight:700;color:#FFFCEE">{{ activeBar.name }}</span>
+            <span style="font-size:14px;color:#B7BEDF;line-height:1.5">{{ activeBar.note }}</span>
+          </div>
+          <div style="margin-top:14px;padding:16px 18px;background:rgba(242,230,60,.1);border-radius:14px;font-size:14.5px;color:#E4E8FA;line-height:1.55">Preis je nach Termin, Anfahrt und Dauer — wir melden uns in der Regel innerhalb von 48 Stunden mit einem Festpreis.</div>
+        </div>
+
+        <div id="anfrage" style="background:#FFFCEE;border-radius:26px;padding:clamp(26px,3.4vw,38px);color:#0F1538;scroll-margin-top:84px">
+          <sc-if value="{{ sent }}">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:20px 0">
+              <div style="width:60px;height:60px;border-radius:50%;background:#C2E23F;display:flex;align-items:center;justify-content:center;font-size:30px;color:#0F1538">✓</div>
+              <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;margin:0;letter-spacing:-.02em">Anfrage ist raus!</h3>
+              <p style="font-size:16px;line-height:1.6;color:#4A4F72;margin:0">Danke — wir schauen in den Kalender und melden uns innerhalb von 48 Stunden bei euch. Bei eiligen Terminen: einfach kurz durchrufen unter <a href="tel:+4917626043698" style="color:#0F1538;text-decoration:underline">0176 26043698</a>.</p>
+              <button type="button" onClick="{{ reset }}" style="margin-top:6px;background:none;border:1.5px solid rgba(15,21,56,.2);color:#0F1538;font-weight:700;font-size:15px;padding:12px 22px;border-radius:999px;cursor:pointer">Weitere Anfrage stellen</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(24px,2.8vw,30px);margin:0 0 8px;letter-spacing:-.02em">Termin anfragen</h3>
+              <p style="font-size:15.5px;line-height:1.6;color:#4A4F72;margin:0 0 24px">Kurz ausfüllen — je mehr wir wissen, desto genauer das Angebot.</p>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:14px">
+                <label style="display:flex;flex-direction:column;gap:7px">
+                  <span style="font-size:13px;font-weight:700;color:#4A4F72">Name *</span>
+                  <input type="text" required="" placeholder="Vor- und Nachname" style="border:1.5px solid rgba(15,21,56,.16);background:#fff;border-radius:12px;padding:14px 15px;font-size:15.5px;color:#0F1538;min-height:48px" />
+                </label>
+                <label style="display:flex;flex-direction:column;gap:7px">
+                  <span style="font-size:13px;font-weight:700;color:#4A4F72">E-Mail *</span>
+                  <input type="email" required="" placeholder="name@beispiel.de" style="border:1.5px solid rgba(15,21,56,.16);background:#fff;border-radius:12px;padding:14px 15px;font-size:15.5px;color:#0F1538;min-height:48px" />
+                </label>
+                <label style="display:flex;flex-direction:column;gap:7px">
+                  <span style="font-size:13px;font-weight:700;color:#4A4F72">Telefon *</span>
+                  <input type="tel" required="" placeholder="0176 0000000" style="border:1.5px solid rgba(15,21,56,.16);background:#fff;border-radius:12px;padding:14px 15px;font-size:15.5px;color:#0F1538;min-height:48px" />
+                </label>
+                <label style="display:flex;flex-direction:column;gap:7px">
+                  <span style="font-size:13px;font-weight:700;color:#4A4F72">Datum der Veranstaltung</span>
+                  <input type="date" style="border:1.5px solid rgba(15,21,56,.16);background:#fff;border-radius:12px;padding:14px 15px;font-size:15.5px;color:#0F1538;min-height:48px" />
+                </label>
+                <label style="display:flex;flex-direction:column;gap:7px">
+                  <span style="font-size:13px;font-weight:700;color:#4A4F72">Ort / PLZ</span>
+                  <input type="text" placeholder="z. B. 68199 Mannheim" style="border:1.5px solid rgba(15,21,56,.16);background:#fff;border-radius:12px;padding:14px 15px;font-size:15.5px;color:#0F1538;min-height:48px" />
+                </label>
+                <label style="display:flex;flex-direction:column;gap:7px">
+                  <span style="font-size:13px;font-weight:700;color:#4A4F72">Erwartete Gäste</span>
+                  <input type="text" placeholder="z. B. 120" style="border:1.5px solid rgba(15,21,56,.16);background:#fff;border-radius:12px;padding:14px 15px;font-size:15.5px;color:#0F1538;min-height:48px" />
+                </label>
+              </div>
+              <label style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
+                <span style="font-size:13px;font-weight:700;color:#4A4F72">Gewünschte Bar</span>
+                <select value="{{ barValue }}" onChange="{{ onBarChange }}" style="border:1.5px solid rgba(15,21,56,.16);background:#fff;border-radius:12px;padding:14px 15px;font-size:15.5px;color:#0F1538;min-height:48px">
+                  <option value="biglemon">BigLemon — die Riesenzitrone</option>
+                  <option value="biglemon2">BigLemon 2 — die zweite Zitrone</option>
+                  <option value="bigorange">BigOrange — die Riesenorange</option>
+                  <option value="offen">Noch offen — beratet uns gerne</option>
+                </select>
+              </label>
+              <label style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
+                <span style="font-size:13px;font-weight:700;color:#4A4F72">Gewünschtes Paket</span>
+                <select value="{{ pkgValue }}" onChange="{{ onPkgChange }}" style="border:1.5px solid rgba(15,21,56,.16);background:#fff;border-radius:12px;padding:14px 15px;font-size:15.5px;color:#0F1538;min-height:48px">
+                  <option value="basic">Basic — 10 bis 50 Personen</option>
+                  <option value="plus">Plus — 50 bis 120 Personen</option>
+                  <option value="premium">Premium — 120 bis 200 Personen</option>
+                  <option value="enterprise">Enterprise — Messe, Sommerfest, Kundenevent</option>
+                  <option value="offen">Weiß ich noch nicht / individuell</option>
+                </select>
+              </label>
+              <label style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
+                <span style="font-size:13px;font-weight:700;color:#4A4F72">Eure Nachricht *</span>
+                <textarea required="" rows="4" placeholder="Was für ein Fest ist es? Wie lange soll die Bar laufen? Gibt es Strom vor Ort?" style="border:1.5px solid rgba(15,21,56,.16);background:#fff;border-radius:12px;padding:14px 15px;font-size:15.5px;color:#0F1538;resize:vertical;line-height:1.5"></textarea>
+              </label>
+              <button type="button" onClick="{{ submit }}" style="width:100%;background:#0F1538;color:#F2E63C;font-weight:800;font-size:16.5px;padding:18px;border-radius:999px;border:none;cursor:pointer;min-height:56px" style-hover="background:#1D2A63">Unverbindlich anfragen</button>
+              <p style="font-size:12.5px;color:#767C9E;margin:14px 0 0;line-height:1.5">* Pflichtfeld. Eure Daten nutzen wir ausschließlich zur Bearbeitung der Anfrage — Details in der <a href="Rechtliches.dc.html#datenschutz" style="color:#0F1538;text-decoration:underline">Datenschutzerklärung</a>.</p>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt" data-screen-label="Kontakt" style="scroll-margin-top:84px;padding:clamp(64px,8vw,110px) 20px;background:#F2E63C;color:#0F1538">
+    <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(30px,5vw,60px);align-items:center">
+      <div>
+        <div style="font-size:12.5px;font-weight:800;letter-spacing:.18em;color:rgba(15,21,56,.6);margin-bottom:16px">KONTAKT</div>
+        <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,4.6vw,54px);line-height:1.02;letter-spacing:-.03em;margin:0 0 20px;text-wrap:balance">Lieber direkt reden?</h2>
+        <p style="font-size:17.5px;line-height:1.65;color:rgba(15,21,56,.75);margin:0 0 32px;max-width:480px;text-wrap:pretty">Ruft an oder schreibt uns. Wir sagen ehrlich, ob euer Termin noch frei ist — und was realistisch machbar ist.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;max-width:440px">
+          <a href="tel:+4917626043698" style="display:flex;align-items:center;gap:16px;background:#0F1538;border-radius:18px;padding:18px 22px;text-decoration:none;min-height:56px" style-hover="background:#1D2A63">
+            <span style="font-size:22px;color:#F2E63C">☎</span>
+            <span style="display:flex;flex-direction:column">
+              <span style="font-size:12.5px;color:#9BA2C8;font-weight:600">Mobil</span>
+              <span style="font-size:18px;color:#FFFCEE;font-weight:700">0176 26043698</span>
+            </span>
+          </a>
+          <a href="mailto:welcome@biglemon.de" style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:18px;padding:18px 22px;text-decoration:none;min-height:56px" style-hover="background:#FFFCEE">
+            <span style="font-size:22px;color:#0F1538">✉</span>
+            <span style="display:flex;flex-direction:column">
+              <span style="font-size:12.5px;color:#767C9E;font-weight:600">E-Mail</span>
+              <span style="font-size:18px;color:#0F1538;font-weight:700">welcome@biglemon.de</span>
+            </span>
+          </a>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <a href="https://www.instagram.com/biglemonbar" target="_blank" rel="noopener" aria-label="BigLemon auf Instagram" title="Instagram" style="flex:1 1 120px;display:flex;align-items:center;justify-content:center;gap:10px;background:#0F1538;color:#FFFCEE;border-radius:18px;padding:17px 20px;text-decoration:none;min-height:56px" style-hover="background:#1D2A63;color:#F2E63C"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.96.24 2.65.51.72.28 1.33.66 1.94 1.27.6.6.98 1.22 1.26 1.94.27.69.46 1.48.51 2.65.06 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.05 1.17-.24 1.96-.51 2.65a5.2 5.2 0 0 1-1.26 1.94c-.61.6-1.22.98-1.94 1.26-.69.27-1.48.46-2.65.51-1.25.06-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-1.96-.24-2.65-.51a5.2 5.2 0 0 1-1.94-1.26 5.2 5.2 0 0 1-1.27-1.94c-.27-.69-.46-1.48-.51-2.65C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.24-1.96.51-2.65.28-.72.66-1.33 1.27-1.94A5.2 5.2 0 0 1 5.99 1.3c.69-.27 1.48-.46 2.65-.51C9.89 2.2 10.29 2.2 12 2.2Zm0 1.8c-3.15 0-3.5.01-4.73.07-.94.04-1.45.2-1.79.33-.45.18-.77.39-1.11.73-.34.34-.55.66-.73 1.11-.13.34-.29.85-.33 1.79-.06 1.23-.07 1.58-.07 4.97s.01 3.74.07 4.97c.04.94.2 1.45.33 1.79.18.45.39.77.73 1.11.34.34.66.55 1.11.73.34.13.85.29 1.79.33 1.23.06 1.58.07 4.73.07s3.5-.01 4.73-.07c.94-.04 1.45-.2 1.79-.33.45-.18.77-.39 1.11-.73.34-.34.55-.66.73-1.11.13-.34.29-.85.33-1.79.06-1.23.07-1.58.07-4.97s-.01-3.74-.07-4.97c-.04-.94-.2-1.45-.33-1.79a2.9 2.9 0 0 0-.73-1.11 2.9 2.9 0 0 0-1.11-.73c-.34-.13-.85-.29-1.79-.33C15.5 4.01 15.15 4 12 4Zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8Zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2Zm5.15-2.4a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg></a>
+            <a href="https://www.facebook.com/biglemonbar" target="_blank" rel="noopener" aria-label="BigLemon auf Facebook" title="Facebook" style="flex:1 1 120px;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#0F1538;border-radius:18px;padding:17px 20px;text-decoration:none;min-height:56px" style-hover="background:#FFFCEE;color:#1D2A63"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.91h-2.33V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg></a>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:16px;background:rgba(15,21,56,.08);border-radius:18px;padding:18px 22px">
+            <span style="font-size:22px;color:#0F1538">⌂</span>
+            <span style="display:flex;flex-direction:column">
+              <span style="font-size:12.5px;color:rgba(15,21,56,.6);font-weight:600">BigLemon Deutschland</span>
+              <span style="font-size:17px;color:#0F1538;font-weight:700;line-height:1.45">Christopher Moravec<br />Angelstraße 110, 68199 Mannheim</span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;position:relative;min-height:280px">
+        <div style="position:absolute;width:min(80%,340px);aspect-ratio:1;border-radius:50%;background:rgba(15,21,56,.08)"></div>
+        <img src="assets/lemon-frei.png" alt="BigLemon Cocktailbar" style="position:relative;width:min(78%,320px);height:auto;display:block;filter:drop-shadow(0 30px 40px rgba(15,21,56,.28))" />
+      </div>
+    </div>
+  </section>
+
+  <footer style="position:relative;overflow:hidden;background:#0B1030;color:#8E96C0;padding:clamp(44px,6vw,68px) 20px 34px">
+    <div style="position:absolute;inset:0;pointer-events:none;opacity:{{ glowOpacity }};background:radial-gradient(520px 300px at 92% 0%,rgba(242,230,60,.3),transparent 64%),radial-gradient(420px 280px at 4% 100%,rgba(194,226,63,.22),transparent 66%)"></div>
+    <div style="position:relative;max-width:1240px;margin:0 auto">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:34px;padding-bottom:34px;border-bottom:1px solid rgba(255,252,238,.1)">
+        <div>
+          <img src="assets/logo-light.png" alt="Big Lemon" style="height:52px;width:auto;display:block;margin-bottom:18px" />
+          <p style="font-size:14.5px;line-height:1.6;margin:0;max-width:280px">„Lieber Natur Pur" — Cocktails, die begeistern. Die etwas andere mobile Cocktailbar aus Mannheim.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#FFFCEE;margin-bottom:4px">SEITE</div>
+          <a href="#bar" style="font-size:14.5px;color:#8E96C0;text-decoration:none" style-hover="color:#F2E63C">Die Bar</a>
+          <a href="#drinks" style="font-size:14.5px;color:#8E96C0;text-decoration:none" style-hover="color:#F2E63C">Drinks</a>
+          <a href="#termine" style="font-size:14.5px;color:#8E96C0;text-decoration:none" style-hover="color:#F2E63C">Termine 2026</a>
+          <a href="#galerie" style="font-size:14.5px;color:#8E96C0;text-decoration:none" style-hover="color:#F2E63C">Galerie</a>
+          <a href="#bars" style="font-size:14.5px;color:#8E96C0;text-decoration:none" style-hover="color:#F2E63C">Unsere Bars</a>
+          <a href="#buchen" style="font-size:14.5px;color:#8E96C0;text-decoration:none" style-hover="color:#F2E63C">Buchung</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#FFFCEE;margin-bottom:4px">KONTAKT</div>
+          <a href="tel:+4917626043698" style="font-size:14.5px;color:#8E96C0;text-decoration:none" style-hover="color:#F2E63C">0176 26043698</a>
+          <a href="mailto:welcome@biglemon.de" style="font-size:14.5px;color:#8E96C0;text-decoration:none" style-hover="color:#F2E63C">welcome@biglemon.de</a>
+          <span style="font-size:14.5px;line-height:1.55">Angelstraße 110<br />68199 Mannheim</span>
+          <span style="display:flex;gap:16px;margin-top:6px">
+            <a href="https://www.instagram.com/biglemonbar" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram" style="color:#8E96C0;text-decoration:none;display:flex;align-items:center" style-hover="color:#F2E63C"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.96.24 2.65.51.72.28 1.33.66 1.94 1.27.6.6.98 1.22 1.26 1.94.27.69.46 1.48.51 2.65.06 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.05 1.17-.24 1.96-.51 2.65a5.2 5.2 0 0 1-1.26 1.94c-.61.6-1.22.98-1.94 1.26-.69.27-1.48.46-2.65.51-1.25.06-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-1.96-.24-2.65-.51a5.2 5.2 0 0 1-1.94-1.26 5.2 5.2 0 0 1-1.27-1.94c-.27-.69-.46-1.48-.51-2.65C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.24-1.96.51-2.65.28-.72.66-1.33 1.27-1.94A5.2 5.2 0 0 1 5.99 1.3c.69-.27 1.48-.46 2.65-.51C9.89 2.2 10.29 2.2 12 2.2Zm0 1.8c-3.15 0-3.5.01-4.73.07-.94.04-1.45.2-1.79.33-.45.18-.77.39-1.11.73-.34.34-.55.66-.73 1.11-.13.34-.29.85-.33 1.79-.06 1.23-.07 1.58-.07 4.97s.01 3.74.07 4.97c.04.94.2 1.45.33 1.79.18.45.39.77.73 1.11.34.34.66.55 1.11.73.34.13.85.29 1.79.33 1.23.06 1.58.07 4.73.07s3.5-.01 4.73-.07c.94-.04 1.45-.2 1.79-.33.45-.18.77-.39 1.11-.73.34-.34.55-.66.73-1.11.13-.34.29-.85.33-1.79.06-1.23.07-1.58.07-4.97s-.01-3.74-.07-4.97c-.04-.94-.2-1.45-.33-1.79a2.9 2.9 0 0 0-.73-1.11 2.9 2.9 0 0 0-1.11-.73c-.34-.13-.85-.29-1.79-.33C15.5 4.01 15.15 4 12 4Zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8Zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2Zm5.15-2.4a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg></a>
+            <a href="https://www.facebook.com/biglemonbar" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook" style="color:#8E96C0;text-decoration:none;display:flex;align-items:center" style-hover="color:#F2E63C"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.91h-2.33V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg></a>
+          </span>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;padding-top:22px;font-size:13px">
+        <span>© 2026 BigLemon Deutschland</span>
+        <span style="display:flex;gap:20px;flex-wrap:wrap">
+          <a href="Rechtliches.dc.html" style="color:#8E96C0;text-decoration:none" style-hover="color:#F2E63C">Impressum</a>
+          <a href="Rechtliches.dc.html#datenschutz" style="color:#8E96C0;text-decoration:none" style-hover="color:#F2E63C">Datenschutz</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;fruchtStufe&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dezent&quot;,&quot;fruchtig&quot;,&quot;knallig&quot;],&quot;default&quot;:&quot;fruchtig&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look&quot;},&quot;zitronenTapete&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Look&quot;}}">
+const MONTHS = [
+  ["Mai", [["08.–10.05.", "Frühlingsfest", "Lorsch"], ["29.–31.05.", "Schützenfest", "Gummersbach"], ["30.–31.05.", "Berger Straßenfest", "Frankfurt-Bergen"]]],
+  ["Juni", [["04.–07.06.", "CSD", "Düsseldorf"], ["13.06.", "Weststadtfest", "Weinheim"], ["26.–28.06.", "Altstadtfest", "Trier"]]],
+  ["Juli", [["03.–05.07.", "CSD", "Köln"], ["03.–05.07.", "Lanzparkfest", "Mannheim-Lindenhof"], ["10.–11.07.", "Straßenfest", "Neckarrems"], ["12.07.", "CSD", "Olpe"], ["18.07.", "Sommernachtsfest", "Heimkirchen"], ["24.–27.07.", "CSD", "Stuttgart"], ["25.07.", "CSD", "Berlin"], ["25.07.", "CSD", "Duisburg"], ["31.07.–02.08.", "Torbogenfest", "Göllheim"]]],
+  ["August", [["12.08.", "Bernemer Mittwoch", "Frankfurt-Bornheim"], ["21.–23.08.", "Jazz & Joy", "Worms"], ["22.–23.08.", "Kerwe", "Sandhofen"], ["28.–30.08.", "Altstadtfest", "Siegburg"], ["28.–30.08.", "Jubiläumsfeier", "Germersheim"]]],
+  ["September", [["04.–06.09.", "Altstadtfest", "Brilon"], ["11.–13.09.", "Altstadtfest", "Speyer"], ["18.–20.09.", "Stadtfest", "Hennef"], ["27.09.", "Kerwe", "Niederkirchen"]]]
+];
+
+const DRINKS = [
+  { name: "Lemon Fresh", tag: "KLASSIKER", desc: "Handgepresste Zitrone, Rohrzucker, Soda, viel Eis. Der Drink, für den die Leute wiederkommen.", alc: false },
+  { name: "Strawberry Lemon", tag: "FRUCHTIG", desc: "Frische Erdbeere trifft Limette und Minze. Süß, sauer, sommerlich.", alc: false },
+  { name: "Coco Lime", tag: "CREMIG", desc: "Kokosmilch, Limette und Rohrzucker — cremig gemixt, karibisch im Kopf.", alc: false },
+  { name: "Orange Sunrise", tag: "VITAMIN", desc: "Frisch gepresste Orange mit Maracuja. Die Vitaminbombe für den Nachmittag.", alc: false },
+  { name: "Caipi Lemon", tag: "MIT SCHUSS", desc: "Limette, Rohrzucker, Cachaça, crushed Ice. Handgestampft, wie es sich gehört.", alc: true },
+  { name: "Big Hugo", tag: "MIT SCHUSS", desc: "Holunder, Limette, Minze und Prosecco. Der Aperitif für den Sonnenuntergang.", alc: true }
+];
+
+const PACKAGES = [
+  { key: "basic", name: "Basic", label: "PAKET 01", size: "10 bis 50 Personen", desc: "Für die private Feier im Garten, den runden Geburtstag oder das Vereinsjubiläum. Die Bar kommt, bleibt ein paar Stunden und macht aus dem Abend einen Anlass.", includes: ["Anlieferung und kompletter Aufbau der BigLemon", "Ein Barkeeper an der Presse", "Frisch gepresste Säfte und Cocktails aus der Karte", "Gläser, Eis und Zubehör inklusive"] },
+  { key: "plus", name: "Plus", label: "PAKET 02", size: "50 bis 120 Personen", desc: "Der Klassiker für Hochzeiten, Straßenfeste und größere Firmenfeiern. Zwei Leute hinter der Theke, damit die Schlange nie steht.", includes: ["Anlieferung, Aufbau und Abbau", "Zweiköpfiges Barkeeper-Team", "Erweiterte Drinkauswahl mit und ohne Alkohol", "Beleuchtung der Bar für den Abendbetrieb", "Individuelle Absprache der Laufzeit"] },
+  { key: "premium", name: "Premium", label: "PAKET 03", size: "120 bis 200 Personen", desc: "Für Stadtfeste, Festivals und alles, wo es richtig voll wird. Mehrtägig möglich — wir sind das von der Kerwe gewohnt.", includes: ["Mehrtägiger Betrieb möglich", "Volles Crew-Team im Schichtbetrieb", "Komplette Karte plus Sonderwünsche", "Abstimmung mit Veranstalter und Standplanung", "Nachschub-Logistik über die gesamte Laufzeit"] },
+  { key: "enterprise", name: "Enterprise", label: "PAKET 04", size: "Messe, Sommerfest, Kundenevent", desc: "Ihr braucht ein Highlight am Stand oder auf dem Betriebsgelände? Die BigLemon zieht Leute an, bevor ihr das erste Wort gesagt habt.", includes: ["Einsatz auf Messen und Firmengeländen", "Branding-Möglichkeiten an der Bar auf Anfrage", "Alkoholfreies Konzept auf Wunsch", "Abrechnung auf Rechnung, Bewirtungsbeleg inklusive", "Kombination mit Amore Catering möglich"] }
+];
+
+const PLATZ = [["PLATZBEDARF", "ca. 3 × 3 m"], ["STROM", "nicht nötig"], ["WASSER", "nicht nötig"]];
+
+const BARS = [
+  { key: "biglemon", name: "BigLemon", tag: "DAS ORIGINAL", cta: "BigLemon anfragen",
+    accent: "#F2E63C", accentSoft: "rgba(242,230,60,.26)",
+    pitch: "Die erste Riesenzitrone, drei Meter groß und fahrbar. Aufklappen, anstellen, staunen — und dazu frisch gepresste Cocktails direkt aus der Presse.",
+    note: "Das Original — seit Jahren auf Festen zwischen Mannheim und Frankfurt.",
+    specs: PLATZ },
+  { key: "biglemon2", name: "BigLemon 2", tag: "DIE ZWEITE ZITRONE", cta: "BigLemon 2 anfragen",
+    accent: "#F7B32B", accentSoft: "rgba(247,179,43,.26)",
+    pitch: "Baugleich zur ersten, mit eigener Crew. Damit laufen zwei Theken parallel auf einem großen Fest — oder zwei Termine am selben Wochenende.",
+    note: "Für lange Schlangen oder parallele Termine — zweimal die gleiche Bar.",
+    specs: PLATZ },
+  { key: "bigorange", name: "BigOrange", tag: "DIE ORANGE", cta: "BigOrange anfragen",
+    accent: "#EE7B2F", accentSoft: "rgba(238,123,47,.26)",
+    pitch: "Gleiche Technik, andere Frucht: die Riesenorange in warmem Orange. Ein frischer Farbakzent, wenn es zum Fest oder zum Branding besser passt.",
+    note: "Wie die BigLemon, nur in Orange — schön als Duo mit einer Zitrone.",
+    specs: PLATZ }
+];
+
+class Component extends DCLogic {
+  state = { w: typeof window !== "undefined" ? window.innerWidth : 1200, menuOpen: false, pkg: "plus", sent: false, bar: "biglemon" };
+
+  componentDidMount() {
+    this._onResize = () => this.setState({ w: window.innerWidth });
+    window.addEventListener("resize", this._onResize);
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._onResize); }
+
+  renderVals() {
+    const mobile = this.state.w < 940;
+    const active = PACKAGES.find(p => p.key === this.state.pkg) || {
+      key: "offen", label: "INDIVIDUELL", name: "Individuelles Angebot", size: "Größe noch offen",
+      desc: "Ihr wisst noch nicht, welches Paket passt? Schickt uns Anlass, Datum, Ort und die erwartete Gästezahl — wir schlagen euch die passende Variante vor.",
+      includes: ["Beratung zur passenden Bar und Paketgröße", "Angebot mit Festpreis nach euren Eckdaten", "Alles frei kombinierbar"]
+    };
+    const level = this.props.fruchtStufe || "fruchtig";
+    const wall = this.props.zitronenTapete ?? true;
+    const F = { dezent: [0.2, 0.55], fruchtig: [0.46, 0.85], knallig: [0.68, 1] }[level] || [0.46, 0.85];
+    return {
+      wallOpacity: wall ? F[0] : 0,
+      wallOpacitySoft: wall ? F[0] * 0.75 : 0,
+      glowOpacity: F[1],
+      wideSpan: this.state.w < 700 ? "auto" : "span 2",
+      galleryCols: this.state.w < 620 ? "repeat(2,minmax(0,1fr))" : "repeat(auto-fit,minmax(min(100%,220px),1fr))",
+      heroSide: this.state.w >= 940,
+      heroSmall: this.state.w >= 620 && this.state.w < 940,
+      desktopNav: !mobile,
+      mobileNav: mobile,
+      menuOpen: mobile && this.state.menuOpen,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      drinks: DRINKS.map((d, i) => ({
+        name: d.name, desc: d.desc, tag: d.tag,
+        slot: "bl-drink-" + i,
+        placeholder: "Foto: " + d.name,
+        tagBg: d.alc ? "rgba(242,230,60,.16)" : "rgba(194,226,63,.16)",
+        tagColor: d.alc ? "#F2E63C" : "#C2E23F"
+      })),
+      months: MONTHS.map(([name, items]) => ({
+        name,
+        count: items.length + (items.length === 1 ? " Termin" : " Termine"),
+        items: items.map(([date, n, city]) => ({ date, name: n, city }))
+      })),
+      packages: PACKAGES.map(p => {
+        const on = p.key === this.state.pkg;
+        return {
+          name: p.name,
+          bg: on ? "#F2E63C" : "rgba(255,252,238,.06)",
+          color: on ? "#0F1538" : "#E4E8FA",
+          border: on ? "#F2E63C" : "rgba(255,252,238,.22)",
+          select: () => this.setState({ pkg: p.key })
+        };
+      }),
+      active,
+      bars: BARS.map(b => ({
+        name: b.name, tag: b.tag, pitch: b.pitch, cta: b.cta,
+        accent: b.accent, accentSoft: b.accentSoft,
+        slot: "bl-bar-" + b.key,
+        placeholder: "Foto: " + b.name,
+        specs: b.specs.map(([label, value]) => ({ label, value })),
+        choose: () => {
+          this.setState({ bar: b.key });
+          const el = document.getElementById("buchen");
+          if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: "smooth" });
+        }
+      })),
+      barChips: BARS.map(b => {
+        const on = b.key === this.state.bar;
+        return {
+          name: b.name,
+          bg: on ? b.accent : "rgba(255,252,238,.06)",
+          color: on ? "#0F1538" : "#E4E8FA",
+          border: on ? b.accent : "rgba(255,252,238,.22)",
+          select: () => this.setState({ bar: b.key })
+        };
+      }),
+      activeBar: BARS.find(b => b.key === this.state.bar) ||
+        { name: "Noch offen", note: "Wir beraten euch, welche Bar zu eurem Fest passt.", accent: "#C2E23F" },
+      barValue: this.state.bar,
+      onBarChange: e => this.setState({ bar: e.target.value }),
+      pkgValue: this.state.pkg,
+      onPkgChange: e => this.setState({ pkg: e.target.value }),
+      sent: this.state.sent,
+      notSent: !this.state.sent,
+      submit: () => {
+        this.setState({ sent: true });
+        const el = document.getElementById("anfrage");
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: "smooth" });
+      },
+      reset: () => this.setState({ sent: false })
+    };
+  }
+}
+</script>
+</body>
+</html>
