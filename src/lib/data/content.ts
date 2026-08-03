@@ -30,6 +30,32 @@ export const CONTACT = {
 	vatId: 'DE 272012285'
 };
 
+/** Stammdaten für Meta-Tags und strukturierte Daten. */
+export const SITE = {
+	name: 'BigLemon',
+	title: 'BigLemon — Die mobile Cocktailbar für euer Fest',
+	description:
+		'Die BigLemon ist eine 3 Meter große, fahrbare Riesenzitrone voller frisch gepresster Cocktails — buchbar für Hochzeiten, Firmenfeiern, Stadtfeste und Festivals in Mannheim, Rhein-Neckar und bundesweit.',
+	/** Kurzfassung für Social-Vorschauen, wo wenig Platz ist. */
+	shortDescription:
+		'Mobile Cocktailbar aus Mannheim: frisch gepresste Cocktails aus einer 3 Meter großen Riesenzitrone.',
+	keywords: [
+		'mobile Cocktailbar',
+		'Cocktailbar mieten',
+		'Cocktailbar Mannheim',
+		'mobile Bar Hochzeit',
+		'Barkeeper buchen',
+		'Cocktails Firmenfeier',
+		'Stadtfest Bar',
+		'Rhein-Neckar',
+		'BigLemon'
+	],
+	ogImage: '/og-image.jpg',
+	locale: 'de_DE',
+	/** Regionen, in denen die Bar üblicherweise unterwegs ist. */
+	areaServed: ['Mannheim', 'Rhein-Neckar', 'Rhein-Main', 'Deutschland']
+};
+
 export const NAV_LINKS = [
 	{ href: '/#bar', label: 'Die Bar' },
 	{ href: '/#drinks', label: 'Drinks' },
@@ -253,8 +279,8 @@ export const GALLERY_SHOTS: GalleryShot[] = [
 	{ placeholder: 'Foto: Frisch gepresst' }
 ];
 
+/** Kennzahlen im Hero. Die Anzahl der Feste kommt aus dem CMS und steht deshalb nicht hier. */
 export const HERO_STATS = [
-	{ value: '24', label: 'Feste in 2026' },
 	{ value: '50+', label: 'verschiedene Cocktails' },
 	{ value: '0', label: 'Künstliche Aromen' }
 ];

@@ -62,15 +62,6 @@
 						<SocialIcon name="facebook" />
 					</a>
 				</div>
-				<div class="flex items-start gap-4 rounded-[18px] bg-second/8 px-[22px] py-[18px]">
-					<span class="text-[22px]">⌂</span>
-					<span class="flex flex-col">
-						<span class="text-[12.5px] font-semibold text-second/60">{CONTACT.company}</span>
-						<span class="text-[17px] leading-[1.45] font-bold">
-							{CONTACT.owner}<br />{CONTACT.street}, {CONTACT.city}
-						</span>
-					</span>
-				</div>
 			</div>
 		</div>
 

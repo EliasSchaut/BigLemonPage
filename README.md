@@ -245,6 +245,16 @@ Dann liefert der Fallback. Im Server-Log steht eine Zeile mit `[cms]` und dem Gr
 
 ---
 
+## SEO und Metadaten
+
+`src/lib/components/Seo.svelte` erzeugt Titel, Description, Keywords, Canonical, Open Graph, Twitter Card und optionale strukturierte Daten. Die Textbausteine stehen zentral in `SITE` (`src/lib/data/content.ts`), das Vorschaubild unter `static/og-image.jpg` (1200×630).
+
+Die Startseite liefert zusätzlich `LocalBusiness`-JSON-LD aus `src/lib/data/structured-data.ts` — mit Kontaktdaten, Einsatzgebieten und Social-Profilen. Die Termine sind bewusst **nicht** als `Event` ausgezeichnet: BigLemon ist auf Stadtfesten und CSDs Anbieter, nicht Veranstalter; sie als eigene Events zu melden wäre gegenüber Suchmaschinen falsch.
+
+`robots.txt` und `sitemap.xml` sind Routen statt statischer Dateien, weil beide absolute URLs brauchen.
+
+> **Wichtig:** Alle absoluten URLs (Canonical, `og:image`, Sitemap) leiten sich aus `ORIGIN` ab. Ist die Variable in Produktion nicht gesetzt, stehen dort die falschen Adressen und Social-Vorschauen bleiben leer.
+
 ## Was im Code bleibt
 
 Bewusst **nicht** im CMS, damit Design und Rechtstexte nicht versehentlich kaputtgehen:

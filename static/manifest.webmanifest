@@ -1,0 +1,31 @@
+{
+	"name": "BigLemon — Mobile Cocktailbar",
+	"short_name": "BigLemon",
+	"description": "Die mobile Cocktailbar aus Mannheim: eine 3 Meter große, fahrbare Riesenzitrone voller frisch gepresster Cocktails.",
+	"lang": "de",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"background_color": "#0F1538",
+	"theme_color": "#0F1538",
+	"icons": [
+		{
+			"src": "/icon-192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/icon-512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/icon-maskable-512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	]
+}

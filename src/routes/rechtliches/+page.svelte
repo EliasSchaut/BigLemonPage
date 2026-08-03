@@ -2,6 +2,7 @@
 	import { CONTACT } from '$lib/data/content';
 	import Eyebrow from '$lib/components/ui/Eyebrow.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
+	import Seo from '$lib/components/Seo.svelte';
 
 	const privacySections = [
 		{
@@ -35,10 +36,11 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Impressum & Datenschutz — BigLemon</title>
-	<meta name="robots" content="noindex" />
-</svelte:head>
+<Seo
+	title="Impressum & Datenschutz — BigLemon"
+	description="Impressum und Datenschutzerklärung der BigLemon Deutschland, mobile Cocktailbar aus Mannheim."
+	noindex
+/>
 
 <div class="bg-cream px-5 pt-[clamp(40px,6vw,76px)] pb-[clamp(56px,7vw,90px)] text-second">
 	<div class="mx-auto max-w-[960px]">

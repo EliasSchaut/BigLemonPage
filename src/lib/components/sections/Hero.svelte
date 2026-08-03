@@ -3,6 +3,14 @@
 	import { HERO_STATS } from '$lib/data/content';
 	import Button from '$lib/components/ui/Button.svelte';
 	import GlowBackdrop from '$lib/components/ui/GlowBackdrop.svelte';
+
+	let { eventCount = 0 }: { eventCount?: number } = $props();
+
+	// Erste Kennzahl kommt live aus dem CMS, der Rest steht im Code.
+	const stats = $derived([
+		{ value: String(eventCount), label: 'Feste im Kalender' },
+		...HERO_STATS
+	]);
 </script>
 
 <section
@@ -56,7 +64,7 @@
 			<div
 				class="grid max-w-[560px] grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-[18px] border-t border-cream/13 pt-[26px]"
 			>
-				{#each HERO_STATS as stat (stat.label)}
+				{#each stats as stat (stat.label)}
 					<div>
 						<div class="font-display text-3xl leading-none font-extrabold text-prime">
 							{stat.value}

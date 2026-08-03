@@ -25,6 +25,8 @@ export interface EventItem {
 	end?: string;
 	name: string;
 	city: string;
+	/** Vom Server gesetzt: liegt der Termin bereits in der Vergangenheit? */
+	past?: boolean;
 }
 
 export interface EventMonth {

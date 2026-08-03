@@ -9,19 +9,17 @@
 	import Bars from '$lib/components/sections/Bars.svelte';
 	import Booking from '$lib/components/sections/booking/Booking.svelte';
 	import Contact from '$lib/components/sections/Contact.svelte';
+	import Seo from '$lib/components/Seo.svelte';
+	import { page } from '$app/state';
+	import { SITE } from '$lib/data/content';
+	import { localBusinessJsonLd } from '$lib/data/structured-data';
 
 	let { data }: { data: PageData } = $props();
 </script>
 
-<svelte:head>
-	<title>BigLemon — Die mobile Cocktailbar für euer Fest</title>
-	<meta
-		name="description"
-		content="Die BigLemon: eine 3 Meter große, fahrbare Riesenzitrone voller frisch gepresster Cocktails — für Hochzeiten, Firmenfeiern, Stadtfeste und Festivals."
-	/>
-</svelte:head>
+<Seo title={SITE.title} jsonLd={localBusinessJsonLd(page.url.origin)} />
 
-<Hero />
+<Hero eventCount={data.eventCount} />
 <Marquee />
 <WhyBar />
 <Drinks drinks={data.drinks} />

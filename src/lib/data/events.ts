@@ -66,3 +66,15 @@ export function groupByMonth(events: EventItem[]): EventMonth[] {
 export function upcomingByMonth(events: EventItem[], today = todayInBerlin()): EventMonth[] {
 	return groupByMonth(events.filter((event) => isUpcoming(event, today)));
 }
+
+/**
+ * Alle Termine nach Monat gruppiert, jeder Eintrag mit `past` markiert. Ein Monat
+ * kann beides enthalten — deshalb wird pro Termin markiert und nicht pro Monat
+ * getrennt, sonst erschiene dieselbe Monatsueberschrift zweimal.
+ */
+export function allByMonth(events: EventItem[], today = todayInBerlin()): EventMonth[] {
+	return groupByMonth(events).map((month) => ({
+		name: month.name,
+		items: month.items.map((event) => ({ ...event, past: !isUpcoming(event, today) }))
+	}));
+}

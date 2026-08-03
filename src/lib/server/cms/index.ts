@@ -5,7 +5,7 @@
 
 import { readItems } from '@directus/sdk';
 import { BARS, DRINKS, EVENTS, GALLERY_SHOTS, PACKAGES } from '$lib/data/content';
-import { upcomingByMonth } from '$lib/data/events';
+import { allByMonth } from '$lib/data/events';
 import type { Bar, BookingPackage, Drink, EventMonth, GalleryShot } from '$lib/data/types';
 import { directus } from './client';
 import { cached } from './cache';
@@ -16,7 +16,10 @@ export interface SiteContent {
 	drinks: Drink[];
 	bars: Bar[];
 	packages: BookingPackage[];
+	/** Alle Termine nach Monat gruppiert; vergangene sind mit `past` markiert. */
 	eventMonths: EventMonth[];
+	/** Anzahl aller im CMS gepflegten Termine — Grundlage der Kennzahl im Hero. */
+	eventCount: number;
 	gallery: GalleryShot[];
 }
 
@@ -31,7 +34,8 @@ export function fallbackContent(): SiteContent {
 		drinks: DRINKS,
 		bars: BARS,
 		packages: PACKAGES,
-		eventMonths: upcomingByMonth(EVENTS),
+		eventMonths: allByMonth(EVENTS),
+		eventCount: EVENTS.length,
 		gallery: GALLERY_SHOTS
 	};
 }
@@ -84,7 +88,8 @@ async function loadFromDirectus(): Promise<SiteContent> {
 		drinks: drinks.length > 0 ? mapDrinks(drinks) : defaults.drinks,
 		bars: bars.length > 0 ? mapBars(bars) : defaults.bars,
 		packages: packages.length > 0 ? mapPackages(packages) : defaults.packages,
-		eventMonths: upcomingByMonth(mapEvents(events)),
+		eventMonths: allByMonth(mapEvents(events)),
+		eventCount: events.length,
 		gallery: gallery.length > 0 ? mapGallery(gallery) : defaults.gallery
 	};
 }

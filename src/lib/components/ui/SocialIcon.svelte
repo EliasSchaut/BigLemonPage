@@ -1,4 +1,9 @@
 <script lang="ts">
+	// Die Markendateien aus assets/svgs werden per ?raw eingebettet, damit sie
+	// die Textfarbe erben (currentColor) — ein <img> koennte beim Hover nicht umfaerben.
+	import instagram from '$lib/assets/svgs/instagram-light.svg?raw';
+	import facebook from '$lib/assets/svgs/facebook-light.svg?raw';
+
 	interface Props {
 		name: 'instagram' | 'facebook';
 		size?: number;
@@ -6,14 +11,15 @@
 
 	let { name, size = 22 }: Props = $props();
 
-	const paths = {
-		instagram:
-			'M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.96.24 2.65.51.72.28 1.33.66 1.94 1.27.6.6.98 1.22 1.26 1.94.27.69.46 1.48.51 2.65.06 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.05 1.17-.24 1.96-.51 2.65a5.2 5.2 0 0 1-1.26 1.94c-.61.6-1.22.98-1.94 1.26-.69.27-1.48.46-2.65.51-1.25.06-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-1.96-.24-2.65-.51a5.2 5.2 0 0 1-1.94-1.26 5.2 5.2 0 0 1-1.27-1.94c-.27-.69-.46-1.48-.51-2.65C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.24-1.96.51-2.65.28-.72.66-1.33 1.27-1.94A5.2 5.2 0 0 1 5.99 1.3c.69-.27 1.48-.46 2.65-.51C9.89 2.2 10.29 2.2 12 2.2Zm0 1.8c-3.15 0-3.5.01-4.73.07-.94.04-1.45.2-1.79.33-.45.18-.77.39-1.11.73-.34.34-.55.66-.73 1.11-.13.34-.29.85-.33 1.79-.06 1.23-.07 1.58-.07 4.97s.01 3.74.07 4.97c.04.94.2 1.45.33 1.79.18.45.39.77.73 1.11.34.34.66.55 1.11.73.34.13.85.29 1.79.33 1.23.06 1.58.07 4.73.07s3.5-.01 4.73-.07c.94-.04 1.45-.2 1.79-.33.45-.18.77-.39 1.11-.73.34-.34.55-.66.73-1.11.13-.34.29-.85.33-1.79.06-1.23.07-1.58.07-4.97s-.01-3.74-.07-4.97c-.04-.94-.2-1.45-.33-1.79a2.9 2.9 0 0 0-.73-1.11 2.9 2.9 0 0 0-1.11-.73c-.34-.13-.85-.29-1.79-.33C15.5 4.01 15.15 4 12 4Zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8Zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2Zm5.15-2.4a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z',
-		facebook:
-			'M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.91h-2.33V22c4.78-.76 8.44-4.92 8.44-9.94Z'
-	};
+	const icons = { instagram, facebook };
 </script>
 
-<svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
-	<path d={paths[name]} />
-</svg>
+<span
+	class="inline-flex shrink-0 items-center justify-center [&>svg]:size-full"
+	style:width="{size}px"
+	style:height="{size}px"
+	aria-hidden="true"
+>
+	<!-- eslint-disable-next-line svelte/no-at-html-tags — statische Datei aus dem Build -->
+	{@html icons[name]}
+</span>
