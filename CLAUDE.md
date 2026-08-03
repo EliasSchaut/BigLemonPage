@@ -20,32 +20,19 @@ Package manager is **pnpm**.
 - `pnpm lint` — Prettier check; `pnpm format` to fix
 - No test setup exists yet.
 
-### Database
-
-Postgres via Docker + Drizzle ORM:
-
-- `pnpm db:start` — start local Postgres (`compose.yaml`, port 5432)
-- `pnpm db:push` — push schema directly (dev)
-- `pnpm db:generate` / `pnpm db:migrate` — generate and run migrations
-- `pnpm db:studio` — Drizzle Studio
-
-Requires `DATABASE_URL` in `.env` (both `drizzle.config.ts` and the app throw if unset).
-
 ### E-Mail
 
 Das Anfrageformular verschickt per SMTP (Nodemailer). Konfiguration über `.env`, alle Variablen sind in `.env.example` dokumentiert: `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `CONTACT_EMAIL`. Ohne `CONTACT_EMAIL` geht die Mail an die Adresse aus `CONTACT` in `src/lib/data/content.ts`.
 
-Lokal testen ohne echten Mailserver: `python3 -m smtpd -n -c DebuggingServer localhost:2525` und `SMTP_HOST=127.0.0.1 SMTP_PORT=2525` setzen.
+Lokal fängt **MailDev** (aus `compose.override.yaml`) allen Versand ab: Postfach unter `http://localhost:1080`, SMTP auf Port 1025. Für `pnpm dev` dazu `SMTP_HOST=127.0.0.1` und `SMTP_PORT=1025` setzen; der `web`-Container ist bereits darauf gerichtet.
 
 ### CMS (Directus)
 
 Termine, Drinks, Bars, Pakete und die Galeriebilder pflegt der Kunde in Directus (`http://localhost:8055`, läuft über `compose.yaml` auf einer eigenen Datenbank `directus`).
 
-- `docker compose up -d` — Postgres + Directus starten
+- `docker compose up -d` — Postgres + Directus starten (Zugangsdaten kommen aus `POSTGRES_USER`/`POSTGRES_PASSWORD` in der `.env`; Directus erhaelt daraus einen `DB_CONNECTION_STRING`, `DIRECTUS_DB_URL` ueberschreibt ihn fuer externe Datenbanken)
 - `node --env-file=.env scripts/setup-directus-schema.mjs` — Collections, Bild-Relationen, öffentliche Leserechte und die Rolle „Redaktion" anlegen (idempotent, ersetzt einen Schema-Snapshot)
 - `node --env-file=.env --experimental-strip-types scripts/seed-directus.ts` — Startwerte aus `content.ts` übertragen (überspringt befüllte Collections)
-
-Beim ersten Start muss die Datenbank existieren: `docker compose exec db createdb -U root directus`.
 
 **Lizenz:** Directus 12 erzwingt Lizenzstufen. Ohne Key läuft die Instanz im Core-Tier — dort sind feldbeschränkte Berechtigungen gesperrt (das Setup-Skript weicht automatisch auf Vollzugriff aus) und nach 30 Tagen Karenz können Nicht-Admin-Logins blockiert werden.
 
@@ -57,7 +44,7 @@ Zwei Fallstricke: Der Key bindet sich beim ersten Start **fest an Projekt und `P
 
 - **SvelteKit 2 + Svelte 5 with runes mode forced** for all project files via `vite.config.ts` (`compilerOptions.runes`) — use `$props()`, `$state()`, `$derived()`, etc.; legacy `export let` / `$:` syntax will not compile outside `node_modules`.
 - **Tailwind CSS v4** via the Vite plugin — no `tailwind.config.js`; configuration lives in CSS (`src/routes/layout.css`, imported by the root layout). `@tailwindcss/forms` is enabled there via `@plugin`.
-- **Database layer**: schema in `src/lib/server/db/schema.ts`, client (postgres-js + Drizzle) exported as `db` from `src/lib/server/db/index.ts`. Server-only by convention of the `$lib/server` path.
+- **Keine Datenbank in der App**: Die Website liest ihre Inhalte ausschließlich per HTTP aus Directus. Postgres läuft nur als Directus-Backend — der `web`-Container bekommt bewusst keine DB-Zugangsdaten.
 - **Inhalte**: `src/lib/data/content.ts` hat eine Doppelrolle — Startwerte für den CMS-Seed _und_ Fallback zur Laufzeit; die Datei bleibt daher gepflegt. `src/lib/server/cms/` fragt Directus (`index.ts`), cacht prozessweit mit stale-if-error (`cache.ts`) und übersetzt die Rohdaten in die App-Typen (`map.ts`). Fällt Directus aus, rendert die Seite unverändert aus `content.ts`. Datumsformatierung und Monatsgruppierung der Termine liegen in `src/lib/data/events.ts` (framework- und serverfrei, damit CMS- und Fallback-Daten dieselbe Logik durchlaufen). Markenfarben und Galerie-Layout bleiben im Code: im CMS stehen nur Token-Namen, die `map.ts` auflöst.
 - **Mail-Versand**: `src/lib/server/mail/` — `index.ts` baut den (gepoolten) Nodemailer-Transport aus `$env/dynamic/private` und verschickt; `template.ts` ersetzt `{{platzhalter}}` in den Vorlagen unter `templates/` (HTML-Werte werden escaped). Die Vorlagen werden per `?raw` in den Server-Build gebündelt und sind in `.prettierignore` ausgenommen. Aufgerufen von der Form-Action `anfrage` in `src/routes/+page.server.ts`.
 - **Deployment target**: Node server (`@sveltejs/adapter-node`). In Produktion muss `ORIGIN` auf die öffentliche URL gesetzt sein, sonst lehnt der CSRF-Schutz die Formular-POSTs mit 403 ab.
@@ -67,7 +54,6 @@ Zwei Fallstricke: Der Key bindet sich beim ersten Start **fest an Projekt und `P
 - `bars.key` / `packages.key` sind ein Vertrag zwischen CMS, Anfrageformular, `booking.svelte.ts` und dem Label-Mapping in der Anfrage-Mail — im CMS als „technischer Schlüssel" markiert und nicht zu ändern.
 - Bildfelder brauchen einen Eintrag in `directus_relations`, sonst liefert die API nur die UUID statt der Bilddaten. Beim Anlegen per API entsteht der nicht automatisch — `setup-directus-schema.mjs` legt ihn explizit an.
 - Termine liegen als Feldtyp `date` (nicht `datetime`), sonst verschiebt die Zeitzonenkonvertierung Datumsangaben um einen Tag.
-- Directus läuft auf einer **eigenen** Datenbank. In `local` würde `drizzle-kit push` die `directus_*`-Tabellen als verwaist erkennen und zum Löschen anbieten.
 - Das Volume `directus_uploads` liegt nicht in Postgres und gehört separat ins Backup — sonst sind nach einem Restore alle Fotos weg.
 
 ## Code style

@@ -12,7 +12,7 @@ Termine, Drinks, Bars, Pakete und alle Fotos pflegt der Kunde selbst in Directus
 
 - **Node** ≥ 20 (entwickelt und getestet mit 24)
 - **pnpm** (`corepack enable`)
-- **Docker** mit Compose — für Postgres und Directus
+- **Docker** mit Compose — für Directus (samt eigener Postgres) und MailDev
 
 ## Lokale Entwicklung
 
@@ -50,11 +50,9 @@ SMTP_PASS=
 
 Abgeschickte Anfragen landen dann im Postfach unter http://localhost:1080.
 
-Beim **allerersten Start** muss die Directus-Datenbank angelegt und befüllt werden:
+Beim **allerersten Start** muss Directus noch befüllt werden:
 
 ```bash
-docker compose exec db createdb -U root directus
-docker compose up -d directus
 node --env-file=.env scripts/setup-directus-schema.mjs                     # Collections, Rechte, Rolle
 node --env-file=.env --experimental-strip-types scripts/seed-directus.ts   # Startdaten
 ```
@@ -92,7 +90,17 @@ Alle Variablen sind in `.env.example` dokumentiert. Kurzübersicht, was wofür g
 | `DIRECTUS_TOKEN`                                   | nein                  | Nur nötig, wenn die Collections nicht öffentlich lesbar sein sollen.                                              |
 | `CMS_CACHE_TTL`                                    | nein                  | Sekunden, die Inhalte im Prozess gecacht werden (Standard 60).                                                    |
 
-> `DATABASE_URL` braucht die Website **nicht** zur Laufzeit — Postgres nutzt derzeit nur Directus. Die Variable ist ausschließlich für die `drizzle-kit`-Befehle da.
+> Die Website spricht **keine Datenbank** an — sie liest ihre Inhalte über HTTP aus Directus. Postgres gehört allein Directus; der `web`-Container bekommt deshalb bewusst keine Datenbankvariablen.
+
+### Datenbank (nur für Directus)
+
+| Variable                             | Pflicht | Zweck                                                                                                                                                                                                                       |
+| ------------------------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `POSTGRES_USER`, `POSTGRES_PASSWORD` | **ja**  | Zugangsdaten der Postgres-Instanz. Fehlen sie, bricht `docker compose` mit einer klaren Meldung ab, statt mit Standardwerten zu starten.                                                                                    |
+| `POSTGRES_DB`                        | nein    | Standard `directus`. Wird beim ersten Start eines leeren Volumes automatisch angelegt.                                                                                                                                      |
+| `DIRECTUS_DB_URL`                    | nein    | Vollständiger Connection-String. Nur nötig, wenn Directus auf eine Datenbank **außerhalb** dieses Stacks zeigen soll (z. B. eine verwaltete Postgres). Ohne Angabe baut `compose.yaml` die URL aus den `POSTGRES_*`-Werten. |
+
+Directus bekommt keine Einzelwerte mehr, sondern einen `DB_CONNECTION_STRING` — die Zugangsdaten stehen damit nur an einer Stelle. Sonderzeichen im Passwort müssen URL-kodiert sein.
 
 ### Directus-Container
 
@@ -114,6 +122,28 @@ docker compose -f compose.yaml up -d --build
 
 Vorher in der `.env` setzen: `ORIGIN`, `DIRECTUS_ASSET_URL` und die `SMTP_*`-Werte. Der `web`-Service reicht sie durch und spricht Directus intern über `http://directus:8055` an.
 
+### Image für einen anderen Prozessor bauen (Apple Silicon → x86-Server)
+
+Auf einem M-Mac entsteht standardmäßig ein `arm64`-Image. Läuft der Server auf x86, muss die Zielplattform mit angegeben werden — Docker Desktop emuliert das (dank Rosetta ohne nennenswerten Zeitverlust, hier ~30 s):
+
+```bash
+# nur amd64, lokal verfügbar
+docker buildx build --platform linux/amd64 -t kidilias/biglemon:latest --load .
+```
+
+Für ein Image, das **beide** Architekturen bedient, braucht buildx einen eigenen Builder — der voreingestellte `docker`-Treiber kann keine Manifest-Listen erzeugen:
+
+```bash
+docker buildx create --name multiarch --driver docker-container --bootstrap   # einmalig
+docker buildx build --builder multiarch \
+  --platform linux/amd64,linux/arm64 \
+  -t kidilias/biglemon:latest --push .
+```
+
+`--push` ist hier Pflicht: Mehr-Architektur-Images lassen sich nicht mit `--load` in den lokalen Docker-Speicher legen, sie brauchen eine Registry.
+
+> Wer ohnehin direkt auf dem Server baut (`docker compose -f compose.yaml up -d --build`), braucht davon nichts — dort wird nativ für die richtige Architektur gebaut.
+
 ### Ohne Docker
 
 ```bash
@@ -127,23 +157,39 @@ Auf den Server gehören dann **`build/`**, `package.json`, `pnpm-lock.yaml`, `pn
 
 In beiden Fällen gehört ein Reverse Proxy (nginx, Caddy, Traefik) für TLS davor.
 
-### Domains
+### Domains und Reverse Proxy
 
-Zwei Namen sind nötig:
+Website und CMS können sich eine Domain teilen (`biglemon.de` und `biglemon.de/cms/`) oder auf zwei Namen liegen. Eine fertige nginx-Konfiguration für die Pfad-Variante liegt in [`deploy/nginx.conf.example`](./deploy/nginx.conf.example).
 
-| Domain            | Ziel                    | Hinweis                                                                                                                                                             |
-| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `biglemon.de`     | Node-Server (Port 3000) | `ORIGIN` muss exakt darauf zeigen.                                                                                                                                  |
-| `cms.biglemon.de` | Directus (Port 8055)    | `DIRECTUS_PUBLIC_URL` darauf setzen, per `robots.txt`/Header auf `noindex`, und `DIRECTUS_TRUST_PROXY=true` setzen — sonst sehen die Rate-Limiter nur die Proxy-IP. |
+Die passenden Werte in der `.env`:
 
-`DIRECTUS_ASSET_URL` muss auf die **öffentliche** CMS-Domain zeigen, weil diese URLs im HTML landen. `DIRECTUS_URL` darf dagegen die interne Adresse sein.
+| Variable               | Pfad-Variante             | Subdomain-Variante        |
+| ---------------------- | ------------------------- | ------------------------- |
+| `ORIGIN`               | `https://biglemon.de`     | `https://biglemon.de`     |
+| `DIRECTUS_PUBLIC_URL`  | `https://biglemon.de/cms` | `https://cms.biglemon.de` |
+| `DIRECTUS_ASSET_URL`   | `https://biglemon.de/cms` | `https://cms.biglemon.de` |
+| `DIRECTUS_URL`         | `http://directus:8055`    | `http://directus:8055`    |
+| `DIRECTUS_TRUST_PROXY` | `true`                    | `true`                    |
+
+`DIRECTUS_PUBLIC_URL` und `DIRECTUS_ASSET_URL` müssen die **öffentliche** Adresse samt Präfix enthalten — die eine baut Directus in Weiterleitungen und Mails ein, die andere landet als Bild-URL im HTML. `DIRECTUS_URL` bleibt die interne Compose-Adresse und wird nur serverseitig benutzt.
+
+#### Besonderheiten der Pfad-Variante
+
+Vier Dinge entscheiden, ob es funktioniert:
+
+1. **Der Slash am Ende von `proxy_pass` ist Pflicht.** `proxy_pass http://127.0.0.1:8055/;` schneidet das Präfix ab, sodass Directus `/server/ping` statt `/cms/server/ping` sieht. Ohne den Slash läuft jede Anfrage ins Leere.
+2. **`client_max_body_size` hochsetzen.** nginx lehnt Uploads über 1 MB sonst mit **413** ab — im Test scheiterte bereits ein 1,6-MB-Foto. Handyfotos sind schnell 5–12 MB, und Bilder hochladen ist die Hauptaufgabe des CMS.
+3. **`absolute_redirect off;`** — sonst verliert die automatische Weiterleitung von `/cms` auf `/cms/` den Port bzw. das `https`.
+4. **`DIRECTUS_TRUST_PROXY=true`**, sonst sehen die Rate-Limiter nur die IP des Proxys. Der Standard hat sich in Directus 12 auf `false` geändert.
+
+Getestet mit Directus 12.2.0 hinter nginx: Admin-Oberfläche, API, Login samt Session-Cookie und Bild-Transformationen laufen unter dem Präfix. Möglich ist das, weil die Admin-App relative Asset-Pfade (`./assets/…`) verwendet.
+
+> Das Session-Cookie von Directus wird mit `Path=/` gesetzt und damit auch an die Website mitgeschickt. Unkritisch (`HttpOnly`, `SameSite=Lax`), aber ein Argument für die Subdomain-Variante, wenn eine saubere Trennung gewünscht ist. Bei einer eigenen CMS-Domain gehört diese zusätzlich auf `noindex`.
 
 ### Erststart auf dem Server
 
 ```bash
-docker compose -f compose.yaml up -d db
-docker compose exec db createdb -U root directus
-docker compose -f compose.yaml up -d directus
+docker compose -f compose.yaml up -d
 node --env-file=.env scripts/setup-directus-schema.mjs
 node --env-file=.env --experimental-strip-types scripts/seed-directus.ts
 ```

@@ -1,30 +1,32 @@
 services:
-  db:
+  postgres:
+    networks: [intern]
     image: postgres:17-alpine
     restart: always
     ports:
-      - 5432:5432
+      # Nur lokal erreichbar — der Datenbankport gehoert nie ins Internet.
+      - 127.0.0.1:5432:5432
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_DB: local
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER fehlt in der .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD fehlt in der .env}
+      POSTGRES_DB: ${POSTGRES_DB:-directus}
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U root -d local']
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB:-directus}']
       interval: 5s
       timeout: 5s
       retries: 10
 
   directus:
-    # Version gepinnt: Directus 12 erzwingt Lizenzstufen, ein unbemerkter Sprung
-    # kann Redaktions-Logins sperren.
+    networks: [intern]
     image: directus/directus:12.2.0
     restart: unless-stopped
     ports:
-      - 8055:8055
+      # Von aussen kommt Directus nur ueber den Reverse Proxy (/cms).
+      - 127.0.0.1:8055:8055
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
     volumes:
       - directus_uploads:/directus/uploads
@@ -35,13 +37,7 @@ services:
       # UND an PUBLIC_URL — siehe Hinweis in .env.example.
       LICENSE_KEY: ${DIRECTUS_LICENSE_KEY:-}
       DB_CLIENT: pg
-      DB_HOST: db
-      DB_PORT: '5432'
-      # Eigene Datenbank — in "local" wuerde drizzle-kit push die directus_*-Tabellen
-      # als verwaist erkennen und zum Loeschen anbieten.
-      DB_DATABASE: directus
-      DB_USER: root
-      DB_PASSWORD: mysecretpassword
+      DB_CONNECTION_STRING: ${DIRECTUS_DB_URL:-postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-directus}}
       ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
       ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
       PUBLIC_URL: ${DIRECTUS_PUBLIC_URL:-http://localhost:8055}
@@ -51,20 +47,19 @@ services:
       IP_TRUST_PROXY: ${DIRECTUS_TRUST_PROXY:-false}
 
   web:
+    networks: [intern]
+    image: kidilias/biglemon:latest
     build:
       context: .
     restart: unless-stopped
     ports:
-      - 3000:3000
+      - 127.0.0.1:3000:3000
     depends_on:
       directus:
         condition: service_started
     environment:
-      # Muss exakt der oeffentlichen URL entsprechen, sonst 403 auf jedes Formular.
       ORIGIN: ${ORIGIN:-http://localhost:3000}
-      # SSR spricht Directus intern ueber den Servicenamen an ...
       DIRECTUS_URL: http://directus:8055
-      # ... die Bild-URLs im HTML brauchen dagegen die oeffentliche Adresse.
       DIRECTUS_ASSET_URL: ${DIRECTUS_ASSET_URL:-http://localhost:8055}
       DIRECTUS_TOKEN: ${DIRECTUS_TOKEN:-}
       CMS_CACHE_TTL: ${CMS_CACHE_TTL:-60}
@@ -75,6 +70,10 @@ services:
       SMTP_PASS: ${SMTP_PASS:-}
       SMTP_FROM: ${SMTP_FROM:-}
       CONTACT_EMAIL: ${CONTACT_EMAIL:-}
+
+networks:
+  intern:
+    driver: bridge
 
 volumes:
   pgdata:

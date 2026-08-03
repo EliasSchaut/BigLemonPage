@@ -8,11 +8,12 @@
 services:
   # Faengt saemtliche ausgehende Mail ab. Weboberflaeche: http://localhost:1080
   maildev:
+    networks: [intern]
     image: maildev/maildev:latest
     restart: unless-stopped
     ports:
-      - 1080:1080 # Weboberflaeche
-      - 1025:1025 # SMTP
+      - 127.0.0.1:1080:1080 # Weboberflaeche
+      - 127.0.0.1:1025:1025 # SMTP
     environment:
       MAILDEV_WEB_PORT: '1080'
       MAILDEV_SMTP_PORT: '1025'
