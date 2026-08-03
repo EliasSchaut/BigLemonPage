@@ -25,6 +25,7 @@
 		"@tailwindcss/forms": "^0.5.11",
 		"@tailwindcss/vite": "^4.3.0",
 		"@types/node": "^24",
+		"@types/nodemailer": "^8.0.1",
 		"drizzle-kit": "^0.31.10",
 		"drizzle-orm": "^0.45.2",
 		"postgres": "^3.4.9",
@@ -36,5 +37,8 @@
 		"tailwindcss": "^4.3.0",
 		"typescript": "^6.0.3",
 		"vite": "^8.0.16"
+	},
+	"dependencies": {
+		"nodemailer": "^9.0.3"
 	}
 }

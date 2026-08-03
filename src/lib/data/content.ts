@@ -1,4 +1,21 @@
 // Zentrale Inhalte der Website — aus dem Prototyp (prototype/BigLemon.dc.html) übernommen.
+//
+// Doppelte Rolle: Startwerte für den CMS-Seed (scripts/seed-directus.ts) und
+// Fallback zur Laufzeit, falls Directus nicht erreichbar ist. Deshalb bleiben
+// diese Daten erhalten, auch wenn die Inhalte längst aus dem CMS kommen.
+
+import type { Bar, BarSpec, BookingPackage, Drink, EventItem, GalleryShot } from './types';
+
+export type {
+	Bar,
+	BarSpec,
+	BookingPackage,
+	Drink,
+	EventItem,
+	EventMonth,
+	GalleryShot,
+	Image
+} from './types';
 
 export const CONTACT = {
 	phoneDisplay: '0176 26043698',
@@ -8,8 +25,8 @@ export const CONTACT = {
 	company: 'BigLemon Deutschland',
 	street: 'Angelstraße 110',
 	city: '68199 Mannheim',
-	instagram: 'https://www.instagram.com/biglemonbar',
-	facebook: 'https://www.facebook.com/biglemonbar',
+	instagram: 'https://www.instagram.com/biglemonbar/',
+	facebook: 'https://www.facebook.com/www.biglemon.de/',
 	vatId: 'DE 272012285'
 };
 
@@ -31,13 +48,6 @@ export const MARQUEE_ITEMS = [
 	'FESTIVALS',
 	'CSD'
 ];
-
-export interface Drink {
-	name: string;
-	tag: string;
-	desc: string;
-	alc: boolean;
-}
 
 export const DRINKS: Drink[] = [
 	{
@@ -78,77 +88,36 @@ export const DRINKS: Drink[] = [
 	}
 ];
 
-export interface EventItem {
-	date: string;
-	name: string;
-	city: string;
-}
-
-export interface EventMonth {
-	name: string;
-	items: EventItem[];
-}
-
-export const MONTHS: EventMonth[] = [
-	{
-		name: 'Mai',
-		items: [
-			{ date: '08.–10.05.', name: 'Frühlingsfest', city: 'Lorsch' },
-			{ date: '29.–31.05.', name: 'Schützenfest', city: 'Gummersbach' },
-			{ date: '30.–31.05.', name: 'Berger Straßenfest', city: 'Frankfurt-Bergen' }
-		]
-	},
-	{
-		name: 'Juni',
-		items: [
-			{ date: '04.–07.06.', name: 'CSD', city: 'Düsseldorf' },
-			{ date: '13.06.', name: 'Weststadtfest', city: 'Weinheim' },
-			{ date: '26.–28.06.', name: 'Altstadtfest', city: 'Trier' }
-		]
-	},
-	{
-		name: 'Juli',
-		items: [
-			{ date: '03.–05.07.', name: 'CSD', city: 'Köln' },
-			{ date: '03.–05.07.', name: 'Lanzparkfest', city: 'Mannheim-Lindenhof' },
-			{ date: '10.–11.07.', name: 'Straßenfest', city: 'Neckarrems' },
-			{ date: '12.07.', name: 'CSD', city: 'Olpe' },
-			{ date: '18.07.', name: 'Sommernachtsfest', city: 'Heimkirchen' },
-			{ date: '24.–27.07.', name: 'CSD', city: 'Stuttgart' },
-			{ date: '25.07.', name: 'CSD', city: 'Berlin' },
-			{ date: '25.07.', name: 'CSD', city: 'Duisburg' },
-			{ date: '31.07.–02.08.', name: 'Torbogenfest', city: 'Göllheim' }
-		]
-	},
-	{
-		name: 'August',
-		items: [
-			{ date: '12.08.', name: 'Bernemer Mittwoch', city: 'Frankfurt-Bornheim' },
-			{ date: '21.–23.08.', name: 'Jazz & Joy', city: 'Worms' },
-			{ date: '22.–23.08.', name: 'Kerwe', city: 'Sandhofen' },
-			{ date: '28.–30.08.', name: 'Altstadtfest', city: 'Siegburg' },
-			{ date: '28.–30.08.', name: 'Jubiläumsfeier', city: 'Germersheim' }
-		]
-	},
-	{
-		name: 'September',
-		items: [
-			{ date: '04.–06.09.', name: 'Altstadtfest', city: 'Brilon' },
-			{ date: '11.–13.09.', name: 'Altstadtfest', city: 'Speyer' },
-			{ date: '18.–20.09.', name: 'Stadtfest', city: 'Hennef' },
-			{ date: '27.09.', name: 'Kerwe', city: 'Niederkirchen' }
-		]
-	}
+/**
+ * Termine der Saison 2026. Flache Liste mit ISO-Daten — Sortierung und
+ * Monatsgruppierung leitet `$lib/data/events` daraus ab.
+ */
+export const EVENTS: EventItem[] = [
+	{ start: '2026-05-08', end: '2026-05-10', name: 'Frühlingsfest', city: 'Lorsch' },
+	{ start: '2026-05-29', end: '2026-05-31', name: 'Schützenfest', city: 'Gummersbach' },
+	{ start: '2026-05-30', end: '2026-05-31', name: 'Berger Straßenfest', city: 'Frankfurt-Bergen' },
+	{ start: '2026-06-04', end: '2026-06-07', name: 'CSD', city: 'Düsseldorf' },
+	{ start: '2026-06-13', name: 'Weststadtfest', city: 'Weinheim' },
+	{ start: '2026-06-26', end: '2026-06-28', name: 'Altstadtfest', city: 'Trier' },
+	{ start: '2026-07-03', end: '2026-07-05', name: 'CSD', city: 'Köln' },
+	{ start: '2026-07-03', end: '2026-07-05', name: 'Lanzparkfest', city: 'Mannheim-Lindenhof' },
+	{ start: '2026-07-10', end: '2026-07-11', name: 'Straßenfest', city: 'Neckarrems' },
+	{ start: '2026-07-12', name: 'CSD', city: 'Olpe' },
+	{ start: '2026-07-18', name: 'Sommernachtsfest', city: 'Heimkirchen' },
+	{ start: '2026-07-24', end: '2026-07-27', name: 'CSD', city: 'Stuttgart' },
+	{ start: '2026-07-25', name: 'CSD', city: 'Berlin' },
+	{ start: '2026-07-25', name: 'CSD', city: 'Duisburg' },
+	{ start: '2026-07-31', end: '2026-08-02', name: 'Torbogenfest', city: 'Göllheim' },
+	{ start: '2026-08-12', name: 'Bernemer Mittwoch', city: 'Frankfurt-Bornheim' },
+	{ start: '2026-08-21', end: '2026-08-23', name: 'Jazz & Joy', city: 'Worms' },
+	{ start: '2026-08-22', end: '2026-08-23', name: 'Kerwe', city: 'Sandhofen' },
+	{ start: '2026-08-28', end: '2026-08-30', name: 'Altstadtfest', city: 'Siegburg' },
+	{ start: '2026-08-28', end: '2026-08-30', name: 'Jubiläumsfeier', city: 'Germersheim' },
+	{ start: '2026-09-04', end: '2026-09-06', name: 'Altstadtfest', city: 'Brilon' },
+	{ start: '2026-09-11', end: '2026-09-13', name: 'Altstadtfest', city: 'Speyer' },
+	{ start: '2026-09-18', end: '2026-09-20', name: 'Stadtfest', city: 'Hennef' },
+	{ start: '2026-09-27', name: 'Kerwe', city: 'Niederkirchen' }
 ];
-
-export interface BookingPackage {
-	key: string;
-	name: string;
-	label: string;
-	size: string;
-	desc: string;
-	includes: string[];
-}
 
 export const PACKAGES: BookingPackage[] = [
 	{
@@ -221,23 +190,11 @@ export const CUSTOM_PACKAGE: BookingPackage = {
 	]
 };
 
-const PLATZ: { label: string; value: string }[] = [
+const PLATZ: BarSpec[] = [
 	{ label: 'PLATZBEDARF', value: 'ca. 3 × 3 m' },
 	{ label: 'STROM', value: 'nicht nötig' },
 	{ label: 'WASSER', value: 'nicht nötig' }
 ];
-
-export interface Bar {
-	key: string;
-	name: string;
-	tag: string;
-	cta: string;
-	accent: string;
-	accentSoft: string;
-	pitch: string;
-	note: string;
-	specs: { label: string; value: string }[];
-}
 
 export const BARS: Bar[] = [
 	{
@@ -283,6 +240,18 @@ export const OPEN_BAR: Pick<Bar, 'name' | 'note' | 'accent'> = {
 	note: 'Wir beraten euch, welche Bar zu eurem Fest passt.',
 	accent: '#C2E23F'
 };
+
+/** Galerie-Kacheln. `wide` verdoppelt die Spaltenbreite, `tall` die Zeilenhöhe. */
+export const GALLERY_SHOTS: GalleryShot[] = [
+	{ placeholder: 'Foto: Die Bar auf dem Stadtfest', wide: true, tall: true },
+	{ placeholder: 'Foto: Chriss beim Mixen' },
+	{ placeholder: 'Foto: Altstadtfest Ladenburg' },
+	{ placeholder: 'Foto: Drinks in der Hand', tall: true },
+	{ placeholder: 'Foto: Museumsuferfest Frankfurt' },
+	{ placeholder: 'Foto: Die Lemon Family' },
+	{ placeholder: 'Foto: Bar bei Nacht', wide: true },
+	{ placeholder: 'Foto: Frisch gepresst' }
+];
 
 export const HERO_STATS = [
 	{ value: '24', label: 'Feste in 2026' },

@@ -1,0 +1,24 @@
+NEUE ANFRAGE ÜBER BIGLEMON.DE
+=============================
+
+KONTAKT
+-------
+Name:            {{name}}
+E-Mail:          {{email}}
+Telefon:         {{phone}}
+
+VERANSTALTUNG
+-------------
+Datum:           {{date}}
+Ort / PLZ:       {{location}}
+Erwartete Gäste: {{guests}}
+Gewünschte Bar:  {{bar}}
+Paket:           {{package}}
+
+NACHRICHT
+---------
+{{message}}
+
+--
+Gesendet über das Anfrageformular auf biglemon.de am {{submittedAt}}.
+Antworten auf diese Mail gehen direkt an {{name}} <{{email}}>.

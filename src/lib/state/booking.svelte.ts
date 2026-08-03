@@ -3,6 +3,5 @@
 // mutiert, daher als Modul-State unbedenklich für SSR.
 export const booking = $state({
 	pkg: 'plus',
-	bar: 'biglemon',
-	sent: false
+	bar: 'biglemon'
 });

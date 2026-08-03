@@ -1,0 +1,7 @@
+pnpm-lock.yaml
+prototype/
+context/
+
+# Mail-Vorlagen: Prettier bricht die tabellenbasierten Inline-Styles um und fügt
+# Whitespace in Blöcke ein, die auf exakten Umbrüchen beruhen (white-space: pre-wrap).
+src/lib/server/mail/templates/

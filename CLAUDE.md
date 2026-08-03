@@ -31,12 +31,19 @@ Postgres via Docker + Drizzle ORM:
 
 Requires `DATABASE_URL` in `.env` (both `drizzle.config.ts` and the app throw if unset).
 
+### E-Mail
+
+Das Anfrageformular verschickt per SMTP (Nodemailer). Konfiguration über `.env`, alle Variablen sind in `.env.example` dokumentiert: `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `CONTACT_EMAIL`. Ohne `CONTACT_EMAIL` geht die Mail an die Adresse aus `CONTACT` in `src/lib/data/content.ts`.
+
+Lokal testen ohne echten Mailserver: `python3 -m smtpd -n -c DebuggingServer localhost:2525` und `SMTP_HOST=127.0.0.1 SMTP_PORT=2525` setzen.
+
 ## Architecture
 
 - **SvelteKit 2 + Svelte 5 with runes mode forced** for all project files via `vite.config.ts` (`compilerOptions.runes`) — use `$props()`, `$state()`, `$derived()`, etc.; legacy `export let` / `$:` syntax will not compile outside `node_modules`.
 - **Tailwind CSS v4** via the Vite plugin — no `tailwind.config.js`; configuration lives in CSS (`src/routes/layout.css`, imported by the root layout). `@tailwindcss/forms` is enabled there via `@plugin`.
 - **Database layer**: schema in `src/lib/server/db/schema.ts`, client (postgres-js + Drizzle) exported as `db` from `src/lib/server/db/index.ts`. Server-only by convention of the `$lib/server` path.
-- **Deployment target**: Node server (`@sveltejs/adapter-node`).
+- **Mail-Versand**: `src/lib/server/mail/` — `index.ts` baut den (gepoolten) Nodemailer-Transport aus `$env/dynamic/private` und verschickt; `template.ts` ersetzt `{{platzhalter}}` in den Vorlagen unter `templates/` (HTML-Werte werden escaped). Die Vorlagen werden per `?raw` in den Server-Build gebündelt und sind in `.prettierignore` ausgenommen. Aufgerufen von der Form-Action `anfrage` in `src/routes/+page.server.ts`.
+- **Deployment target**: Node server (`@sveltejs/adapter-node`). In Produktion muss `ORIGIN` auf die öffentliche URL gesetzt sein, sonst lehnt der CSRF-Schutz die Formular-POSTs mit 403 ab.
 
 ## Code style
 
