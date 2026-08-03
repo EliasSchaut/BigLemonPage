@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { BARS } from '$lib/data/content';
+	import type { Bar } from '$lib/data/types';
 	import { booking } from '$lib/state/booking.svelte';
 	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
 	import Tag from '$lib/components/ui/Tag.svelte';
 	import ImageSlot from '$lib/components/ui/ImageSlot.svelte';
+
+	let { bars }: { bars: Bar[] } = $props();
 
 	function chooseBar(key: string) {
 		booking.bar = key;
@@ -22,13 +24,17 @@
 		</SectionIntro>
 
 		<div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,290px),1fr))] gap-5">
-			{#each BARS as bar (bar.key)}
+			{#each bars as bar (bar.key)}
 				<article
 					class="flex flex-col overflow-hidden rounded-card border-[1.5px] border-second/10 bg-white transition-[border-color,box-shadow] hover:border-prime hover:shadow-card-lg"
 				>
 					<div class="h-1.5" style:background={bar.accent}></div>
 					<div class="relative h-[210px] bg-cream-200">
-						<ImageSlot placeholder="Foto: {bar.name}" class="border-second/15 bg-second/3" />
+						<ImageSlot
+							placeholder="Foto: {bar.name}"
+							class="border-second/15 bg-second/3"
+							{...bar.image}
+						/>
 					</div>
 					<div class="flex flex-1 flex-col gap-3.5 p-6">
 						<div class="flex flex-wrap items-center gap-2.5">

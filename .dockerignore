@@ -1,0 +1,14 @@
+node_modules
+build
+.svelte-kit
+.git
+.idea
+.env
+.env.*
+!.env.example
+prototype
+context
+scripts
+*.md
+!README.md
+.DS_Store

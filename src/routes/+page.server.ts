@@ -1,6 +1,6 @@
 import { fail } from '@sveltejs/kit';
-import type { Actions } from './$types';
-import { BARS, PACKAGES } from '$lib/data/content';
+import type { Actions, PageServerLoad } from './$types';
+import { getSiteContent } from '$lib/server/cms';
 import { sendAnfrageMail } from '$lib/server/mail';
 
 const MAX_LENGTHS = {
@@ -16,20 +16,12 @@ const MAX_LENGTHS = {
 // Grobe Plausibilitätsprüfung — die echte Validierung macht der Mailserver.
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-const BAR_LABELS: Record<string, string> = {
-	...Object.fromEntries(BARS.map((bar) => [bar.key, bar.name])),
-	offen: 'Noch offen — Beratung gewünscht'
-};
-
-const PACKAGE_LABELS: Record<string, string> = {
-	...Object.fromEntries(PACKAGES.map((pkg) => [pkg.key, `${pkg.name} (${pkg.size})`])),
-	offen: 'Noch offen / individuell'
-};
-
 function field(data: FormData, name: string): string {
 	const value = data.get(name);
 	return typeof value === 'string' ? value.trim() : '';
 }
+
+export const load: PageServerLoad = async () => getSiteContent();
 
 export const actions = {
 	anfrage: async ({ request }) => {
@@ -72,11 +64,23 @@ export const actions = {
 			return fail(400, { errors, values });
 		}
 
+		// Labels erst hier auflösen, damit im CMS umbenannte Einträge in der Mail
+		// korrekt auftauchen (kommt aus demselben Cache, kostet keinen Extra-Request).
+		const { bars, packages } = await getSiteContent();
+		const barLabels: Record<string, string> = {
+			...Object.fromEntries(bars.map((bar) => [bar.key, bar.name])),
+			offen: 'Noch offen — Beratung gewünscht'
+		};
+		const packageLabels: Record<string, string> = {
+			...Object.fromEntries(packages.map((pkg) => [pkg.key, `${pkg.name} (${pkg.size})`])),
+			offen: 'Noch offen / individuell'
+		};
+
 		try {
 			await sendAnfrageMail({
 				...values,
-				bar: BAR_LABELS[barKey] ?? 'Noch offen',
-				package: PACKAGE_LABELS[packageKey] ?? 'Noch offen'
+				bar: barLabels[barKey] ?? 'Noch offen',
+				package: packageLabels[packageKey] ?? 'Noch offen'
 			});
 		} catch (error) {
 			console.error('Anfrage konnte nicht versendet werden:', error);

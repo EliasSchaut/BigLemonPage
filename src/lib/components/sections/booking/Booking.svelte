@@ -1,6 +1,7 @@
 <script lang="ts">
 	import barWall from '$lib/assets/images/bar-hintergrund.jpg';
-	import { PACKAGES, CUSTOM_PACKAGE, BARS, OPEN_BAR } from '$lib/data/content';
+	import { CUSTOM_PACKAGE, OPEN_BAR } from '$lib/data/content';
+	import type { Bar, BookingPackage } from '$lib/data/types';
 	import { booking } from '$lib/state/booking.svelte';
 	import Eyebrow from '$lib/components/ui/Eyebrow.svelte';
 	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
@@ -8,8 +9,10 @@
 	import GlowBackdrop from '$lib/components/ui/GlowBackdrop.svelte';
 	import BookingForm from './BookingForm.svelte';
 
-	const activePackage = $derived(PACKAGES.find((p) => p.key === booking.pkg) ?? CUSTOM_PACKAGE);
-	const activeBar = $derived(BARS.find((b) => b.key === booking.bar) ?? OPEN_BAR);
+	let { packages, bars }: { packages: BookingPackage[]; bars: Bar[] } = $props();
+
+	const activePackage = $derived(packages.find((p) => p.key === booking.pkg) ?? CUSTOM_PACKAGE);
+	const activeBar = $derived(bars.find((b) => b.key === booking.bar) ?? OPEN_BAR);
 </script>
 
 <section
@@ -35,7 +38,7 @@
 			<div>
 				<div class="mb-2.5 text-xs font-extrabold tracking-[.16em] text-second-450">1 — PAKET</div>
 				<div class="flex flex-wrap gap-2.5">
-					{#each PACKAGES as pkg (pkg.key)}
+					{#each packages as pkg (pkg.key)}
 						<Chip active={pkg.key === booking.pkg} onclick={() => (booking.pkg = pkg.key)}>
 							{pkg.name}
 						</Chip>
@@ -45,7 +48,7 @@
 			<div>
 				<div class="mb-2.5 text-xs font-extrabold tracking-[.16em] text-second-450">2 — BAR</div>
 				<div class="flex flex-wrap gap-2.5">
-					{#each BARS as bar (bar.key)}
+					{#each bars as bar (bar.key)}
 						<Chip
 							active={bar.key === booking.bar}
 							color={bar.accent}
@@ -97,7 +100,7 @@
 				</div>
 			</div>
 
-			<BookingForm />
+			<BookingForm {packages} {bars} />
 		</div>
 	</div>
 </section>

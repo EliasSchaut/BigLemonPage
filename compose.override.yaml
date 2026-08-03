@@ -1,0 +1,40 @@
+# Entwicklungs-Override. "docker compose" laedt diese Datei automatisch mit.
+#
+# ACHTUNG: In Produktion deshalb ausdruecklich nur die Basisdatei verwenden,
+# sonst gehen alle Anfragen an MailDev statt an den echten Mailserver:
+#
+#   docker compose -f compose.yaml up -d --build
+
+services:
+  # Faengt saemtliche ausgehende Mail ab. Weboberflaeche: http://localhost:1080
+  maildev:
+    image: maildev/maildev:latest
+    restart: unless-stopped
+    ports:
+      - 1080:1080 # Weboberflaeche
+      - 1025:1025 # SMTP
+    environment:
+      MAILDEV_WEB_PORT: '1080'
+      MAILDEV_SMTP_PORT: '1025'
+    healthcheck:
+      # /healthz gibt es in diesem Image nicht — die API-Route ist der verlaessliche Endpunkt.
+      test: ['CMD', 'wget', '-q', '-O', '-', 'http://127.0.0.1:1080/api/email']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    depends_on:
+      maildev:
+        condition: service_started
+    environment:
+      # MailDev nimmt alles ohne Authentifizierung und ohne TLS an.
+      SMTP_HOST: maildev
+      SMTP_PORT: '1025'
+      SMTP_SECURE: 'false'
+      SMTP_USER: ''
+      SMTP_PASS: ''
+      SMTP_FROM: BigLemon Website <anfragen@biglemon.de>
+      CONTACT_EMAIL: welcome@biglemon.de
+      # Kurze TTL, damit CMS-Aenderungen beim Entwickeln sofort sichtbar sind.
+      CMS_CACHE_TTL: '5'

@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { DRINKS } from '$lib/data/content';
+	import type { Drink } from '$lib/data/types';
 	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Tag from '$lib/components/ui/Tag.svelte';
 	import ImageSlot from '$lib/components/ui/ImageSlot.svelte';
 	import GlowBackdrop from '$lib/components/ui/GlowBackdrop.svelte';
+
+	let { drinks }: { drinks: Drink[] } = $props();
 </script>
 
 <section
@@ -35,12 +37,12 @@
 		</div>
 
 		<div class="grid grid-cols-[repeat(auto-fill,minmax(255px,1fr))] gap-5">
-			{#each DRINKS as drink (drink.name)}
+			{#each drinks as drink (drink.name)}
 				<article
 					class="flex flex-col overflow-hidden rounded-[22px] border border-cream/11 bg-cream/4 transition-colors hover:border-prime/45 hover:bg-prime/7"
 				>
 					<div class="relative h-[190px] bg-second-750">
-						<ImageSlot placeholder="Foto: {drink.name}" />
+						<ImageSlot placeholder="Foto: {drink.name}" {...drink.image} />
 					</div>
 					<div class="flex flex-1 flex-col gap-[9px] px-5 pt-5 pb-[22px]">
 						<div class="flex items-baseline justify-between gap-3">

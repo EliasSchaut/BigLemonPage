@@ -2,18 +2,9 @@
 	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
 	import ImageSlot from '$lib/components/ui/ImageSlot.svelte';
 	import GlowBackdrop from '$lib/components/ui/GlowBackdrop.svelte';
+	import type { GalleryShot } from '$lib/data/types';
 
-	// wide: doppelte Spaltenbreite, tall: doppelte Zeilenhöhe (Masonry-Raster)
-	const shots: { placeholder: string; wide?: boolean; tall?: boolean }[] = [
-		{ placeholder: 'Foto: Die Bar auf dem Stadtfest', wide: true, tall: true },
-		{ placeholder: 'Foto: Chriss beim Mixen' },
-		{ placeholder: 'Foto: Altstadtfest Ladenburg' },
-		{ placeholder: 'Foto: Drinks in der Hand', tall: true },
-		{ placeholder: 'Foto: Museumsuferfest Frankfurt' },
-		{ placeholder: 'Foto: Die Lemon Family' },
-		{ placeholder: 'Foto: Bar bei Nacht', wide: true },
-		{ placeholder: 'Foto: Frisch gepresst' }
-	];
+	let { shots }: { shots: GalleryShot[] } = $props();
 </script>
 
 <section
@@ -46,7 +37,7 @@
 						? 'min-[700px]:col-span-2'
 						: ''} {shot.tall ? 'row-span-2' : ''}"
 				>
-					<ImageSlot placeholder={shot.placeholder} />
+					<ImageSlot placeholder={shot.placeholder} {...shot.image} />
 				</div>
 			{/each}
 		</div>

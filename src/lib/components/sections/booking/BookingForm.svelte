@@ -1,8 +1,28 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { CONTACT, PACKAGES } from '$lib/data/content';
+	import { CONTACT } from '$lib/data/content';
+	import type { Bar, BookingPackage } from '$lib/data/types';
 	import { booking } from '$lib/state/booking.svelte';
+
+	let { packages, bars }: { packages: BookingPackage[]; bars: Bar[] } = $props();
+
+	// Verschwindet ein Eintrag aus dem CMS, zeigt das <select> sonst nichts an
+	// und würde beim Absenden einen leeren Wert schicken.
+	$effect(() => {
+		if (bars.length > 0 && booking.bar !== 'offen' && !bars.some((b) => b.key === booking.bar)) {
+			booking.bar = bars[0].key;
+		}
+	});
+	$effect(() => {
+		if (
+			packages.length > 0 &&
+			booking.pkg !== 'offen' &&
+			!packages.some((p) => p.key === booking.pkg)
+		) {
+			booking.pkg = packages[0].key;
+		}
+	});
 
 	const inputClasses =
 		'min-h-12 rounded-field border-[1.5px] border-second/16 bg-white px-[15px] py-3.5 text-[15.5px] text-second';
@@ -180,16 +200,16 @@
 			<label class="mb-3.5 flex flex-col gap-[7px]">
 				<span class="text-[13px] font-bold text-second-600">Gewünschte Bar</span>
 				<select name="bar" bind:value={booking.bar} class={inputClasses}>
-					<option value="biglemon">BigLemon — die Riesenzitrone</option>
-					<option value="biglemon2">BigLemon 2 — die zweite Zitrone</option>
-					<option value="bigorange">BigOrange — die Riesenorange</option>
+					{#each bars as bar (bar.key)}
+						<option value={bar.key}>{bar.name}</option>
+					{/each}
 					<option value="offen">Noch offen — beratet uns gerne</option>
 				</select>
 			</label>
 			<label class="mb-3.5 flex flex-col gap-[7px]">
 				<span class="text-[13px] font-bold text-second-600">Gewünschtes Paket</span>
 				<select name="package" bind:value={booking.pkg} class={inputClasses}>
-					{#each PACKAGES as pkg (pkg.key)}
+					{#each packages as pkg (pkg.key)}
 						<option value={pkg.key}>{pkg.name} — {pkg.size}</option>
 					{/each}
 					<option value="offen">Weiß ich noch nicht / individuell</option>

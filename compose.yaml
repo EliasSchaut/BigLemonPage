@@ -16,5 +16,67 @@ services:
       timeout: 5s
       retries: 10
 
+  directus:
+    # Version gepinnt: Directus 12 erzwingt Lizenzstufen, ein unbemerkter Sprung
+    # kann Redaktions-Logins sperren.
+    image: directus/directus:12.2.0
+    restart: unless-stopped
+    ports:
+      - 8055:8055
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - directus_uploads:/directus/uploads
+      - directus_extensions:/directus/extensions
+    environment:
+      SECRET: ${DIRECTUS_SECRET}
+      # Open-Innovation-Grant-Key. Bindet sich beim ersten Start an dieses Projekt
+      # UND an PUBLIC_URL — siehe Hinweis in .env.example.
+      LICENSE_KEY: ${DIRECTUS_LICENSE_KEY:-}
+      DB_CLIENT: pg
+      DB_HOST: db
+      DB_PORT: '5432'
+      # Eigene Datenbank — in "local" wuerde drizzle-kit push die directus_*-Tabellen
+      # als verwaist erkennen und zum Loeschen anbieten.
+      DB_DATABASE: directus
+      DB_USER: root
+      DB_PASSWORD: mysecretpassword
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
+      PUBLIC_URL: ${DIRECTUS_PUBLIC_URL:-http://localhost:8055}
+      ASSETS_CACHE_TTL: 30d
+      WEBSOCKETS_ENABLED: 'false'
+      TELEMETRY: 'false'
+      IP_TRUST_PROXY: ${DIRECTUS_TRUST_PROXY:-false}
+
+  web:
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    depends_on:
+      directus:
+        condition: service_started
+    environment:
+      # Muss exakt der oeffentlichen URL entsprechen, sonst 403 auf jedes Formular.
+      ORIGIN: ${ORIGIN:-http://localhost:3000}
+      # SSR spricht Directus intern ueber den Servicenamen an ...
+      DIRECTUS_URL: http://directus:8055
+      # ... die Bild-URLs im HTML brauchen dagegen die oeffentliche Adresse.
+      DIRECTUS_ASSET_URL: ${DIRECTUS_ASSET_URL:-http://localhost:8055}
+      DIRECTUS_TOKEN: ${DIRECTUS_TOKEN:-}
+      CMS_CACHE_TTL: ${CMS_CACHE_TTL:-60}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+      CONTACT_EMAIL: ${CONTACT_EMAIL:-}
+
 volumes:
   pgdata:
+  directus_uploads:
+  directus_extensions:

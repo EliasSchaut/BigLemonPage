@@ -37,13 +37,38 @@ Das Anfrageformular verschickt per SMTP (Nodemailer). Konfiguration über `.env`
 
 Lokal testen ohne echten Mailserver: `python3 -m smtpd -n -c DebuggingServer localhost:2525` und `SMTP_HOST=127.0.0.1 SMTP_PORT=2525` setzen.
 
+### CMS (Directus)
+
+Termine, Drinks, Bars, Pakete und die Galeriebilder pflegt der Kunde in Directus (`http://localhost:8055`, läuft über `compose.yaml` auf einer eigenen Datenbank `directus`).
+
+- `docker compose up -d` — Postgres + Directus starten
+- `node --env-file=.env scripts/setup-directus-schema.mjs` — Collections, Bild-Relationen, öffentliche Leserechte und die Rolle „Redaktion" anlegen (idempotent, ersetzt einen Schema-Snapshot)
+- `node --env-file=.env --experimental-strip-types scripts/seed-directus.ts` — Startwerte aus `content.ts` übertragen (überspringt befüllte Collections)
+
+Beim ersten Start muss die Datenbank existieren: `docker compose exec db createdb -U root directus`.
+
+**Lizenz:** Directus 12 erzwingt Lizenzstufen. Ohne Key läuft die Instanz im Core-Tier — dort sind feldbeschränkte Berechtigungen gesperrt (das Setup-Skript weicht automatisch auf Vollzugriff aus) und nach 30 Tagen Karenz können Nicht-Admin-Logins blockiert werden.
+
+Der Key des kostenlosen [Open Innovation Grant](https://directus.com/oig) (<5 Mio. $ Umsatz, <50 Mitarbeitende) gehört als `DIRECTUS_LICENSE_KEY` in die `.env`; `compose.yaml` reicht ihn als `LICENSE_KEY` durch. Danach `docker compose up -d directus` und das Setup-Skript erneut ausführen — es grenzt den öffentlichen Lesezugriff auf `directus_files` dann auf die benötigten Felder ein.
+
+Zwei Fallstricke: Der Key bindet sich beim ersten Start **fest an Projekt und `PUBLIC_URL`** — eine lokale Aktivierung verbraucht eine der begrenzten Aktivierungen für `http://localhost:8055`. Und `LICENSE_KEY` und `LICENSE_TOKEN` schließen sich aus; sind beide gesetzt, startet Directus nicht.
+
 ## Architecture
 
 - **SvelteKit 2 + Svelte 5 with runes mode forced** for all project files via `vite.config.ts` (`compilerOptions.runes`) — use `$props()`, `$state()`, `$derived()`, etc.; legacy `export let` / `$:` syntax will not compile outside `node_modules`.
 - **Tailwind CSS v4** via the Vite plugin — no `tailwind.config.js`; configuration lives in CSS (`src/routes/layout.css`, imported by the root layout). `@tailwindcss/forms` is enabled there via `@plugin`.
 - **Database layer**: schema in `src/lib/server/db/schema.ts`, client (postgres-js + Drizzle) exported as `db` from `src/lib/server/db/index.ts`. Server-only by convention of the `$lib/server` path.
+- **Inhalte**: `src/lib/data/content.ts` hat eine Doppelrolle — Startwerte für den CMS-Seed _und_ Fallback zur Laufzeit; die Datei bleibt daher gepflegt. `src/lib/server/cms/` fragt Directus (`index.ts`), cacht prozessweit mit stale-if-error (`cache.ts`) und übersetzt die Rohdaten in die App-Typen (`map.ts`). Fällt Directus aus, rendert die Seite unverändert aus `content.ts`. Datumsformatierung und Monatsgruppierung der Termine liegen in `src/lib/data/events.ts` (framework- und serverfrei, damit CMS- und Fallback-Daten dieselbe Logik durchlaufen). Markenfarben und Galerie-Layout bleiben im Code: im CMS stehen nur Token-Namen, die `map.ts` auflöst.
 - **Mail-Versand**: `src/lib/server/mail/` — `index.ts` baut den (gepoolten) Nodemailer-Transport aus `$env/dynamic/private` und verschickt; `template.ts` ersetzt `{{platzhalter}}` in den Vorlagen unter `templates/` (HTML-Werte werden escaped). Die Vorlagen werden per `?raw` in den Server-Build gebündelt und sind in `.prettierignore` ausgenommen. Aufgerufen von der Form-Action `anfrage` in `src/routes/+page.server.ts`.
 - **Deployment target**: Node server (`@sveltejs/adapter-node`). In Produktion muss `ORIGIN` auf die öffentliche URL gesetzt sein, sonst lehnt der CSRF-Schutz die Formular-POSTs mit 403 ab.
+
+## Fallstricke
+
+- `bars.key` / `packages.key` sind ein Vertrag zwischen CMS, Anfrageformular, `booking.svelte.ts` und dem Label-Mapping in der Anfrage-Mail — im CMS als „technischer Schlüssel" markiert und nicht zu ändern.
+- Bildfelder brauchen einen Eintrag in `directus_relations`, sonst liefert die API nur die UUID statt der Bilddaten. Beim Anlegen per API entsteht der nicht automatisch — `setup-directus-schema.mjs` legt ihn explizit an.
+- Termine liegen als Feldtyp `date` (nicht `datetime`), sonst verschiebt die Zeitzonenkonvertierung Datumsangaben um einen Tag.
+- Directus läuft auf einer **eigenen** Datenbank. In `local` würde `drizzle-kit push` die `directus_*`-Tabellen als verwaist erkennen und zum Löschen anbieten.
+- Das Volume `directus_uploads` liegt nicht in Postgres und gehört separat ins Backup — sonst sind nach einem Restore alle Fotos weg.
 
 ## Code style
 
