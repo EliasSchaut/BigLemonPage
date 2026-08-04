@@ -7,8 +7,6 @@
 
 	let { packages, bars }: { packages: BookingPackage[]; bars: Bar[] } = $props();
 
-	// Verschwindet ein Eintrag aus dem CMS, zeigt das <select> sonst nichts an
-	// und würde beim Absenden einen leeren Wert schicken.
 	$effect(() => {
 		if (bars.length > 0 && booking.bar !== 'offen' && !bars.some((b) => b.key === booking.bar)) {
 			booking.bar = bars[0].key;
@@ -40,8 +38,6 @@
 	const submit: SubmitFunction = () => {
 		sending = true;
 
-		// Ohne update() bleiben die eingegebenen Werte im Formular stehen,
-		// falls die Anfrage abgelehnt wurde.
 		return async ({ result }) => {
 			sending = false;
 
@@ -73,7 +69,7 @@
 
 <div
 	id="anfrage"
-	class="scroll-mt-[84px] rounded-[26px] bg-cream p-[clamp(26px,3.4vw,38px)] text-second"
+	class="scroll-mt-(--header-h) rounded-[26px] bg-cream p-[clamp(26px,3.4vw,38px)] text-second"
 >
 	{#if sent}
 		<div class="flex flex-col items-start gap-3.5 py-5">
@@ -118,7 +114,6 @@
 		{/if}
 
 		<form method="POST" action="/?/anfrage" use:enhance={submit}>
-			<!-- Honeypot gegen Bots: unsichtbar und vom Screenreader ausgenommen. -->
 			<div class="hidden" aria-hidden="true">
 				<label>
 					Website

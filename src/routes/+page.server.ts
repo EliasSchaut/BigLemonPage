@@ -13,7 +13,6 @@ const MAX_LENGTHS = {
 	message: 5000
 } as const;
 
-// Grobe Plausibilitätsprüfung — die echte Validierung macht der Mailserver.
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function field(data: FormData, name: string): string {
@@ -27,7 +26,6 @@ export const actions = {
 	anfrage: async ({ request }) => {
 		const data = await request.formData();
 
-		// Honeypot: für Menschen unsichtbar, Bots füllen es aus.
 		if (field(data, 'website')) {
 			return { success: true };
 		}
@@ -64,8 +62,6 @@ export const actions = {
 			return fail(400, { errors, values });
 		}
 
-		// Labels erst hier auflösen, damit im CMS umbenannte Einträge in der Mail
-		// korrekt auftauchen (kommt aus demselben Cache, kostet keinen Extra-Request).
 		const { bars, packages } = await getSiteContent();
 		const barLabels: Record<string, string> = {
 			...Object.fromEntries(bars.map((bar) => [bar.key, bar.name])),

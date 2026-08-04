@@ -2,14 +2,6 @@ import { assetBase } from './client';
 import type { FileRow } from './schema';
 import type { Image } from '$lib/data/types';
 
-/**
- * Baut die Bild-URLs fuer einen Slot.
- *
- * Immer Breite *und* Hoehe mit `fit=cover`: das macht die Dateigroesse unabhaengig
- * vom Seitenverhaeltnis des Originals (ein Hochformat-Foto laedt sonst ein
- * Vielfaches) und aktiviert den Focal-Point-Editor in Directus — ein schlechter
- * Zuschnitt laesst sich damit im CMS korrigieren statt im CSS.
- */
 function url(file: FileRow, width: number, ratio: number): string {
 	const params = new URLSearchParams({
 		width: String(width),
@@ -18,15 +10,12 @@ function url(file: FileRow, width: number, ratio: number): string {
 		quality: '78',
 		format: 'auto'
 	});
-	// Cache-Buster, damit ein ersetztes Bild sofort durchschlaegt.
 	if (file.modified_on) params.set('v', file.modified_on);
 	return `${assetBase}/assets/${file.id}?${params}`;
 }
 
 export interface SlotSpec {
-	/** 1x-Breiten fuer das srcset; die erste ist die Basisbreite. */
 	widths: number[];
-	/** Zielverhaeltnis Breite/Hoehe. */
 	ratio: number;
 	sizes: string;
 }
@@ -43,7 +32,6 @@ export function toImage(
 		src: url(file, base, slot.ratio),
 		srcset: slot.widths.map((w) => `${url(file, w, slot.ratio)} ${w}w`).join(', '),
 		sizes: slot.sizes,
-		// Der Alternativtext haengt am Bild, damit er nur einmal gepflegt wird.
 		alt: file.alt?.trim() || file.title?.trim() || altFallback,
 		width: base,
 		height: Math.round(base / slot.ratio)

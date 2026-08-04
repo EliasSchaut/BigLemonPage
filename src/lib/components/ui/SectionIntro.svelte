@@ -5,7 +5,6 @@
 	interface Props {
 		eyebrow: string;
 		eyebrowTone?: 'olive' | 'lime' | 'prime' | 'muted';
-		/** Textfarbe der Überschrift/des Leads: hell (auf navy) oder dunkel (auf cream) */
 		tone?: 'light' | 'dark';
 		lead?: string;
 		class?: string;

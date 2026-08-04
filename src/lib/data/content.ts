@@ -1,9 +1,3 @@
-// Zentrale Inhalte der Website — aus dem Prototyp (prototype/BigLemon.dc.html) übernommen.
-//
-// Doppelte Rolle: Startwerte für den CMS-Seed (scripts/seed-directus.ts) und
-// Fallback zur Laufzeit, falls Directus nicht erreichbar ist. Deshalb bleiben
-// diese Daten erhalten, auch wenn die Inhalte längst aus dem CMS kommen.
-
 import type { Bar, BarSpec, BookingPackage, Drink, EventItem, GalleryShot } from './types';
 
 export type {
@@ -30,13 +24,11 @@ export const CONTACT = {
 	vatId: 'DE 272012285'
 };
 
-/** Stammdaten für Meta-Tags und strukturierte Daten. */
 export const SITE = {
 	name: 'BigLemon',
 	title: 'BigLemon — Die mobile Cocktailbar für euer Fest',
 	description:
 		'Die BigLemon ist eine 3 Meter große, fahrbare Riesenzitrone voller frisch gepresster Cocktails — buchbar für Hochzeiten, Firmenfeiern, Stadtfeste und Festivals in Mannheim, Rhein-Neckar und bundesweit.',
-	/** Kurzfassung für Social-Vorschauen, wo wenig Platz ist. */
 	shortDescription:
 		'Mobile Cocktailbar aus Mannheim: frisch gepresste Cocktails aus einer 3 Meter großen Riesenzitrone.',
 	keywords: [
@@ -52,7 +44,6 @@ export const SITE = {
 	],
 	ogImage: '/og-image.jpg',
 	locale: 'de_DE',
-	/** Regionen, in denen die Bar üblicherweise unterwegs ist. */
 	areaServed: ['Mannheim', 'Rhein-Neckar', 'Rhein-Main', 'Deutschland']
 };
 
@@ -114,10 +105,6 @@ export const DRINKS: Drink[] = [
 	}
 ];
 
-/**
- * Termine der Saison 2026. Flache Liste mit ISO-Daten — Sortierung und
- * Monatsgruppierung leitet `$lib/data/events` daraus ab.
- */
 export const EVENTS: EventItem[] = [
 	{ start: '2026-05-08', end: '2026-05-10', name: 'Frühlingsfest', city: 'Lorsch' },
 	{ start: '2026-05-29', end: '2026-05-31', name: 'Schützenfest', city: 'Gummersbach' },
@@ -267,7 +254,6 @@ export const OPEN_BAR: Pick<Bar, 'name' | 'note' | 'accent'> = {
 	accent: '#C2E23F'
 };
 
-/** Galerie-Kacheln. `wide` verdoppelt die Spaltenbreite, `tall` die Zeilenhöhe. */
 export const GALLERY_SHOTS: GalleryShot[] = [
 	{ placeholder: 'Foto: Die Bar auf dem Stadtfest', wide: true, tall: true },
 	{ placeholder: 'Foto: Chriss beim Mixen' },
@@ -279,7 +265,6 @@ export const GALLERY_SHOTS: GalleryShot[] = [
 	{ placeholder: 'Foto: Frisch gepresst' }
 ];
 
-/** Kennzahlen im Hero. Die Anzahl der Feste kommt aus dem CMS und steht deshalb nicht hier. */
 export const HERO_STATS = [
 	{ value: '50+', label: 'verschiedene Cocktails' },
 	{ value: '0', label: 'Künstliche Aromen' }

@@ -3,7 +3,6 @@
 
 	interface Props {
 		active?: boolean;
-		/** Akzentfarbe im aktiven Zustand (Standard: BigLemon-Gelb) */
 		color?: string;
 		onclick?: () => void;
 		children: Snippet;

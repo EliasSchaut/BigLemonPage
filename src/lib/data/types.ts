@@ -1,7 +1,3 @@
-// Datentypen der Website-Inhalte. Bewusst frei von Framework- und Server-Imports,
-// damit sie sowohl im Client als auch im Seed-Skript nutzbar sind.
-
-/** Fertig aufbereitetes Bild — die URLs baut der CMS-Mapper, die Komponente reicht sie nur durch. */
 export interface Image {
 	src: string;
 	srcset?: string;
@@ -19,13 +15,11 @@ export interface Drink {
 	image?: Image;
 }
 
-/** Ein Termin. Datumsangaben als ISO-String (YYYY-MM-DD); `end` fehlt bei eintägigen Terminen. */
 export interface EventItem {
 	start: string;
 	end?: string;
 	name: string;
 	city: string;
-	/** Vom Server gesetzt: liegt der Termin bereits in der Vergangenheit? */
 	past?: boolean;
 }
 
@@ -53,7 +47,6 @@ export interface Bar {
 	name: string;
 	tag: string;
 	cta: string;
-	/** Aufgelöste Akzentfarbe. Im CMS steht nur ein Token-Name, der Mapper löst ihn auf. */
 	accent: string;
 	accentSoft: string;
 	pitch: string;
@@ -62,7 +55,6 @@ export interface Bar {
 	image?: Image;
 }
 
-/** Galerie-Kachel. `wide`/`tall` steuern die Rasterfläche. */
 export interface GalleryShot {
 	placeholder: string;
 	wide?: boolean;

@@ -1,8 +1,3 @@
-// Einstiegspunkt für die Website-Inhalte.
-//
-// Fragt Directus, cacht das Ergebnis und fällt bei jedem Problem auf die Werte
-// aus content.ts zurück — die Seite bleibt damit auch ohne CMS vollständig.
-
 import { readItems } from '@directus/sdk';
 import { BARS, DRINKS, EVENTS, GALLERY_SHOTS, PACKAGES } from '$lib/data/content';
 import { allByMonth } from '$lib/data/events';
@@ -16,19 +11,15 @@ export interface SiteContent {
 	drinks: Drink[];
 	bars: Bar[];
 	packages: BookingPackage[];
-	/** Alle Termine nach Monat gruppiert; vergangene sind mit `past` markiert. */
 	eventMonths: EventMonth[];
-	/** Anzahl aller im CMS gepflegten Termine — Grundlage der Kennzahl im Hero. */
 	eventCount: number;
 	gallery: GalleryShot[];
 }
 
 const CACHE_KEY = 'site';
 
-/** Verschachtelte Bildfelder — das SDK erwartet dafür Objekt-Syntax. */
 const image = { image: FILE_FIELDS } as const;
 
-/** Inhalte aus dem Code — Startwerte für den CMS-Seed und Fallback zur Laufzeit. */
 export function fallbackContent(): SiteContent {
 	return {
 		drinks: DRINKS,
@@ -81,9 +72,6 @@ async function loadFromDirectus(): Promise<SiteContent> {
 
 	const defaults = fallbackContent();
 
-	// Eine leere Terminliste ist zulässig (Saisonende), eine leere Drinkliste
-	// dagegen fast sicher ein Konfigurationsfehler — dort lieber die Werte aus
-	// content.ts zeigen als eine leere Sektion.
 	return {
 		drinks: drinks.length > 0 ? mapDrinks(drinks) : defaults.drinks,
 		bars: bars.length > 0 ? mapBars(bars) : defaults.bars,

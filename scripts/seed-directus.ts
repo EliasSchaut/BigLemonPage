@@ -1,12 +1,3 @@
-/**
- * Uebertraegt die Startwerte aus src/lib/data/content.ts nach Directus.
- *
- * Idempotent: Collections, die bereits Eintraege haben, werden uebersprungen.
- * Bilder werden nicht geseedet — die lädt der Redakteur selbst hoch.
- *
- *   node --env-file=.env --experimental-strip-types scripts/seed-directus.ts
- */
-
 import { BARS, DRINKS, EVENTS, GALLERY_SHOTS, PACKAGES } from '../src/lib/data/content.ts';
 
 const URL_BASE = process.env.DIRECTUS_URL ?? 'http://localhost:8055';
@@ -34,7 +25,6 @@ async function api(path: string, options: RequestInit = {}) {
 	return body.data;
 }
 
-/** Hex-Akzent der Bestandsdaten auf den Token-Namen im CMS zurueckfuehren. */
 const ACCENT_TOKENS: Record<string, string> = {
 	'#F2E63C': 'lemon',
 	'#F7B32B': 'sun',
@@ -42,7 +32,6 @@ const ACCENT_TOKENS: Record<string, string> = {
 	'#C2E23F': 'lime'
 };
 
-/** 'Foto: Bar bei Nacht' -> 'Bar bei Nacht' (das Praefix baut die Komponente). */
 const stripPhotoPrefix = (value: string) => value.replace(/^Foto:\s*/i, '');
 
 function galleryTileSize(shot: { wide?: boolean; tall?: boolean }): string {

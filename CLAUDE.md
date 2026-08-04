@@ -59,3 +59,5 @@ Zwei Fallstricke: Der Key bindet sich beim ersten Start **fest an Projekt und `P
 ## Code style
 
 Prettier is enforced (`prettier.config.js`): tabs, single quotes, no trailing commas, 100-char lines, with the Svelte and Tailwind class-sorting plugins.
+
+**No comments in code.** Write code that explains itself instead. If a comment is genuinely unavoidable, write it in English — never German. Rationale that would otherwise go into a comment belongs in this file (see "Fallstricke").

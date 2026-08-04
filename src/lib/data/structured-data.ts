@@ -1,13 +1,5 @@
-// Strukturierte Daten (schema.org). Suchmaschinen lesen daraus Firmenname,
-// Kontakt und Einsatzgebiet — für einen lokalen Anbieter wertvoller als Keywords.
-
 import { CONTACT, SITE } from './content';
 
-/**
- * Bewusst `LocalBusiness` und **keine** `Event`-Einträge für die Termine:
- * BigLemon ist auf Stadtfesten und CSDs Gastronomie-Anbieter, nicht Veranstalter.
- * Die Termine als eigene Events auszuzeichnen wäre gegenüber Suchmaschinen falsch.
- */
 export function localBusinessJsonLd(origin: string) {
 	const url = (path: string) => new URL(path, origin).href;
 

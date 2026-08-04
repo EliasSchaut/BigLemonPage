@@ -2,7 +2,6 @@ import nodemailer, { type Transporter } from 'nodemailer';
 import { env } from '$env/dynamic/private';
 import { CONTACT } from '$lib/data/content';
 import { renderHtmlTemplate, renderTemplate, type TemplateValues } from './template';
-// ?raw bündelt die Vorlagen in den Server-Build — kein Dateizugriff zur Laufzeit nötig.
 import htmlTemplate from './templates/anfrage.html?raw';
 import textTemplate from './templates/anfrage.txt?raw';
 
@@ -30,7 +29,6 @@ function requireEnv(key: string): string {
 	return value;
 }
 
-/** Transport wird einmalig aufgebaut und danach wiederverwendet (Connection-Pool). */
 function getTransporter(): Transporter {
 	if (transporter) return transporter;
 
@@ -42,7 +40,6 @@ function getTransporter(): Transporter {
 	transporter = nodemailer.createTransport({
 		host: requireEnv('SMTP_HOST'),
 		port,
-		// Port 465 spricht direkt TLS, alles andere startet per STARTTLS.
 		secure: env.SMTP_SECURE ? env.SMTP_SECURE === 'true' : port === 465,
 		auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: requireEnv('SMTP_PASS') } : undefined,
 		pool: true
@@ -51,7 +48,6 @@ function getTransporter(): Transporter {
 	return transporter;
 }
 
-/** Kopfzeilen dürfen keine Zeilenumbrüche enthalten (Header-Injection). */
 function singleLine(value: string): string {
 	return value.replace(/[\r\n]+/g, ' ').trim();
 }
@@ -78,11 +74,6 @@ function withFallbacks(data: AnfrageMail): TemplateValues {
 	};
 }
 
-/**
- * Rendert die Anfrage aus der Vorlage und verschickt sie per SMTP an
- * die Kontaktadresse. Reply-To zeigt auf die anfragende Person, damit
- * eine Antwort direkt dort landet.
- */
 export async function sendAnfrageMail(data: AnfrageMail): Promise<void> {
 	const values = withFallbacks(data);
 

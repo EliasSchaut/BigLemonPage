@@ -10,16 +10,16 @@
 			text: `${CONTACT.company}, ${CONTACT.owner}, ${CONTACT.street}, ${CONTACT.city}, ${CONTACT.email}, ${CONTACT.phoneDisplay}.`
 		},
 		{
-			title: '2. Aufruf dieser Website (Server-Logfiles)',
-			text: 'Beim Aufruf unserer Seite werden durch unseren Hoster automatisch IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, übertragene Datenmenge, Browsertyp und Betriebssystem verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO — unser berechtigtes Interesse an einem sicheren, störungsfreien Betrieb. Die Logfiles werden nach spätestens 30 Tagen gelöscht.'
+			title: '2. Aufruf dieser Website',
+			text: 'Diese Website läuft auf einem gemieteten Server der netcup GmbH, Karlsruhe, mit Serverstandort in Deutschland; betrieben wird sie in unserem Auftrag. Beim Aufruf überträgt euer Browser technisch notwendige Daten — vor allem eure IP-Adresse —, ohne die die Seite nicht ausgeliefert werden kann. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, unser berechtigtes Interesse an einem funktionierenden Auftritt. Wir führen keine Zugriffsprotokolle: Seitenaufrufe werden nicht gespeichert und nicht ausgewertet. Lediglich bei technischen Störungen hält der Webserver einzelne Fehlermeldungen samt IP-Adresse fest, die wir nach spätestens sieben Tagen löschen.'
 		},
 		{
 			title: '3. Anfrage- und Kontaktformular',
-			text: 'Wenn ihr uns über das Formular, per E-Mail oder telefonisch eine Anfrage schickt, verarbeiten wir die angegebenen Daten (Name, E-Mail, Telefon, Ort, Datum, Gästezahl, Nachricht) ausschließlich zur Bearbeitung der Anfrage und für Anschlussfragen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Vertrag bzw. Vertragsanbahnung), im Übrigen lit. f DSGVO. Anfragen ohne Buchung löschen wir nach zwölf Monaten; bei einer Buchung gelten die steuerlichen Aufbewahrungsfristen von bis zu zehn Jahren.'
+			text: 'Wenn ihr uns über das Formular, per E-Mail oder telefonisch eine Anfrage schickt, verarbeiten wir die angegebenen Daten (Name, E-Mail, Telefon, Ort, Datum, Gästezahl, Nachricht) ausschließlich zur Bearbeitung der Anfrage und für Anschlussfragen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Vertrag bzw. Vertragsanbahnung), im Übrigen lit. f DSGVO. Anfragen ohne Buchung löschen wir nach zwölf Monaten; bei einer Buchung gelten die steuerlichen Aufbewahrungsfristen von bis zu zehn Jahren. Die Angabe dieser Daten ist weder gesetzlich noch vertraglich vorgeschrieben — ohne sie können wir eine Anfrage aber nicht beantworten.'
 		},
 		{
 			title: '4. Empfänger und Auftragsverarbeiter',
-			text: 'Eure Daten geben wir nicht zu Werbezwecken weiter. Zugriff haben ausschließlich unser Hosting- und E-Mail-Dienstleister auf Grundlage eines Auftragsverarbeitungsvertrags (Art. 28 DSGVO) sowie — bei einer Buchung — unser Steuerbüro.'
+			text: 'Eure Daten geben wir nicht zu Werbezwecken weiter. Beteiligt sind nur die netcup GmbH, Karlsruhe, die uns den Server bereitstellt, und die IONOS SE, Montabaur, über die unser E-Mail-Postfach und der Versand des Anfrageformulars laufen. Beide sind für uns als Auftragsverarbeiter nach Art. 28 DSGVO tätig, die Daten bleiben in Deutschland. Bei einer Buchung erhält zusätzlich unser Steuerbüro die abrechnungsrelevanten Daten.'
 		},
 		{
 			title: '5. Cookies',
@@ -55,7 +55,7 @@
 			<Button href="#datenschutz" variant="outline-dark">Datenschutzerklärung</Button>
 		</div>
 
-		<section id="impressum" class="mb-11 scroll-mt-[90px]">
+		<section id="impressum" class="mb-11 scroll-mt-(--header-h)">
 			<h2
 				class="m-0 mb-5 font-display text-[clamp(24px,3vw,32px)] font-extrabold tracking-[-.02em]"
 			>
@@ -98,7 +98,7 @@
 			</div>
 		</section>
 
-		<section id="datenschutz" class="scroll-mt-[90px]">
+		<section id="datenschutz" class="scroll-mt-(--header-h)">
 			<h2
 				class="m-0 mb-5 font-display text-[clamp(24px,3vw,32px)] font-extrabold tracking-[-.02em]"
 			>
@@ -107,13 +107,6 @@
 			<div
 				class="flex flex-col gap-6 rounded-[22px] border-[1.5px] border-second/10 bg-white p-[clamp(24px,3vw,34px)]"
 			>
-				<div
-					class="rounded-[14px] bg-prime/16 px-[18px] py-4 text-[14.5px] leading-relaxed text-second-600"
-				>
-					Textgerüst — bitte vor dem Livegang mit eurem Hoster (Auftragsverarbeitungsvertrag) und
-					ggf. anwaltlich abgleichen. Wenn Karten, Analyse-Tools oder Social-Media-Plugins
-					dazukommen, müssen sie hier ergänzt werden.
-				</div>
 				{#each privacySections as section (section.title)}
 					<div>
 						<h3 class="m-0 mb-2.5 font-display text-[19px] font-bold">{section.title}</h3>

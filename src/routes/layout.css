@@ -111,6 +111,9 @@
 }
 
 @layer base {
+	:root {
+		--header-h: 75px;
+	}
 	html {
 		scroll-behavior: smooth;
 	}

@@ -1,15 +1,7 @@
-// Uebersetzt Directus-Rohdaten in die App-Typen. Alles hier ist defensiv:
-// fehlende Felder duerfen die Seite nie zum Absturz bringen.
-
 import type { Bar, BarSpec, BookingPackage, Drink, EventItem, GalleryShot } from '$lib/data/types';
 import type { BarRow, DrinkRow, EventRow, GalleryRow, PackageRow } from './schema';
 import { SLOTS, toImage } from './assets';
 
-/**
- * Markenfarben bleiben im Code — im CMS steht nur ein Token-Name. Ein Color-Picker
- * waere genau das Werkzeug, mit dem sich das Design brechen liesse, und `accentSoft`
- * ist ein abgeleiteter Wert, der sonst auseinanderdriftet.
- */
 const ACCENTS = {
 	lemon: { accent: '#F2E63C', accentSoft: 'rgba(242,230,60,.26)' },
 	sun: { accent: '#F7B32B', accentSoft: 'rgba(247,179,43,.26)' },
@@ -19,7 +11,6 @@ const ACCENTS = {
 
 const accentFor = (token: string | null) => ACCENTS[token as keyof typeof ACCENTS] ?? ACCENTS.lemon;
 
-/** Notnagel, falls im CMS der technische Schluessel geleert wurde. */
 const slugify = (value: string) =>
 	value
 		.toLowerCase()
@@ -31,7 +22,6 @@ export function mapEvents(rows: EventRow[]): EventItem[] {
 		.filter((row) => row.date_start && row.name)
 		.map((row) => ({
 			start: row.date_start,
-			// Ein Enddatum gleich dem Start bedeutet dasselbe wie kein Enddatum.
 			end: row.date_end && row.date_end !== row.date_start ? row.date_end : undefined,
 			name: row.name,
 			city: row.city ?? ''
@@ -60,7 +50,6 @@ export function mapBars(rows: BarRow[]): Bar[] {
 			accentSoft,
 			pitch: row.pitch ?? '',
 			note: row.note ?? '',
-			// JSON-Felder kommen als null zurueck, solange sie nie angefasst wurden.
 			specs: (row.specs ?? [])
 				.filter((spec): spec is BarSpec => Boolean(spec?.label && spec?.value))
 				.map((spec) => ({ label: spec.label, value: spec.value })),

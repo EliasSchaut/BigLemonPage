@@ -5,12 +5,9 @@
 	interface Props {
 		title: string;
 		description?: string;
-		/** Pfad oder absolute URL. Social-Netzwerke brauchen eine absolute Adresse. */
 		image?: string;
 		type?: 'website' | 'article';
-		/** Seiten wie das Impressum gehören nicht in den Index. */
 		noindex?: boolean;
-		/** Zusätzliche strukturierte Daten (JSON-LD). */
 		jsonLd?: unknown;
 	}
 
@@ -23,8 +20,6 @@
 		jsonLd
 	}: Props = $props();
 
-	// page.url.origin liefert serverseitig den Wert aus ORIGIN — deshalb muss die
-	// Variable in Produktion gesetzt sein, sonst werden die URLs hier falsch.
 	const canonical = $derived(new URL(page.url.pathname, page.url.origin).href);
 	const imageUrl = $derived(new URL(image, page.url.origin).href);
 </script>

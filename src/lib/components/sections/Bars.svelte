@@ -13,7 +13,10 @@
 	}
 </script>
 
-<section id="bars" class="scroll-mt-[84px] bg-cream px-5 py-[clamp(64px,8vw,110px)] text-second">
+<section
+	id="bars"
+	class="scroll-mt-(--header-h) bg-cream px-5 py-[clamp(64px,8vw,110px)] text-second"
+>
 	<div class="mx-auto max-w-[1240px]">
 		<SectionIntro
 			eyebrow="DREI BARS, EIN TEAM"

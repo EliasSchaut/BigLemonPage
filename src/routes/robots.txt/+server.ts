@@ -1,7 +1,5 @@
 import type { RequestHandler } from './$types';
 
-// Als Route statt statischer Datei, weil die Sitemap-Zeile eine absolute URL
-// braucht — die Domain steht erst zur Laufzeit fest.
 export const GET: RequestHandler = ({ url }) => {
 	const body = `User-agent: *
 Allow: /

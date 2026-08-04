@@ -4,7 +4,10 @@
 	const lemonSlice = 'repeating-conic-gradient(from 12deg,#FFF8B4 0deg 36deg,#EFE24A 36deg 45deg)';
 </script>
 
-<section id="bar" class="scroll-mt-[84px] bg-cream px-5 py-[clamp(64px,8vw,110px)] text-second">
+<section
+	id="bar"
+	class="scroll-mt-(--header-h) bg-cream px-5 py-[clamp(64px,8vw,110px)] text-second"
+>
 	<div class="mx-auto max-w-[1240px]">
 		<SectionIntro
 			eyebrow="WARUM DIE BIGLEMON"
@@ -68,7 +71,7 @@
 				<h3 class="m-0 font-display text-[22px] font-bold tracking-[-.01em]">Crew mit Routine</h3>
 				<p class="m-0 text-[15px] leading-relaxed text-second-600">
 					Seit Jahren auf Stadtfesten, Messen und CSDs unterwegs. Wir kennen die Abläufe, halten das
-					Tempo und bleiben auch im Andrang freundlich.
+					Tempo und bleiben auch bei Andrang freundlich.
 				</p>
 			</div>
 		</div>

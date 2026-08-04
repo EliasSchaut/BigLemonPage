@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { MARQUEE_ITEMS } from '$lib/data/content';
 
-	// Inhalt verdoppeln: die Animation schiebt um -50 %, so entsteht die Endlosschleife
 	const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
 </script>
 

@@ -5,7 +5,10 @@
 	import SocialIcon from '$lib/components/ui/SocialIcon.svelte';
 </script>
 
-<section id="kontakt" class="scroll-mt-[84px] bg-prime px-5 py-[clamp(64px,8vw,110px)] text-second">
+<section
+	id="kontakt"
+	class="scroll-mt-(--header-h) bg-prime px-5 py-[clamp(64px,8vw,110px)] text-second"
+>
 	<div
 		class="mx-auto grid max-w-[1240px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-[clamp(30px,5vw,60px)]"
 	>

@@ -1,6 +1,5 @@
 <script lang="ts">
 	interface Props {
-		/** Beschriftung des Platzhalters, solange noch kein Foto vorliegt */
 		placeholder: string;
 		src?: string;
 		srcset?: string;

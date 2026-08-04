@@ -11,7 +11,7 @@
 
 <section
 	id="drinks"
-	class="relative scroll-mt-[84px] overflow-hidden px-5 py-[clamp(64px,8vw,110px)]"
+	class="relative scroll-mt-(--header-h) overflow-hidden px-5 py-[clamp(64px,8vw,110px)]"
 	style:background="linear-gradient(180deg,#0F1538,#151C48)"
 >
 	<GlowBackdrop

@@ -1,7 +1,3 @@
-// Rohform der Directus-Antworten. Bewusst getrennt von den App-Typen in
-// $lib/data/types — map.ts uebersetzt zwischen beiden.
-
-/** Nur die Felder, die die Website tatsaechlich braucht. */
 export interface FileRow {
 	id: string;
 	alt: string | null;
@@ -66,7 +62,6 @@ export interface CmsSchema {
 	gallery: GalleryRow[];
 }
 
-/** Bildfelder, die von jeder Collection mitgeladen werden. */
 export const FILE_FIELDS: (keyof FileRow)[] = [
 	'id',
 	'alt',

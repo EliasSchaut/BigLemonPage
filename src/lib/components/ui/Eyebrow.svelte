@@ -2,7 +2,6 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		/** olive auf hellen, lime/prime auf dunklen Sektionen */
 		tone?: 'olive' | 'lime' | 'prime' | 'muted';
 		class?: string;
 		children: Snippet;

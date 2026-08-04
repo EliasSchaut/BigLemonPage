@@ -1,13 +1,23 @@
 <script lang="ts">
+	import { slide } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
 	import logoLight from '$lib/assets/images/logo-light.png';
 	import { NAV_LINKS } from '$lib/data/content';
 	import Button from '$lib/components/ui/Button.svelte';
+	import MenuLemonIcon from '$lib/components/ui/MenuLemonIcon.svelte';
 
 	let menuOpen = $state(false);
 	const closeMenu = () => (menuOpen = false);
+
+	let headerHeight = $state(0);
+
+	$effect(() => {
+		if (headerHeight) document.documentElement.style.setProperty('--header-h', `${headerHeight}px`);
+	});
 </script>
 
 <header
+	bind:offsetHeight={headerHeight}
 	class="sticky top-0 z-60 border-b border-prime/18 bg-second/82 backdrop-blur-[14px] backdrop-saturate-100"
 >
 	<div class="mx-auto flex max-w-[1240px] items-center justify-between gap-4 px-5 py-3.5">
@@ -36,18 +46,19 @@
 		<button
 			type="button"
 			onclick={() => (menuOpen = !menuOpen)}
-			aria-label="Menü"
+			aria-label={menuOpen ? 'Menü schließen' : 'Menü öffnen'}
 			aria-expanded={menuOpen}
-			class="flex size-[46px] cursor-pointer flex-col items-center justify-center gap-[5px] rounded-[14px] border border-prime/30 bg-prime/8 min-[940px]:hidden"
+			class="flex size-[46px] cursor-pointer items-center justify-center rounded-[14px] border border-prime/30 bg-prime/8 text-prime min-[940px]:hidden"
 		>
-			<span class="block h-0.5 w-5 rounded-xs bg-prime"></span>
-			<span class="block h-0.5 w-5 rounded-xs bg-prime"></span>
-			<span class="block h-0.5 w-5 rounded-xs bg-prime"></span>
+			<MenuLemonIcon open={menuOpen} />
 		</button>
 	</div>
 
 	{#if menuOpen}
-		<nav class="flex flex-col gap-0.5 border-t border-prime/14 px-4 pt-2 pb-5 min-[940px]:hidden">
+		<nav
+			transition:slide={{ duration: 320, easing: cubicOut }}
+			class="absolute inset-x-0 top-full flex flex-col gap-0.5 overflow-hidden border-b border-prime/18 bg-second/97 px-4 pt-2 pb-5 backdrop-blur-[14px] min-[940px]:hidden"
+		>
 			{#each NAV_LINKS as link (link.href)}
 				<a
 					href={link.href}

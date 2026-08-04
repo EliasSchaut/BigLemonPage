@@ -1,12 +1,3 @@
-/**
- * Legt das Datenmodell und die oeffentlichen Leserechte in Directus an.
- *
- * Idempotent: vorhandene Collections/Felder/Rechte werden uebersprungen, das
- * Skript kann also gefahrlos erneut laufen.
- *
- *   node --env-file=.env scripts/setup-directus-schema.mjs
- */
-
 const URL_BASE = process.env.DIRECTUS_URL ?? 'http://localhost:8055';
 const EMAIL = process.env.DIRECTUS_ADMIN_EMAIL;
 const PASSWORD = process.env.DIRECTUS_ADMIN_PASSWORD;
@@ -36,7 +27,6 @@ async function api(path, options = {}) {
 	return body.data;
 }
 
-/** Deutsches Label fuer ein Feld. */
 const de = (translation) => [{ language: 'de-DE', translation }];
 
 const pk = {
@@ -366,10 +356,6 @@ async function ensureCollections() {
 	}
 }
 
-/**
- * Ein Bildfeld per API anzulegen erzeugt zwar den Fremdschluessel, aber keinen
- * Relations-Eintrag — ohne den liefert die API nur die UUID statt der Bilddaten.
- */
 async function ensureImageRelations() {
 	const existing = await api('/relations');
 	const have = new Set(existing.map((r) => `${r.collection}.${r.field}`));
@@ -392,7 +378,6 @@ async function ensureImageRelations() {
 	}
 }
 
-/** Alternativtext gehoert ans Bild, damit er nur einmal gepflegt wird. */
 async function ensureFileAltField() {
 	const fields = await api('/fields/directus_files');
 	if (fields.some((f) => f.field === 'alt')) {
@@ -421,7 +406,6 @@ const PUBLIC_READ = {
 	bars: ['*'],
 	packages: ['*'],
 	gallery: ['*'],
-	// /assets liefert Bilder nur aus, wenn directus_files oeffentlich lesbar ist.
 	directus_files: [
 		'id',
 		'alt',
@@ -454,8 +438,6 @@ async function ensurePublicRead() {
 				console.log(`  = Leserecht ${collection} steht bereits richtig`);
 				continue;
 			}
-			// Nach dem Aktivieren einer Lizenz laesst sich der zuvor noetige
-			// Vollzugriff nachtraeglich auf die benoetigten Felder eingrenzen.
 			try {
 				await api(`/permissions/${current.id}`, {
 					method: 'PATCH',
@@ -490,9 +472,6 @@ async function ensurePublicRead() {
 			await grant(fields);
 			console.log(`  + Leserecht ${collection}`);
 		} catch (error) {
-			// Ohne Lizenz gilt schon eine Feldliste als "custom permission rule".
-			// Dann bleibt nur Vollzugriff — mit Open-Innovation-Grant-Key laesst
-			// sich das nachtraeglich durch erneutes Ausfuehren verschaerfen.
 			if (error.status === 403 && fields[0] !== '*') {
 				await grant(['*']);
 				console.log(
@@ -507,10 +486,6 @@ async function ensurePublicRead() {
 
 const EDITABLE = ['events', 'drinks', 'bars', 'packages', 'gallery'];
 
-/**
- * Rolle fuer den Redakteur: darf Inhalte und Bilder pflegen, aber weder das
- * Datenmodell noch Einstellungen anfassen — das Design bleibt damit unantastbar.
- */
 async function ensureEditorRole() {
 	const roles = await api('/roles?limit=-1');
 	if (roles.some((r) => r.name === 'Redaktion')) {
@@ -544,7 +519,6 @@ async function ensureEditorRole() {
 			});
 		}
 	}
-	// Ohne Rechte auf directus_files kann der Redakteur keine Fotos hochladen.
 	for (const action of ['create', 'read', 'update', 'delete']) {
 		await api('/permissions', {
 			method: 'POST',

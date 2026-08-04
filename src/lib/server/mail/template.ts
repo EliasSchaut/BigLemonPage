@@ -1,8 +1,3 @@
-/**
- * Minimaler Template-Renderer: ersetzt {{platzhalter}} durch die übergebenen Werte.
- * Bewusst ohne Template-Engine — die Vorlagen brauchen nur Ersetzung, keine Logik.
- */
-
 export type TemplateValues = Record<string, string>;
 
 const PLACEHOLDER = /\{\{\s*([a-zA-Z][a-zA-Z0-9_]*)\s*\}\}/g;
@@ -15,7 +10,6 @@ const HTML_ENTITIES: Record<string, string> = {
 	"'": '&#39;'
 };
 
-/** Verhindert, dass Nutzereingaben als Markup in der HTML-Mail landen. */
 export function escapeHtml(value: string): string {
 	return value.replace(/[&<>"']/g, (char) => HTML_ENTITIES[char]);
 }

@@ -9,7 +9,7 @@
 
 <section
 	id="galerie"
-	class="relative scroll-mt-[84px] overflow-hidden bg-second px-5 py-[clamp(64px,8vw,110px)]"
+	class="relative scroll-mt-(--header-h) overflow-hidden bg-second px-5 py-[clamp(64px,8vw,110px)]"
 >
 	<GlowBackdrop
 		wall

@@ -17,7 +17,7 @@
 
 <section
 	id="buchen"
-	class="relative scroll-mt-[84px] overflow-hidden bg-cover bg-center px-5 py-[clamp(64px,8vw,110px)]"
+	class="relative scroll-mt-(--header-h) overflow-hidden bg-cover bg-center px-5 py-[clamp(64px,8vw,110px)]"
 	style:background-image="linear-gradient(rgb(15 21 56/.93),rgb(15 21 56/.96)),url('{barWall}')"
 >
 	<GlowBackdrop

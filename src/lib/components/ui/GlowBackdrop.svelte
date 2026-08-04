@@ -2,15 +2,11 @@
 	import barWall from '$lib/assets/images/bar-hintergrund.jpg';
 
 	interface Props {
-		/** Foto-Tapete einblenden (Bar-Hintergrund) */
 		wall?: boolean;
 		wallOpacity?: number;
-		/** CSS mask-image für die Tapete */
 		wallMask?: string;
-		/** Zusätzliche radial-gradient-Glows (background-Wert) */
 		glow?: string;
 		glowOpacity?: number;
-		/** Abdunkelnde Verlaufsschicht über der Tapete */
 		shade?: string;
 	}
 

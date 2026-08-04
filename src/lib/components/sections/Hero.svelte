@@ -6,7 +6,6 @@
 
 	let { eventCount = 0 }: { eventCount?: number } = $props();
 
-	// Erste Kennzahl kommt live aus dem CMS, der Rest steht im Code.
 	const stats = $derived([
 		{ value: String(eventCount), label: 'Feste im Kalender' },
 		...HERO_STATS
