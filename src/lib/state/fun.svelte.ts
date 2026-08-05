@@ -28,6 +28,7 @@ type SplashOptions = {
 	angle?: number;
 	spread?: number;
 	power?: number;
+	scale?: number;
 	colors?: string[];
 };
 
@@ -39,6 +40,7 @@ export function splash(x: number, y: number, options: SplashOptions = {}) {
 		angle = -Math.PI / 2,
 		spread = Math.PI * 0.85,
 		power = 240,
+		scale = 1,
 		colors = JUICE
 	} = options;
 
@@ -51,13 +53,13 @@ export function splash(x: number, y: number, options: SplashOptions = {}) {
 			y,
 			dx: Math.cos(a) * dist,
 			dy: Math.sin(a) * dist + 60 + Math.random() * 90,
-			size: 5 + Math.random() * 13,
+			size: (5 + Math.random() * 13) * scale,
 			color: colors[Math.floor(Math.random() * colors.length)],
 			duration: 620 + Math.random() * 420
 		};
 		droplets.push(drop);
 		setTimeout(() => {
-			const index = droplets.indexOf(drop);
+			const index = droplets.findIndex((entry) => entry.id === drop.id);
 			if (index > -1) droplets.splice(index, 1);
 		}, drop.duration);
 	}
