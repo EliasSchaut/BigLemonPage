@@ -62,7 +62,7 @@
 			</p>
 		{:else}
 			<div id="termin-liste" class="flex flex-col gap-[34px]">
-				{#each visibleMonths as month (month.name)}
+				{#each visibleMonths as month}
 					<div>
 						<div class="mb-3.5 flex items-center gap-4">
 							<h3 class="m-0 font-display text-[26px] font-extrabold tracking-[-.02em]">
@@ -75,7 +75,7 @@
 							</span>
 						</div>
 						<div class="grid grid-cols-[repeat(auto-fill,minmax(268px,1fr))] gap-3">
-							{#each month.items as event (event.start + event.name + event.city)}
+							{#each month.items as event}
 								<div
 									class="flex items-center gap-3.5 rounded-2xl border-[1.5px] bg-white px-[18px] py-4 transition-[border-color,box-shadow] {event.past
 										? 'border-second/8 opacity-55'

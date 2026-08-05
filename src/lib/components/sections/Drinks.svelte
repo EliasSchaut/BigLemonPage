@@ -37,7 +37,7 @@
 		</div>
 
 		<div class="grid grid-cols-[repeat(auto-fill,minmax(255px,1fr))] gap-5">
-			{#each drinks as drink (drink.name)}
+			{#each drinks as drink}
 				<article
 					class="flex flex-col overflow-hidden rounded-[22px] border border-cream/11 bg-cream/4 transition-colors hover:border-prime/45 hover:bg-prime/7"
 				>

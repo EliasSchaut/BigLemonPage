@@ -31,7 +31,7 @@
 		<div
 			class="grid auto-rows-[170px] grid-cols-2 gap-3.5 min-[620px]:grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))]"
 		>
-			{#each shots as shot (shot.placeholder)}
+			{#each shots as shot}
 				<div
 					class="relative overflow-hidden rounded-[20px] {shot.wide
 						? 'min-[700px]:col-span-2'

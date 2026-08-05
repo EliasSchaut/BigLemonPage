@@ -38,7 +38,7 @@
 			<div>
 				<div class="mb-2.5 text-xs font-extrabold tracking-[.16em] text-second-450">1 — PAKET</div>
 				<div class="flex flex-wrap gap-2.5">
-					{#each packages as pkg (pkg.key)}
+					{#each packages as pkg}
 						<Chip active={pkg.key === booking.pkg} onclick={() => (booking.pkg = pkg.key)}>
 							{pkg.name}
 						</Chip>
@@ -48,7 +48,7 @@
 			<div>
 				<div class="mb-2.5 text-xs font-extrabold tracking-[.16em] text-second-450">2 — BAR</div>
 				<div class="flex flex-wrap gap-2.5">
-					{#each bars as bar (bar.key)}
+					{#each bars as bar}
 						<Chip
 							active={bar.key === booking.bar}
 							color={bar.accent}
@@ -72,7 +72,7 @@
 				<div class="mb-[18px] text-[17px] font-bold text-prime">{activePackage.size}</div>
 				<p class="m-0 mb-6 text-base leading-[1.65] text-second-300">{activePackage.desc}</p>
 				<div class="flex flex-col gap-3 border-t border-cream/13 pt-[22px]">
-					{#each activePackage.includes as item (item)}
+					{#each activePackage.includes as item}
 						<div class="flex items-start gap-3">
 							<span
 								class="mt-0.5 flex size-5 flex-none items-center justify-center rounded-full bg-prime text-xs font-black text-second"

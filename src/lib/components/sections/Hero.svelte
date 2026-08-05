@@ -63,7 +63,7 @@
 			<div
 				class="grid max-w-[560px] grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-[18px] border-t border-cream/13 pt-[26px]"
 			>
-				{#each stats as stat (stat.label)}
+				{#each stats as stat}
 					<div>
 						<div class="font-display text-3xl leading-none font-extrabold text-prime">
 							{stat.value}

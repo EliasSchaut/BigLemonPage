@@ -195,7 +195,7 @@
 			<label class="mb-3.5 flex flex-col gap-[7px]">
 				<span class="text-[13px] font-bold text-second-600">Gewünschte Bar</span>
 				<select name="bar" bind:value={booking.bar} class={inputClasses}>
-					{#each bars as bar (bar.key)}
+					{#each bars as bar}
 						<option value={bar.key}>{bar.name}</option>
 					{/each}
 					<option value="offen">Noch offen — beratet uns gerne</option>
@@ -204,7 +204,7 @@
 			<label class="mb-3.5 flex flex-col gap-[7px]">
 				<span class="text-[13px] font-bold text-second-600">Gewünschtes Paket</span>
 				<select name="package" bind:value={booking.pkg} class={inputClasses}>
-					{#each packages as pkg (pkg.key)}
+					{#each packages as pkg}
 						<option value={pkg.key}>{pkg.name} — {pkg.size}</option>
 					{/each}
 					<option value="offen">Weiß ich noch nicht / individuell</option>
