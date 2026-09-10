@@ -12,8 +12,8 @@ importers:
         specifier: ^24.0.0
         version: 24.0.0
       nodemailer:
-        specifier: ^9.0.3
-        version: 9.0.3
+        specifier: ^9.1.1
+        version: 9.1.1
     devDependencies:
       '@sveltejs/adapter-node':
         specifier: ^5.5.7
@@ -990,8 +990,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nodemailer@9.0.3:
-    resolution: {integrity: sha512-n+YP+NKwR5zRWa60k3GiQ6Q3B4KXCoAw40dAKeCtYn020iNN74aWK2liXIC3ZEATeGql7we3tE3t8QwhY0eskw==}
+  nodemailer@9.1.1:
+    resolution: {integrity: sha512-izw9mVKFix6YSnC9eLgV6g1opl9DUlRio9ZNcq+Wu9Ujn2UwF+8Nl0B8nz22kEC+CTZCvinkxwJ0DeFbb6NwcQ==}
     engines: {node: '>=6.0.0'}
 
   obug@2.1.4:
@@ -1866,7 +1866,7 @@ snapshots:
 
   nanoid@3.3.16: {}
 
-  nodemailer@9.0.3: {}
+  nodemailer@9.1.1: {}
 
   obug@2.1.4: {}
 
