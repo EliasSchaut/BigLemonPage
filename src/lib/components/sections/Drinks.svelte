@@ -5,11 +5,33 @@
 	import Tag from '#lib/components/ui/Tag.svelte';
 	import ImageSlot from '#lib/components/ui/ImageSlot.svelte';
 	import GlowBackdrop from '#lib/components/ui/GlowBackdrop.svelte';
+	import Eigenkreation from '#lib/components/fun/Eigenkreation.svelte';
+	import { prefersReducedMotion } from '#lib/state/fun.svelte.ts';
+
+	const SHOWCASE = 8;
 
 	let { drinks }: { drinks: Drink[] } = $props();
+
+	let section: HTMLElement;
+	let expanded = $state(false);
+
+	const ordered = $derived([
+		...drinks.filter((drink) => drink.featured),
+		...drinks.filter((drink) => !drink.featured)
+	]);
+	const hiddenCount = $derived(Math.max(ordered.length - SHOWCASE, 0));
+	const collapsed = $derived(hiddenCount > 0 && !expanded);
+
+	function toggle() {
+		expanded = !expanded;
+		if (!expanded && section.getBoundingClientRect().top < 0) {
+			section.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+		}
+	}
 </script>
 
 <section
+	bind:this={section}
 	id="drinks"
 	class="relative scroll-mt-(--header-h) overflow-hidden px-5 py-[clamp(64px,8vw,110px)]"
 	style:background="linear-gradient(180deg,#0F1538,#151C48)"
@@ -31,15 +53,16 @@
 			>
 				Erlaubt ist,<br />was schmeckt.
 			</SectionIntro>
-			<Button href="/#buchen" variant="outline-prime" class="whitespace-nowrap">
-				Komplette Karte anfragen
-			</Button>
 		</div>
 
-		<div class="grid grid-cols-[repeat(auto-fill,minmax(255px,1fr))] gap-5">
-			{#each drinks as drink}
+		<div id="drinks-liste" class="grid grid-cols-[repeat(auto-fill,minmax(255px,1fr))] gap-5">
+			{#each ordered as drink, index}
 				<article
-					class="flex flex-col overflow-hidden rounded-[22px] border border-cream/11 bg-cream/4 transition-colors hover:border-prime/45 hover:bg-prime/7"
+					class="flex flex-col overflow-hidden rounded-[22px] border border-cream/11 bg-cream/4 hover:border-prime/45 hover:bg-prime/7 {index <
+					SHOWCASE
+						? 'transition-colors'
+						: 'reveal'}"
+					class:hidden={collapsed && index >= SHOWCASE}
 				>
 					<div class="relative h-[190px] bg-second-750">
 						<ImageSlot placeholder="Foto: {drink.name}" {...drink.image} />
@@ -57,7 +80,21 @@
 					</div>
 				</article>
 			{/each}
+			<Eigenkreation class={collapsed ? 'hidden' : ''} />
 		</div>
+
+		{#if hiddenCount > 0}
+			<div class="mt-[clamp(28px,4vw,40px)] flex justify-center">
+				<Button
+					variant="outline-prime"
+					onclick={toggle}
+					aria-expanded={expanded}
+					aria-controls="drinks-liste"
+				>
+					{expanded ? 'Karte einklappen' : `Komplette Karte ansehen (+${hiddenCount})`}
+				</Button>
+			</div>
+		{/if}
 
 		<p class="mt-[26px] mb-0 text-sm text-second-500">
 			Alle Drinks gibt es auch alkoholfrei. Sonderwünsche? Sagt Bescheid — wir mixen fast alles.

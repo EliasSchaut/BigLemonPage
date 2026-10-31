@@ -12,6 +12,7 @@ export interface Drink {
 	tag: string;
 	desc: string;
 	alc: boolean;
+	featured?: boolean;
 	image?: Image;
 }
 

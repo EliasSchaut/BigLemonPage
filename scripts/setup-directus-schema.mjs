@@ -145,6 +145,18 @@ const COLLECTIONS = [
 				},
 				schema: { default_value: false }
 			},
+			{
+				field: 'featured',
+				type: 'boolean',
+				meta: {
+					interface: 'boolean',
+					translations: de('Startseite'),
+					width: 'half',
+					note: 'Die ersten 8 markierten Drinks stehen sofort sichtbar in der Drinkliste, alle anderen hinter "Komplette Karte ansehen".',
+					options: { label: 'Direkt zeigen' }
+				},
+				schema: { default_value: false }
+			},
 			imageField('Foto')
 		]
 	},

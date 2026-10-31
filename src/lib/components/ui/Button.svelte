@@ -6,6 +6,9 @@
 		variant?: 'primary' | 'dark' | 'outline-cream' | 'outline-prime' | 'outline-dark';
 		size?: 'sm' | 'md' | 'lg';
 		type?: 'button' | 'submit';
+		disabled?: boolean;
+		'aria-expanded'?: boolean;
+		'aria-controls'?: string;
 		onclick?: (e: MouseEvent) => void;
 		class?: string;
 		children: Snippet;
@@ -16,9 +19,11 @@
 		variant = 'primary',
 		size = 'md',
 		type = 'button',
+		disabled = false,
 		onclick,
 		class: cls = '',
-		children
+		children,
+		...aria
 	}: Props = $props();
 
 	const variants = {
@@ -38,12 +43,12 @@
 	};
 
 	const classes = $derived(
-		`inline-flex cursor-pointer items-center justify-center rounded-full text-center leading-none transition-colors ${variants[variant]} ${sizes[size]} ${cls}`
+		`inline-flex cursor-pointer items-center justify-center rounded-full text-center leading-none transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${variants[variant]} ${sizes[size]} ${cls}`
 	);
 </script>
 
 {#if href}
 	<a {href} {onclick} class={classes}>{@render children()}</a>
 {:else}
-	<button {type} {onclick} class={classes}>{@render children()}</button>
+	<button {type} {disabled} {onclick} class={classes} {...aria}>{@render children()}</button>
 {/if}

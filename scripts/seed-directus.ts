@@ -58,7 +58,8 @@ const SEEDS: { collection: string; rows: Record<string, unknown>[] }[] = [
 			name: drink.name,
 			tag: drink.tag,
 			desc: drink.desc,
-			alc: drink.alc
+			alc: drink.alc,
+			featured: drink.featured ?? false
 		}))
 	},
 	{

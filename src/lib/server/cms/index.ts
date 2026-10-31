@@ -42,7 +42,7 @@ async function loadFromDirectus(): Promise<SiteContent> {
 		),
 		directus.request(
 			readItems('drinks', {
-				fields: ['name', 'tag', 'desc', 'alc', image],
+				fields: ['name', 'tag', 'desc', 'alc', 'featured', image],
 				sort: ['sort'],
 				limit: -1
 			})

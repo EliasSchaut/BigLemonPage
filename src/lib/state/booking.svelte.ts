@@ -1,4 +1,5 @@
 export const booking = $state({
 	pkg: 'plus',
-	bar: 'biglemon'
+	bar: 'biglemon',
+	message: ''
 });

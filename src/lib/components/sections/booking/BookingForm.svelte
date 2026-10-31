@@ -43,6 +43,7 @@
 
 			if (result.type === 'success') {
 				sent = true;
+				booking.message = '';
 				errors = {};
 				errorMessage = '';
 				scrollToForm();
@@ -214,6 +215,7 @@
 				<span class="text-[13px] font-bold text-second-600">Eure Nachricht *</span>
 				<textarea
 					name="message"
+					bind:value={booking.message}
 					required
 					rows="4"
 					maxlength="5000"

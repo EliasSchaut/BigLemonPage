@@ -41,6 +41,7 @@ export function mapDrinks(rows: DrinkRow[]): Drink[] {
 		tag: row.tag ?? '',
 		desc: row.desc ?? '',
 		alc: row.alc ?? false,
+		featured: row.featured ?? false,
 		image: toImage(row.image, SLOTS.drink, row.name)
 	}));
 }

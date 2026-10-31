@@ -20,6 +20,7 @@ export interface DrinkRow {
 	tag: string | null;
 	desc: string | null;
 	alc: boolean | null;
+	featured: boolean | null;
 	image: FileRow | null;
 }
 
