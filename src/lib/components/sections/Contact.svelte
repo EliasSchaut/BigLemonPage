@@ -1,8 +1,8 @@
 <script lang="ts">
-	import lemonFrei from '$lib/assets/images/lemon-frei.png';
-	import { CONTACT } from '$lib/data/content';
-	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
-	import SocialIcon from '$lib/components/ui/SocialIcon.svelte';
+	import lemonFrei from '#lib/assets/images/lemon-frei.png';
+	import { CONTACT } from '#lib/data/content.ts';
+	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
+	import SocialIcon from '#lib/components/ui/SocialIcon.svelte';
 </script>
 
 <section

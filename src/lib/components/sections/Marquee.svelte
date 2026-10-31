@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MARQUEE_ITEMS } from '$lib/data/content';
+	import { MARQUEE_ITEMS } from '#lib/data/content.ts';
 
 	const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
 </script>

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
-	import { fun, splash } from '$lib/state/fun.svelte';
-	import LemonIcon from '$lib/components/ui/LemonIcon.svelte';
+	import { fun, splash } from '#lib/state/fun.svelte.ts';
+	import LemonIcon from '#lib/components/ui/LemonIcon.svelte';
 
 	let hoverCapable = $state(false);
 	let hovered = $state(false);

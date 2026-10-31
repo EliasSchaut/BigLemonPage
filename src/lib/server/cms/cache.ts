@@ -1,7 +1,7 @@
-import { dev } from '$app/environment';
-import { env } from '$env/dynamic/private';
+import { dev } from '$app/env';
+import { CMS_CACHE_TTL } from '$app/env/private';
 
-const TTL_MS = (Number(env.CMS_CACHE_TTL ?? (dev ? 5 : 60)) || 60) * 1000;
+const TTL_MS = (Number(CMS_CACHE_TTL ?? (dev ? 5 : 60)) || 60) * 1000;
 const ERROR_COOLDOWN_MS = 15_000;
 
 interface Entry<T> {

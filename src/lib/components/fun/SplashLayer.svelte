@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { droplets } from '$lib/state/fun.svelte';
+	import { droplets } from '#lib/state/fun.svelte.ts';
 </script>
 
 <div class="pointer-events-none fixed inset-0 z-90 overflow-hidden" aria-hidden="true">

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
+	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
 
 	const lemonSlice = 'repeating-conic-gradient(from 12deg,#FFF8B4 0deg 36deg,#EFE24A 36deg 45deg)';
 </script>

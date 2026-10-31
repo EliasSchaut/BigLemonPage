@@ -1,4 +1,11 @@
-import type { Bar, BarSpec, BookingPackage, Drink, EventItem, GalleryShot } from '$lib/data/types';
+import type {
+	Bar,
+	BarSpec,
+	BookingPackage,
+	Drink,
+	EventItem,
+	GalleryShot
+} from '#lib/data/types.ts';
 import type { BarRow, DrinkRow, EventRow, GalleryRow, PackageRow } from './schema';
 import { SLOTS, toImage } from './assets';
 

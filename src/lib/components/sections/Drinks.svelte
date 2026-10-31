@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Drink } from '$lib/data/types';
-	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import Tag from '$lib/components/ui/Tag.svelte';
-	import ImageSlot from '$lib/components/ui/ImageSlot.svelte';
-	import GlowBackdrop from '$lib/components/ui/GlowBackdrop.svelte';
+	import type { Drink } from '#lib/data/types.ts';
+	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
+	import Button from '#lib/components/ui/Button.svelte';
+	import Tag from '#lib/components/ui/Tag.svelte';
+	import ImageSlot from '#lib/components/ui/ImageSlot.svelte';
+	import GlowBackdrop from '#lib/components/ui/GlowBackdrop.svelte';
 
 	let { drinks }: { drinks: Drink[] } = $props();
 </script>

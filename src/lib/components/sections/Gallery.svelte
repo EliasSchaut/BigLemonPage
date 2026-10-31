@@ -1,8 +1,8 @@
 <script lang="ts">
-	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
-	import ImageSlot from '$lib/components/ui/ImageSlot.svelte';
-	import GlowBackdrop from '$lib/components/ui/GlowBackdrop.svelte';
-	import type { GalleryShot } from '$lib/data/types';
+	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
+	import ImageSlot from '#lib/components/ui/ImageSlot.svelte';
+	import GlowBackdrop from '#lib/components/ui/GlowBackdrop.svelte';
+	import type { GalleryShot } from '#lib/data/types.ts';
 
 	let { shots }: { shots: GalleryShot[] } = $props();
 </script>

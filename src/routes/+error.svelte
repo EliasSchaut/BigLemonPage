@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { CONTACT } from '$lib/data/content';
-	import Button from '$lib/components/ui/Button.svelte';
-	import GlowBackdrop from '$lib/components/ui/GlowBackdrop.svelte';
-	import Seo from '$lib/components/Seo.svelte';
+	import { CONTACT } from '#lib/data/content.ts';
+	import Button from '#lib/components/ui/Button.svelte';
+	import GlowBackdrop from '#lib/components/ui/GlowBackdrop.svelte';
+	import Seo from '#lib/components/Seo.svelte';
 
 	const isNotFound = $derived(page.status === 404);
 

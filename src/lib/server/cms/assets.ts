@@ -1,6 +1,6 @@
 import { assetBase } from './client';
 import type { FileRow } from './schema';
-import type { Image } from '$lib/data/types';
+import type { Image } from '#lib/data/types.ts';
 
 function url(file: FileRow, width: number, ratio: number): string {
 	const params = new URLSearchParams({

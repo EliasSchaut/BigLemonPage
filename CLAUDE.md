@@ -42,11 +42,13 @@ Zwei Fallstricke: Der Key bindet sich beim ersten Start **fest an Projekt und `P
 
 ## Architecture
 
-- **SvelteKit 2 + Svelte 5 with runes mode forced** for all project files via `vite.config.ts` (`compilerOptions.runes`) — use `$props()`, `$state()`, `$derived()`, etc.; legacy `export let` / `$:` syntax will not compile outside `node_modules`.
+- **SvelteKit 3 + Svelte 5 with runes mode forced** for all project files via `vite.config.ts` (`compilerOptions.runes`) — use `$props()`, `$state()`, `$derived()`, etc.; legacy `export let` / `$:` syntax will not compile outside `node_modules`.
 - **Tailwind CSS v4** via the Vite plugin — no `tailwind.config.js`; configuration lives in CSS (`src/routes/layout.css`, imported by the root layout). `@tailwindcss/forms` is enabled there via `@plugin`.
 - **Keine Datenbank in der App**: Die Website liest ihre Inhalte ausschließlich per HTTP aus Directus. Postgres läuft nur als Directus-Backend — der `web`-Container bekommt bewusst keine DB-Zugangsdaten.
 - **Inhalte**: `src/lib/data/content.ts` hat eine Doppelrolle — Startwerte für den CMS-Seed _und_ Fallback zur Laufzeit; die Datei bleibt daher gepflegt. `src/lib/server/cms/` fragt Directus (`index.ts`), cacht prozessweit mit stale-if-error (`cache.ts`) und übersetzt die Rohdaten in die App-Typen (`map.ts`). Fällt Directus aus, rendert die Seite unverändert aus `content.ts`. Datumsformatierung und Monatsgruppierung der Termine liegen in `src/lib/data/events.ts` (framework- und serverfrei, damit CMS- und Fallback-Daten dieselbe Logik durchlaufen). Markenfarben und Galerie-Layout bleiben im Code: im CMS stehen nur Token-Namen, die `map.ts` auflöst.
-- **Mail-Versand**: `src/lib/server/mail/` — `index.ts` baut den (gepoolten) Nodemailer-Transport aus `$env/dynamic/private` und verschickt; `template.ts` ersetzt `{{platzhalter}}` in den Vorlagen unter `templates/` (HTML-Werte werden escaped). Die Vorlagen werden per `?raw` in den Server-Build gebündelt und sind in `.prettierignore` ausgenommen. Aufgerufen von der Form-Action `anfrage` in `src/routes/+page.server.ts`.
+- **Mail-Versand**: `src/lib/server/mail/` — `index.ts` baut den (gepoolten) Nodemailer-Transport aus `$app/env/private` und verschickt; `template.ts` ersetzt `{{platzhalter}}` in den Vorlagen unter `templates/` (HTML-Werte werden escaped). Die Vorlagen werden per `?raw` in den Server-Build gebündelt und sind in `.prettierignore` ausgenommen. Aufgerufen von der Form-Action `anfrage` in `src/routes/+page.server.ts`.
+- **Imports**: `$lib` gibt es seit Kit 3 nicht mehr — stattdessen `#lib/...` (Subpath-Import aus `package.json#imports`). Node rät dabei keine Endungen: Imports brauchen die volle Dateiendung (`#lib/data/content.ts`, `#lib/server/cms/index.ts`).
+- **Umgebungsvariablen**: Jede Variable muss in `src/env.ts` (`defineEnvVars`) deklariert sein und wird einzeln aus `$app/env/private` importiert. `$env/*` ist deprecated. Alle Variablen sind dort optional; leere Strings werden zu `undefined` — Pflichtprüfung passiert erst beim Gebrauch (z. B. `requireEnv` im Mail-Versand), damit die Seite ohne SMTP-Konfiguration startet.
 - **Deployment target**: Node server (`@sveltejs/adapter-node`). In Produktion muss `ORIGIN` auf die öffentliche URL gesetzt sein, sonst lehnt der CSRF-Schutz die Formular-POSTs mit 403 ab.
 
 ## Fallstricke
@@ -58,6 +60,8 @@ Zwei Fallstricke: Der Key bindet sich beim ersten Start **fest an Projekt und `P
 - Fotos direkt aus dem Handy (4284×5712) liefen ab Directus 12.2.0 mit `400 ILLEGAL_ASSET_TRANSFORMATION`. Die neue Ausgabegrenze (`ASSETS_TRANSFORM_IMAGE_MAX_OUTPUT_DIMENSION`, Default 3000) wird für jeden Transform-Schritt geprüft, beginnend bei der Originalgröße — und `resolvePreset` stellt den `toFormat`-Schritt (aus `quality`/`format`) vor das `resize`. Damit meldet Schritt 1 die volle Fotogröße, und alles über 3000 px fliegt raus, bevor verkleinert wird. `compose.yaml` setzt die Grenze deshalb auf 6000. Ohne `quality`/`format` in der URL entfällt der Schritt und dieselben Bilder gehen durch — falls die Grenze mal wieder greift, ist das der schnelle Gegentest.
 - Termine liegen als Feldtyp `date` (nicht `datetime`), sonst verschiebt die Zeitzonenkonvertierung Datumsangaben um einen Tag.
 - Das Volume `directus_uploads` liegt nicht in Postgres und gehört separat ins Backup — sonst sind nach einem Restore alle Fotos weg.
+
+- TypeScript bleibt auf 6.x: SvelteKit 3 und svelte-check verlangen als Peer `^6.0.0`; mit TS 7 bricht `svelte-kit sync` ab. `@types/node` bleibt auf 24.x passend zum `node:24-alpine`-Image.
 
 ## Code style
 

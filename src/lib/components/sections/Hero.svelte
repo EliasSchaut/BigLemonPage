@@ -1,8 +1,8 @@
 <script lang="ts">
-	import lemonFrei from '$lib/assets/images/lemon-frei.png';
-	import { HERO_STATS } from '$lib/data/content';
-	import Button from '$lib/components/ui/Button.svelte';
-	import GlowBackdrop from '$lib/components/ui/GlowBackdrop.svelte';
+	import lemonFrei from '#lib/assets/images/lemon-frei.png';
+	import { HERO_STATS } from '#lib/data/content.ts';
+	import Button from '#lib/components/ui/Button.svelte';
+	import GlowBackdrop from '#lib/components/ui/GlowBackdrop.svelte';
 
 	let { eventCount = 0 }: { eventCount?: number } = $props();
 

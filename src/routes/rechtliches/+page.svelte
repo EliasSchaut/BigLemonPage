@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { CONTACT } from '$lib/data/content';
-	import Eyebrow from '$lib/components/ui/Eyebrow.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import Seo from '$lib/components/Seo.svelte';
+	import { CONTACT } from '#lib/data/content.ts';
+	import Eyebrow from '#lib/components/ui/Eyebrow.svelte';
+	import Button from '#lib/components/ui/Button.svelte';
+	import Seo from '#lib/components/Seo.svelte';
 
 	const privacySections = [
 		{

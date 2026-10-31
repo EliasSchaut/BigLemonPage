@@ -1,6 +1,6 @@
 <script lang="ts">
-	import instagram from '$lib/assets/svgs/instagram-light.svg?raw';
-	import facebook from '$lib/assets/svgs/facebook-light.svg?raw';
+	import instagram from '#lib/assets/svgs/instagram-light.svg?raw';
+	import facebook from '#lib/assets/svgs/facebook-light.svg?raw';
 
 	interface Props {
 		name: 'instagram' | 'facebook';

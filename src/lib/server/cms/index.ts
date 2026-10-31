@@ -1,7 +1,7 @@
 import { readItems } from '@directus/sdk';
-import { BARS, DRINKS, EVENTS, GALLERY_SHOTS, PACKAGES } from '$lib/data/content';
-import { allByMonth } from '$lib/data/events';
-import type { Bar, BookingPackage, Drink, EventMonth, GalleryShot } from '$lib/data/types';
+import { BARS, DRINKS, EVENTS, GALLERY_SHOTS, PACKAGES } from '#lib/data/content.ts';
+import { allByMonth } from '#lib/data/events.ts';
+import type { Bar, BookingPackage, Drink, EventMonth, GalleryShot } from '#lib/data/types.ts';
 import { directus } from './client';
 import { cached } from './cache';
 import { mapBars, mapDrinks, mapEvents, mapGallery, mapPackages } from './map';

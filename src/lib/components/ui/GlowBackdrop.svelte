@@ -1,5 +1,5 @@
 <script lang="ts">
-	import barWall from '$lib/assets/images/bar-hintergrund.jpg';
+	import barWall from '#lib/assets/images/bar-hintergrund.jpg';
 
 	interface Props {
 		wall?: boolean;

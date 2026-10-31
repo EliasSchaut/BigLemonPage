@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { fade, scale } from 'svelte/transition';
-	import { fun, splash, JUICE } from '$lib/state/fun.svelte';
+	import { fun, splash, JUICE } from '#lib/state/fun.svelte.ts';
 	import {
 		board,
 		chooseMode,
@@ -9,8 +9,8 @@
 		savedMode,
 		submitScore,
 		type NinjaMode
-	} from '$lib/state/ninja-scores.svelte';
-	import LemonIcon from '$lib/components/ui/LemonIcon.svelte';
+	} from '#lib/state/ninja-scores.svelte.ts';
+	import LemonIcon from '#lib/components/ui/LemonIcon.svelte';
 
 	type Kind = { rind: string; flesh: string };
 	type Fruit = {

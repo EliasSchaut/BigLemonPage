@@ -1,12 +1,12 @@
 <script lang="ts">
-	import barWall from '$lib/assets/images/bar-hintergrund.jpg';
-	import { CUSTOM_PACKAGE, OPEN_BAR } from '$lib/data/content';
-	import type { Bar, BookingPackage } from '$lib/data/types';
-	import { booking } from '$lib/state/booking.svelte';
-	import Eyebrow from '$lib/components/ui/Eyebrow.svelte';
-	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
-	import Chip from '$lib/components/ui/Chip.svelte';
-	import GlowBackdrop from '$lib/components/ui/GlowBackdrop.svelte';
+	import barWall from '#lib/assets/images/bar-hintergrund.jpg';
+	import { CUSTOM_PACKAGE, OPEN_BAR } from '#lib/data/content.ts';
+	import type { Bar, BookingPackage } from '#lib/data/types.ts';
+	import { booking } from '#lib/state/booking.svelte.ts';
+	import Eyebrow from '#lib/components/ui/Eyebrow.svelte';
+	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
+	import Chip from '#lib/components/ui/Chip.svelte';
+	import GlowBackdrop from '#lib/components/ui/GlowBackdrop.svelte';
 	import BookingForm from './BookingForm.svelte';
 
 	let { packages, bars }: { packages: BookingPackage[]; bars: Bar[] } = $props();

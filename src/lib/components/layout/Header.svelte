@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
-	import logoLight from '$lib/assets/images/logo-light.png';
-	import { NAV_LINKS } from '$lib/data/content';
-	import Button from '$lib/components/ui/Button.svelte';
-	import MenuLemonIcon from '$lib/components/ui/MenuLemonIcon.svelte';
+	import logoLight from '#lib/assets/images/logo-light.png';
+	import { NAV_LINKS } from '#lib/data/content.ts';
+	import Button from '#lib/components/ui/Button.svelte';
+	import MenuLemonIcon from '#lib/components/ui/MenuLemonIcon.svelte';
 
 	let menuOpen = $state(false);
 	const closeMenu = () => (menuOpen = false);

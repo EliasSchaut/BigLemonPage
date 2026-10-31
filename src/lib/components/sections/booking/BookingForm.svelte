@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import type { SubmitFunction } from '@sveltejs/kit';
-	import { CONTACT } from '$lib/data/content';
-	import type { Bar, BookingPackage } from '$lib/data/types';
-	import { booking } from '$lib/state/booking.svelte';
+	import type { SubmitFunction } from '$app/forms';
+	import { CONTACT } from '#lib/data/content.ts';
+	import type { Bar, BookingPackage } from '#lib/data/types.ts';
+	import { booking } from '#lib/state/booking.svelte.ts';
 
 	let { packages, bars }: { packages: BookingPackage[]; bars: Bar[] } = $props();
 

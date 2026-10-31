@@ -1,7 +1,7 @@
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { getSiteContent } from '$lib/server/cms';
-import { sendAnfrageMail } from '$lib/server/mail';
+import { getSiteContent } from '#lib/server/cms/index.ts';
+import { sendAnfrageMail } from '#lib/server/mail/index.ts';
 
 const MAX_LENGTHS = {
 	name: 120,

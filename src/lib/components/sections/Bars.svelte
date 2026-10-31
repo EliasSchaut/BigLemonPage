@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Bar } from '$lib/data/types';
-	import { booking } from '$lib/state/booking.svelte';
-	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
-	import Tag from '$lib/components/ui/Tag.svelte';
-	import ImageSlot from '$lib/components/ui/ImageSlot.svelte';
+	import type { Bar } from '#lib/data/types.ts';
+	import { booking } from '#lib/state/booking.svelte.ts';
+	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
+	import Tag from '#lib/components/ui/Tag.svelte';
+	import ImageSlot from '#lib/components/ui/ImageSlot.svelte';
 
 	let { bars }: { bars: Bar[] } = $props();
 

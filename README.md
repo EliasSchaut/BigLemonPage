@@ -2,7 +2,7 @@
 
 Website für **BigLemon**, die mobile Cocktailbar aus Mannheim ([biglemon.de](https://www.biglemon.de)).
 
-SvelteKit 2 (Svelte 5, Runes) · Tailwind CSS v4 · Directus als CMS · Nodemailer für das Anfrageformular · Deployment als Node-Server (`@sveltejs/adapter-node`).
+SvelteKit 3 (Svelte 5, Runes) · Tailwind CSS v4 · Directus als CMS · Nodemailer für das Anfrageformular · Deployment als Node-Server (`@sveltejs/adapter-node`).
 
 Termine, Drinks, Bars, Pakete und alle Fotos pflegt der Kunde selbst in Directus. Fällt das CMS aus, rendert die Seite unverändert aus den Werten in `src/lib/data/content.ts` — die Website ist also nie von Directus abhängig.
 

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import logoLight from '$lib/assets/images/logo-light.png';
-	import { CONTACT } from '$lib/data/content';
-	import GlowBackdrop from '$lib/components/ui/GlowBackdrop.svelte';
-	import SocialIcon from '$lib/components/ui/SocialIcon.svelte';
-	import FooterLemon from '$lib/components/fun/FooterLemon.svelte';
+	import logoLight from '#lib/assets/images/logo-light.png';
+	import { CONTACT } from '#lib/data/content.ts';
+	import GlowBackdrop from '#lib/components/ui/GlowBackdrop.svelte';
+	import SocialIcon from '#lib/components/ui/SocialIcon.svelte';
+	import FooterLemon from '#lib/components/fun/FooterLemon.svelte';
 </script>
 
 <footer

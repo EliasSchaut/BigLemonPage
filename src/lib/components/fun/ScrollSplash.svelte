@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { splash, prefersReducedMotion } from '$lib/state/fun.svelte';
+	import { splash, prefersReducedMotion } from '#lib/state/fun.svelte.ts';
 
 	const WINDOW_MS = 260;
 

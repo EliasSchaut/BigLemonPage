@@ -1,6 +1,14 @@
 import nodemailer, { type Transporter } from 'nodemailer';
-import { env } from '$env/dynamic/private';
-import { CONTACT } from '$lib/data/content';
+import {
+	CONTACT_EMAIL,
+	SMTP_FROM,
+	SMTP_HOST,
+	SMTP_PASS,
+	SMTP_PORT,
+	SMTP_SECURE,
+	SMTP_USER
+} from '$app/env/private';
+import { CONTACT } from '#lib/data/content.ts';
 import { renderHtmlTemplate, renderTemplate, type TemplateValues } from './template';
 import htmlTemplate from './templates/anfrage.html?raw';
 import textTemplate from './templates/anfrage.txt?raw';
@@ -21,8 +29,7 @@ const EMPTY = '—';
 
 let transporter: Transporter | undefined;
 
-function requireEnv(key: string): string {
-	const value = env[key];
+function requireEnv(key: string, value: string | undefined): string {
 	if (!value) {
 		throw new Error(`${key} ist nicht gesetzt — SMTP-Versand nicht konfiguriert`);
 	}
@@ -32,16 +39,16 @@ function requireEnv(key: string): string {
 function getTransporter(): Transporter {
 	if (transporter) return transporter;
 
-	const port = Number(env.SMTP_PORT ?? 587);
+	const port = Number(SMTP_PORT ?? 587);
 	if (!Number.isInteger(port) || port <= 0) {
-		throw new Error(`SMTP_PORT ist keine gültige Portnummer: ${env.SMTP_PORT}`);
+		throw new Error(`SMTP_PORT ist keine gültige Portnummer: ${SMTP_PORT}`);
 	}
 
 	transporter = nodemailer.createTransport({
-		host: requireEnv('SMTP_HOST'),
+		host: requireEnv('SMTP_HOST', SMTP_HOST),
 		port,
-		secure: env.SMTP_SECURE ? env.SMTP_SECURE === 'true' : port === 465,
-		auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: requireEnv('SMTP_PASS') } : undefined,
+		secure: SMTP_SECURE ? SMTP_SECURE === 'true' : port === 465,
+		auth: SMTP_USER ? { user: SMTP_USER, pass: requireEnv('SMTP_PASS', SMTP_PASS) } : undefined,
 		pool: true
 	});
 
@@ -78,8 +85,8 @@ export async function sendAnfrageMail(data: AnfrageMail): Promise<void> {
 	const values = withFallbacks(data);
 
 	await getTransporter().sendMail({
-		from: env.SMTP_FROM || `BigLemon Website <${requireEnv('SMTP_USER')}>`,
-		to: env.CONTACT_EMAIL || CONTACT.email,
+		from: SMTP_FROM || `BigLemon Website <${requireEnv('SMTP_USER', SMTP_USER)}>`,
+		to: CONTACT_EMAIL || CONTACT.email,
 		replyTo: `${singleLine(data.name)} <${data.email}>`,
 		subject: singleLine(`Neue Anfrage von ${data.name} — ${data.package} / ${data.bar}`),
 		text: renderTemplate(textTemplate, values),

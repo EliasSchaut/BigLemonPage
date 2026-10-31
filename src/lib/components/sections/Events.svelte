@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { EventMonth } from '$lib/data/types';
-	import { formatEventDate } from '$lib/data/events';
-	import SectionIntro from '$lib/components/ui/SectionIntro.svelte';
+	import type { EventMonth } from '#lib/data/types.ts';
+	import { formatEventDate } from '#lib/data/events.ts';
+	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
 
 	let { months }: { months: EventMonth[] } = $props();
 
