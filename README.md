@@ -39,12 +39,12 @@ Damit `docker compose up` lokal trotzdem ohne drei `-f` auskommt, stehen in der 
 docker compose up -d postgres directus maildev
 ```
 
-| Dienst               | URL                   |
-| -------------------- | --------------------- |
-| Website (`pnpm dev`) | http://localhost:5173 |
-| Website (Container)  | http://localhost:3000 |
-| Directus             | http://localhost:8055 |
-| MailDev-Postfach     | http://localhost:1080 |
+| Dienst               | URL                                         |
+| -------------------- | ------------------------------------------- |
+| Website (`pnpm dev`) | http://localhost:5173                       |
+| Website (Container)  | http://localhost:3000, Port über `WEB_PORT` |
+| Directus             | http://localhost:8055                       |
+| MailDev-Postfach     | http://localhost:1080                       |
 
 ### Mail beim Entwickeln
 
@@ -87,18 +87,19 @@ Alle Variablen sind in `.env.example` dokumentiert. Kurzübersicht, was wofür g
 
 ### Node-Server (die Website)
 
-| Variable                                           | Pflicht               | Zweck                                                                                                             |
-| -------------------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `ORIGIN`                                           | **ja, in Produktion** | Öffentliche URL, z. B. `https://biglemon.de`. Fehlt sie, lehnt der CSRF-Schutz die Formular-POSTs mit **403** ab. |
-| `PORT`                                             | nein                  | Standard `3000`.                                                                                                  |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | für Mailversand       | Zugangsdaten des Postfachs.                                                                                       |
-| `SMTP_FROM`                                        | für Mailversand       | Absender. Muss zum SMTP-Postfach passen, sonst greifen SPF/DMARC.                                                 |
-| `CONTACT_EMAIL`                                    | nein                  | Empfänger der Anfragen. Ohne Angabe: die Adresse aus `src/lib/data/content.ts`.                                   |
-| `SMTP_SECURE`                                      | nein                  | Erzwingt implizites TLS. Ohne Angabe: `true` bei Port 465, sonst STARTTLS.                                        |
-| `DIRECTUS_URL`                                     | nein                  | Wo der Server Directus erreicht. Im Compose-Netz `http://directus:8055`.                                          |
-| `DIRECTUS_ASSET_URL`                               | nein                  | URL, die in den Bild-Tags landet, z. B. `https://cms.biglemon.de`.                                                |
-| `DIRECTUS_TOKEN`                                   | nein                  | Nur nötig, wenn die Collections nicht öffentlich lesbar sein sollen.                                              |
-| `CMS_CACHE_TTL`                                    | nein                  | Sekunden, die Inhalte im Prozess gecacht werden (Standard 60).                                                    |
+| Variable                                           | Pflicht               | Zweck                                                                                                                                                                                                    |
+| -------------------------------------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ORIGIN`                                           | **ja, in Produktion** | Öffentliche URL, z. B. `https://biglemon.de`. Fehlt sie, lehnt der CSRF-Schutz die Formular-POSTs mit **403** ab.                                                                                        |
+| `PORT`                                             | nein                  | Standard `3000`.                                                                                                                                                                                         |
+| `WEB_PORT`                                         | nein                  | Nur Compose: Host-Port, auf den der `web`-Container gemappt wird, Standard `3000`. In Produktion `8286`. Der Node-Prozess im Container lauscht davon unabhängig auf 3000; `ORIGIN` folgt lokal dem Port. |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | für Mailversand       | Zugangsdaten des Postfachs.                                                                                                                                                                              |
+| `SMTP_FROM`                                        | für Mailversand       | Absender. Muss zum SMTP-Postfach passen, sonst greifen SPF/DMARC.                                                                                                                                        |
+| `CONTACT_EMAIL`                                    | nein                  | Empfänger der Anfragen. Ohne Angabe: die Adresse aus `src/lib/data/content.ts`.                                                                                                                          |
+| `SMTP_SECURE`                                      | nein                  | Erzwingt implizites TLS. Ohne Angabe: `true` bei Port 465, sonst STARTTLS.                                                                                                                               |
+| `DIRECTUS_URL`                                     | nein                  | Wo der Server Directus erreicht. Im Compose-Netz `http://directus:8055`.                                                                                                                                 |
+| `DIRECTUS_ASSET_URL`                               | nein                  | URL, die in den Bild-Tags landet, z. B. `https://cms.biglemon.de`.                                                                                                                                       |
+| `DIRECTUS_TOKEN`                                   | nein                  | Nur nötig, wenn die Collections nicht öffentlich lesbar sein sollen.                                                                                                                                     |
+| `CMS_CACHE_TTL`                                    | nein                  | Sekunden, die Inhalte im Prozess gecacht werden (Standard 60).                                                                                                                                           |
 
 > Die Website spricht **keine Datenbank** an — sie liest ihre Inhalte über HTTP aus Directus. Postgres gehört allein Directus; der `web`-Container bekommt deshalb bewusst keine Datenbankvariablen.
 
@@ -139,7 +140,7 @@ Das Override steht in der `path`-Liste und nicht im Wrapper selbst, weil `includ
 docker compose -f compose.dockhand.yaml config
 ```
 
-**Stack-Variablen in Dockhand:** `DIRECTUS_DB_URL` (Host ist der Containername der Postgres in `pgnet`), `DIRECTUS_SECRET`, `DIRECTUS_ADMIN_EMAIL`, `DIRECTUS_ADMIN_PASSWORD`, `DIRECTUS_LICENSE_KEY`, `DIRECTUS_PUBLIC_URL`, `DIRECTUS_ASSET_URL`, `DIRECTUS_TRUST_PROXY=true`, `ORIGIN` und die `SMTP_*`-Werte. `COMPOSE_FILE` dort nicht setzen.
+**Stack-Variablen in Dockhand:** `DIRECTUS_DB_URL` (Host ist der Containername der Postgres in `pgnet`), `DIRECTUS_SECRET`, `DIRECTUS_ADMIN_EMAIL`, `DIRECTUS_ADMIN_PASSWORD`, `DIRECTUS_LICENSE_KEY`, `DIRECTUS_PUBLIC_URL`, `DIRECTUS_ASSET_URL`, `DIRECTUS_TRUST_PROXY=true`, `ORIGIN`, `WEB_PORT=8286` und die `SMTP_*`-Werte. `COMPOSE_FILE` dort nicht setzen.
 
 **In GitHub:** Variablen `DOCKERHUB_USERNAME` und `DEPLOY_WEBHOOK_URL`, Secrets `DOCKERHUB_TOKEN` und `DEPLOY_WEBHOOK_SECRET`. Ohne `DEPLOY_WEBHOOK_URL` pusht die CI nur das Image. Der Webhook-Aufruf schickt das Secret dreifach: als HMAC-SHA256-Signatur des Bodys (`X-Hub-Signature-256`, das prüft Dockhand), als `X-Gitlab-Token` und als Bearer-Token, damit auch andere Empfänger damit zurechtkommen.
 

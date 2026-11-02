@@ -34,12 +34,12 @@ services:
       context: .
     restart: unless-stopped
     ports:
-      - 127.0.0.1:3000:3000
+      - 127.0.0.1:${WEB_PORT:-3000}:3000
     depends_on:
       directus:
         condition: service_started
     environment:
-      ORIGIN: ${ORIGIN:-http://localhost:3000}
+      ORIGIN: ${ORIGIN:-http://localhost:${WEB_PORT:-3000}}
       DIRECTUS_URL: http://directus:8055
       DIRECTUS_ASSET_URL: ${DIRECTUS_ASSET_URL:-http://localhost:8055}
       DIRECTUS_TOKEN: ${DIRECTUS_TOKEN:-}
