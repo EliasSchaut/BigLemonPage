@@ -68,11 +68,15 @@
 						<ImageSlot placeholder="Foto: {drink.name}" {...drink.image} />
 					</div>
 					<div class="flex flex-1 flex-col gap-[9px] px-5 pt-5 pb-[22px]">
-						<div class="flex items-baseline justify-between gap-3">
+						<div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2">
 							<h3 class="m-0 font-display text-xl font-bold tracking-[-.01em] text-cream">
 								{drink.name}
 							</h3>
-							<Tag class={drink.alc ? 'bg-prime/16 text-prime' : 'bg-lime/16 text-lime'}>
+							<Tag
+								class="max-w-full truncate {drink.alc
+									? 'bg-prime/16 text-prime'
+									: 'bg-lime/16 text-lime'}"
+							>
 								{drink.tag}
 							</Tag>
 						</div>
