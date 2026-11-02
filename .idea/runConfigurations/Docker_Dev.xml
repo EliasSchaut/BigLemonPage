@@ -4,7 +4,8 @@
       <settings>
         <option name="secondarySourceFiles">
           <list>
-            <option value="compose.override.yaml" />
+            <option value="compose.db.yaml" />
+            <option value="compose.dev.yaml" />
           </list>
         </option>
         <option name="sourceFilePath" value="compose.yaml" />

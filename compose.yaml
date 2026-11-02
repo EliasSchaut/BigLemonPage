@@ -1,23 +1,4 @@
 services:
-  postgres:
-    networks: [intern]
-    image: postgres:17-alpine
-    restart: always
-    ports:
-      # Nur lokal erreichbar — der Datenbankport gehoert nie ins Internet.
-      - 127.0.0.1:5432:5432
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER fehlt in der .env}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD fehlt in der .env}
-      POSTGRES_DB: ${POSTGRES_DB:-directus}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB:-directus}']
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
   directus:
     networks: [intern]
     image: directus/directus:12.2.0
@@ -25,9 +6,6 @@ services:
     ports:
       # Von aussen kommt Directus nur ueber den Reverse Proxy (/cms).
       - 127.0.0.1:8055:8055
-    depends_on:
-      postgres:
-        condition: service_healthy
     volumes:
       - directus_uploads:/directus/uploads
       - directus_extensions:/directus/extensions
@@ -37,7 +15,9 @@ services:
       # UND an PUBLIC_URL — siehe Hinweis in .env.example.
       LICENSE_KEY: ${DIRECTUS_LICENSE_KEY:-}
       DB_CLIENT: pg
-      DB_CONNECTION_STRING: ${DIRECTUS_DB_URL:-postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-directus}}
+      # Datenbank außerhalb des Stacks. Lokal überschreibt compose.db.yaml den Wert
+      # mit der gebündelten Postgres.
+      DB_CONNECTION_STRING: ${DIRECTUS_DB_URL:-}
       ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
       ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
       PUBLIC_URL: ${DIRECTUS_PUBLIC_URL:-http://localhost:8055}
@@ -77,6 +57,5 @@ networks:
     driver: bridge
 
 volumes:
-  pgdata:
   directus_uploads:
   directus_extensions:

@@ -1,9 +1,7 @@
-# Entwicklungs-Override. "docker compose" laedt diese Datei automatisch mit.
+# Entwicklungs-Override: MailDev als Mailfänger und kurze Cache-Zeiten.
+# Wird nicht automatisch geladen, sondern ausdrücklich mit angegeben:
 #
-# ACHTUNG: In Produktion deshalb ausdruecklich nur die Basisdatei verwenden,
-# sonst gehen alle Anfragen an MailDev statt an den echten Mailserver:
-#
-#   docker compose -f compose.yaml up -d --build
+#   docker compose -f compose.yaml -f compose.db.yaml -f compose.dev.yaml up -d
 
 services:
   # Faengt saemtliche ausgehende Mail ab. Weboberflaeche: http://localhost:1080

@@ -12,7 +12,7 @@ Termine, Drinks, Bars, Pakete und alle Fotos pflegt der Kunde selbst in Directus
 
 - **Node** ≥ 20 (entwickelt und getestet mit 24)
 - **pnpm** (`corepack enable`)
-- **Docker** mit Compose — für Directus (samt eigener Postgres) und MailDev
+- **Docker** mit Compose — für Directus, die lokale Postgres und MailDev
 
 ## Lokale Entwicklung
 
@@ -23,10 +23,18 @@ docker compose up -d          # Postgres, Directus, MailDev (+ Website im Contai
 pnpm dev                      # http://localhost:5173
 ```
 
-`docker compose up` lädt automatisch `compose.override.yaml` mit und startet damit **MailDev** als Mailfänger. Wer die Website über `pnpm dev` entwickelt, braucht den `web`-Container nicht:
+Der Stack ist auf drei Compose-Dateien verteilt, und keine davon lädt Docker von sich aus mit:
+
+| Datei              | Inhalt                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `compose.yaml`     | Directus und Website — genau das, was im Deployment läuft                                                          |
+| `compose.db.yaml`  | Gebündelte Postgres für Directus. Lokal nötig; im Deployment zeigt `DIRECTUS_DB_URL` auf eine bestehende Datenbank |
+| `compose.dev.yaml` | MailDev als Mailfänger, kurze Cache-Zeiten für den `web`-Container                                                 |
+
+Damit `docker compose up` lokal trotzdem ohne drei `-f` auskommt, stehen in der `.env.example` zwei Zeilen, die alle drei Dateien laden: `COMPOSE_FILE` und `COMPOSE_PATH_SEPARATOR=:`, Letzteres, damit der Trenner auch unter Windows gilt. Wer die Website über `pnpm dev` entwickelt, braucht den `web`-Container nicht:
 
 ```bash
-docker compose up -d db directus maildev
+docker compose up -d postgres directus maildev
 ```
 
 | Dienst               | URL                   |
@@ -38,7 +46,7 @@ docker compose up -d db directus maildev
 
 ### Mail beim Entwickeln
 
-MailDev fängt jede ausgehende Mail ab — es geht nichts nach außen. Der `web`-Container ist über das Override bereits darauf gerichtet. Für `pnpm dev` gehört in die `.env`:
+MailDev fängt jede ausgehende Mail ab — es geht nichts nach außen. Der `web`-Container ist über `compose.dev.yaml` bereits darauf gerichtet. Für `pnpm dev` gehört in die `.env`:
 
 ```
 SMTP_HOST=127.0.0.1
@@ -94,13 +102,13 @@ Alle Variablen sind in `.env.example` dokumentiert. Kurzübersicht, was wofür g
 
 ### Datenbank (nur für Directus)
 
-| Variable                             | Pflicht | Zweck                                                                                                                                                                                                                       |
-| ------------------------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `POSTGRES_USER`, `POSTGRES_PASSWORD` | **ja**  | Zugangsdaten der Postgres-Instanz. Fehlen sie, bricht `docker compose` mit einer klaren Meldung ab, statt mit Standardwerten zu starten.                                                                                    |
-| `POSTGRES_DB`                        | nein    | Standard `directus`. Wird beim ersten Start eines leeren Volumes automatisch angelegt.                                                                                                                                      |
-| `DIRECTUS_DB_URL`                    | nein    | Vollständiger Connection-String. Nur nötig, wenn Directus auf eine Datenbank **außerhalb** dieses Stacks zeigen soll (z. B. eine verwaltete Postgres). Ohne Angabe baut `compose.yaml` die URL aus den `POSTGRES_*`-Werten. |
+| Variable                             | Pflicht                       | Zweck                                                                                                                                                                                                                |
+| ------------------------------------ | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `POSTGRES_USER`, `POSTGRES_PASSWORD` | **ja, mit `compose.db.yaml`** | Zugangsdaten der gebündelten Postgres. Fehlen sie, bricht `docker compose` mit einer klaren Meldung ab, statt mit Standardwerten zu starten.                                                                         |
+| `POSTGRES_DB`                        | nein                          | Standard `directus`. Wird beim ersten Start eines leeren Volumes automatisch angelegt.                                                                                                                               |
+| `DIRECTUS_DB_URL`                    | **ja, im Deployment**         | Connection-String zu einer bestehenden Postgres (z. B. eine verwaltete Datenbank). `compose.yaml` bringt keine eigene mit; fehlt die URL, startet Directus nicht. Mit `compose.db.yaml` wird der Wert überschrieben. |
 
-Directus bekommt keine Einzelwerte mehr, sondern einen `DB_CONNECTION_STRING` — die Zugangsdaten stehen damit nur an einer Stelle. Sonderzeichen im Passwort müssen URL-kodiert sein.
+Directus bekommt in beiden Fällen nur einen `DB_CONNECTION_STRING`; `compose.db.yaml` baut ihn aus den `POSTGRES_*`-Werten. Sonderzeichen im Passwort müssen URL-kodiert sein.
 
 ### Directus-Container
 
@@ -114,13 +122,13 @@ Die Website läuft als Container (`Dockerfile`, mehrstufig: Build-Werkzeuge und 
 
 ### Mit Docker Compose (empfohlen)
 
-> **Wichtig:** In Produktion ausdrücklich nur die Basisdatei angeben. Ohne `-f compose.yaml` zieht Compose das Entwicklungs-Override mit und schickt sämtliche Mail an MailDev statt an den echten Server.
+`compose.yaml` enthält nur Directus und die Website — keine Datenbank, keinen Mailfänger. Das ausdrückliche `-f compose.yaml` ist Absicht: Es schlägt eine `COMPOSE_FILE`-Zeile in der `.env`, die lokal `compose.db.yaml` und `compose.dev.yaml` mitlädt, und hält MailDev damit sicher aus der Produktion.
 
 ```bash
 docker compose -f compose.yaml up -d --build
 ```
 
-Vorher in der `.env` setzen: `ORIGIN`, `DIRECTUS_ASSET_URL` und die `SMTP_*`-Werte. Der `web`-Service reicht sie durch und spricht Directus intern über `http://directus:8055` an.
+Vorher in der `.env` setzen: `DIRECTUS_DB_URL` (eine bestehende Postgres), `ORIGIN`, `DIRECTUS_ASSET_URL` und die `SMTP_*`-Werte. Der `web`-Service reicht sie durch und spricht Directus intern über `http://directus:8055` an. Soll die Datenbank doch im Stack laufen, kommt `-f compose.db.yaml` dazu.
 
 ### Image für einen anderen Prozessor bauen (Apple Silicon → x86-Server)
 
@@ -223,8 +231,8 @@ Ob der Key greift, zeigt `license.source` in `GET /server/info` (mit Admin-Token
 Zwei Dinge gehören gesichert — beide sind nötig, eines allein reicht nicht:
 
 ```bash
-# 1. Inhalte
-docker compose exec -T db pg_dump -U root directus > directus-$(date +%F).sql
+# 1. Inhalte (gebündelte Postgres aus compose.db.yaml — eine externe Datenbank sichert ihr Anbieter)
+docker compose exec -T postgres pg_dump -U root directus > directus-$(date +%F).sql
 
 # 2. Hochgeladene Fotos (liegen NICHT in Postgres)
 docker run --rm -v biglemonpage_directus_uploads:/data -v "$PWD":/backup alpine \
@@ -237,7 +245,7 @@ Fehlt das Volume im Backup, sind nach einem Restore alle Fotos weg, während die
 
 - **Website:** `docker compose -f compose.yaml up -d --build` (bzw. ohne Docker: neu bauen, `build/` ersetzen, Prozess neu starten).
 - **Directus:** Version in `compose.yaml` ist bewusst gepinnt. Vor einem Sprung Release Notes lesen (Lizenz- und Berechtigungsverhalten haben sich in v12 geändert), vorher Backup ziehen.
-- **Postgres:** ebenfalls gepinnt. Ein Major-Upgrade braucht `pg_dump`/`pg_restore` — das Volume ist nicht versionsübergreifend lesbar.
+- **Postgres** (`compose.db.yaml`): ebenfalls gepinnt. Ein Major-Upgrade braucht `pg_dump`/`pg_restore` — das Volume ist nicht versionsübergreifend lesbar.
 
 ### Wenn die Seite plötzlich alte Inhalte zeigt
 

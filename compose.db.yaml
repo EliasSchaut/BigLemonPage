@@ -1,0 +1,34 @@
+# Gebündelte Postgres für Directus. Nur lokal nötig — im Deployment zeigt
+# DIRECTUS_DB_URL auf eine Datenbank außerhalb des Stacks und diese Datei bleibt weg:
+#
+#   docker compose -f compose.yaml -f compose.db.yaml up -d
+
+services:
+  postgres:
+    networks: [intern]
+    image: postgres:17-alpine
+    restart: always
+    ports:
+      # Nur lokal erreichbar — der Datenbankport gehoert nie ins Internet.
+      - 127.0.0.1:5432:5432
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER fehlt in der .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD fehlt in der .env}
+      POSTGRES_DB: ${POSTGRES_DB:-directus}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB:-directus}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  directus:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_CONNECTION_STRING: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-directus}
+
+volumes:
+  pgdata:

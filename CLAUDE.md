@@ -24,13 +24,13 @@ Package manager is **pnpm**.
 
 Das Anfrageformular verschickt per SMTP (Nodemailer). Konfiguration über `.env`, alle Variablen sind in `.env.example` dokumentiert: `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `CONTACT_EMAIL`. Ohne `CONTACT_EMAIL` geht die Mail an die Adresse aus `CONTACT` in `src/lib/data/content.ts`.
 
-Lokal fängt **MailDev** (aus `compose.override.yaml`) allen Versand ab: Postfach unter `http://localhost:1080`, SMTP auf Port 1025. Für `pnpm dev` dazu `SMTP_HOST=127.0.0.1` und `SMTP_PORT=1025` setzen; der `web`-Container ist bereits darauf gerichtet.
+Lokal fängt **MailDev** (aus `compose.dev.yaml`) allen Versand ab: Postfach unter `http://localhost:1080`, SMTP auf Port 1025. Für `pnpm dev` dazu `SMTP_HOST=127.0.0.1` und `SMTP_PORT=1025` setzen; der `web`-Container ist bereits darauf gerichtet.
 
 ### CMS (Directus)
 
-Termine, Drinks, Bars, Pakete und die Galeriebilder pflegt der Kunde in Directus (`http://localhost:8055`, läuft über `compose.yaml` auf einer eigenen Datenbank `directus`).
+Termine, Drinks, Bars, Pakete und die Galeriebilder pflegt der Kunde in Directus (`http://localhost:8055`, läuft über `compose.yaml`; die Postgres dazu liefert lokal `compose.db.yaml`, im Deployment zeigt `DIRECTUS_DB_URL` auf eine bestehende Datenbank).
 
-- `docker compose up -d` — Postgres + Directus starten (Zugangsdaten kommen aus `POSTGRES_USER`/`POSTGRES_PASSWORD` in der `.env`; Directus erhaelt daraus einen `DB_CONNECTION_STRING`, `DIRECTUS_DB_URL` ueberschreibt ihn fuer externe Datenbanken)
+- `docker compose up -d` — Postgres + Directus (+ MailDev) starten. Keine Override-Datei wird automatisch geladen: lokal listet `COMPOSE_FILE` in der `.env` alle drei Dateien (`compose.yaml:compose.db.yaml:compose.dev.yaml`, dazu `COMPOSE_PATH_SEPARATOR=:` für Windows), im Deployment gilt nur `compose.yaml` mit `DIRECTUS_DB_URL`. Die gebündelte Postgres (`compose.db.yaml`) nimmt `POSTGRES_USER`/`POSTGRES_PASSWORD` aus der `.env` und überschreibt den `DB_CONNECTION_STRING` von Directus
 - `node --env-file=.env scripts/setup-directus-schema.mjs` — Collections, Bild-Relationen, öffentliche Leserechte und die Rolle „Redaktion" anlegen (idempotent, ersetzt einen Schema-Snapshot)
 - `node --env-file=.env --experimental-strip-types scripts/seed-directus.ts` — Startwerte aus `content.ts` übertragen (überspringt befüllte Collections)
 
@@ -61,6 +61,7 @@ Zwei Fallstricke: Der Key bindet sich beim ersten Start **fest an Projekt und `P
 - Fotos direkt aus dem Handy (4284×5712) liefen ab Directus 12.2.0 mit `400 ILLEGAL_ASSET_TRANSFORMATION`. Die neue Ausgabegrenze (`ASSETS_TRANSFORM_IMAGE_MAX_OUTPUT_DIMENSION`, Default 3000) wird für jeden Transform-Schritt geprüft, beginnend bei der Originalgröße — und `resolvePreset` stellt den `toFormat`-Schritt (aus `quality`/`format`) vor das `resize`. Damit meldet Schritt 1 die volle Fotogröße, und alles über 3000 px fliegt raus, bevor verkleinert wird. `compose.yaml` setzt die Grenze deshalb auf 6000. Ohne `quality`/`format` in der URL entfällt der Schritt und dieselben Bilder gehen durch — falls die Grenze mal wieder greift, ist das der schnelle Gegentest.
 - Termine liegen als Feldtyp `date` (nicht `datetime`), sonst verschiebt die Zeitzonenkonvertierung Datumsangaben um einen Tag.
 - Das Volume `directus_uploads` liegt nicht in Postgres und gehört separat ins Backup — sonst sind nach einem Restore alle Fotos weg.
+- `DB_CONNECTION_STRING: ${DIRECTUS_DB_URL:-}` in `compose.yaml` hat bewusst keine `:?`-Pflichtprüfung: Compose interpoliert die Basisdatei auch dann, wenn `compose.db.yaml` den Wert überschreibt — eine Pflichtprüfung würde jeden lokalen Start blockieren. Fehlt die URL im Deployment, scheitert erst Directus beim Start an der Datenbankverbindung.
 
 - TypeScript bleibt auf 6.x: SvelteKit 3 und svelte-check verlangen als Peer `^6.0.0`; mit TS 7 bricht `svelte-kit sync` ab. `@types/node` bleibt auf 24.x passend zum `node:24-alpine`-Image.
 
