@@ -1,0 +1,8 @@
+# Der eine Compose-Pfad, den Dockhand für den Git-Stack bekommt. Führt die Basis mit
+# dem Prod-Override zusammen; das Override muss in der path-Liste stehen, weil include
+# Überschneidungen mit eingebundenen Ressourcen als Fehler meldet.
+
+include:
+  - path:
+      - compose.yaml
+      - compose.prod.yaml

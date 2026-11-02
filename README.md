@@ -23,13 +23,15 @@ docker compose up -d          # Postgres, Directus, MailDev (+ Website im Contai
 pnpm dev                      # http://localhost:5173
 ```
 
-Der Stack ist auf drei Compose-Dateien verteilt, und keine davon lädt Docker von sich aus mit:
+Der Stack ist auf mehrere Compose-Dateien verteilt, und keine davon lädt Docker von sich aus mit:
 
-| Datei              | Inhalt                                                                                                             |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `compose.yaml`     | Directus und Website — genau das, was im Deployment läuft                                                          |
-| `compose.db.yaml`  | Gebündelte Postgres für Directus. Lokal nötig; im Deployment zeigt `DIRECTUS_DB_URL` auf eine bestehende Datenbank |
-| `compose.dev.yaml` | MailDev als Mailfänger, kurze Cache-Zeiten für den `web`-Container                                                 |
+| Datei                   | Inhalt                                                                                                                               |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `compose.yaml`          | Directus und Website — genau das, was im Deployment läuft                                                                            |
+| `compose.db.yaml`       | Gebündelte Postgres für Directus. Lokal nötig; im Deployment zeigt `DIRECTUS_DB_URL` auf eine bestehende Datenbank                   |
+| `compose.dev.yaml`      | MailDev als Mailfänger, kurze Cache-Zeiten für den `web`-Container                                                                   |
+| `compose.prod.yaml`     | Prod-Override: hängt Directus ins externe Netz `pgnet` der Host-Postgres, entfernt `build` bei `web` und setzt `pull_policy: always` |
+| `compose.dockhand.yaml` | `include` von `compose.yaml` und `compose.prod.yaml` — der eine Pfad, den Dockhand bekommt (siehe Deployment)                        |
 
 Damit `docker compose up` lokal trotzdem ohne drei `-f` auskommt, stehen in der `.env.example` zwei Zeilen, die alle drei Dateien laden: `COMPOSE_FILE` und `COMPOSE_PATH_SEPARATOR=:`, Letzteres, damit der Trenner auch unter Windows gilt. Wer die Website über `pnpm dev` entwickelt, braucht den `web`-Container nicht:
 
@@ -120,7 +122,28 @@ Directus bekommt in beiden Fällen nur einen `DB_CONNECTION_STRING`; `compose.db
 
 Die Website läuft als Container (`Dockerfile`, mehrstufig: Build-Werkzeuge und Quellcode landen nicht im Laufzeit-Image, das ~256 MB groß ist und als unprivilegierter Benutzer startet).
 
-### Mit Docker Compose (empfohlen)
+### Mit Dockhand (Produktion)
+
+Der Server baut nichts selbst. Bei jedem Push auf `main` baut die CI (`.github/workflows/ci.yml`) das Image, pusht es als `kidilias/biglemon:latest` und `sha-<commit>` nach Docker Hub und ruft den Deploy-Webhook von Dockhand auf. Dockhand zieht dann Repo und Image und startet den Stack neu. Pull Requests bauen das Image nur probeweise, ohne Push.
+
+Der Git-Stack in Dockhand zeigt auf **`compose.dockhand.yaml`**. Dockhand nimmt nur einen Compose-Pfad entgegen, deshalb ist die Datei ein reiner Wrapper, der per `include` die Basis mit dem Prod-Override zusammenführt:
+
+| Datei                   | Inhalt                                                                                                                                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `compose.prod.yaml`     | Hängt Directus zusätzlich ins externe Docker-Netz `pgnet`, in dem die Postgres des Hosts läuft. Entfernt `build` bei `web` und setzt `pull_policy: always`, damit immer das CI-Image läuft. |
+| `compose.dockhand.yaml` | `include` mit der Pfadliste `compose.yaml`, `compose.prod.yaml`                                                                                                                             |
+
+Das Override steht in der `path`-Liste und nicht im Wrapper selbst, weil `include` Überschneidungen mit eingebundenen Ressourcen als Fehler meldet. Braucht Compose ab 2.24 (`include` mit Pfadliste, `!reset`). Das Ergebnis lässt sich lokal prüfen:
+
+```bash
+docker compose -f compose.dockhand.yaml config
+```
+
+**Stack-Variablen in Dockhand:** `DIRECTUS_DB_URL` (Host ist der Containername der Postgres in `pgnet`), `DIRECTUS_SECRET`, `DIRECTUS_ADMIN_EMAIL`, `DIRECTUS_ADMIN_PASSWORD`, `DIRECTUS_LICENSE_KEY`, `DIRECTUS_PUBLIC_URL`, `DIRECTUS_ASSET_URL`, `DIRECTUS_TRUST_PROXY=true`, `ORIGIN` und die `SMTP_*`-Werte. `COMPOSE_FILE` dort nicht setzen.
+
+**In GitHub:** Variablen `DOCKERHUB_USERNAME` und `DEPLOY_WEBHOOK_URL`, Secrets `DOCKERHUB_TOKEN` und `DEPLOY_WEBHOOK_SECRET`. Ohne `DEPLOY_WEBHOOK_URL` pusht die CI nur das Image. Der Webhook-Aufruf schickt das Secret dreifach: als HMAC-SHA256-Signatur des Bodys (`X-Hub-Signature-256`, das prüft Dockhand), als `X-Gitlab-Token` und als Bearer-Token, damit auch andere Empfänger damit zurechtkommen.
+
+### Von Hand mit Docker Compose
 
 `compose.yaml` enthält nur Directus und die Website — keine Datenbank, keinen Mailfänger. Das ausdrückliche `-f compose.yaml` ist Absicht: Es schlägt eine `COMPOSE_FILE`-Zeile in der `.env`, die lokal `compose.db.yaml` und `compose.dev.yaml` mitlädt, und hält MailDev damit sicher aus der Produktion.
 
@@ -197,7 +220,7 @@ Getestet mit Directus 12.2.0 hinter nginx: Admin-Oberfläche, API, Login samt Se
 ### Erststart auf dem Server
 
 ```bash
-docker compose -f compose.yaml up -d
+# Stack in Dockhand anlegen und starten, von Hand: docker compose -f compose.yaml up -d
 node --env-file=.env scripts/setup-directus-schema.mjs
 node --env-file=.env --experimental-strip-types scripts/seed-directus.ts
 ```
@@ -243,7 +266,7 @@ Fehlt das Volume im Backup, sind nach einem Restore alle Fotos weg, während die
 
 ### Updates
 
-- **Website:** `docker compose -f compose.yaml up -d --build` (bzw. ohne Docker: neu bauen, `build/` ersetzen, Prozess neu starten).
+- **Website:** Push auf `main`; die CI baut das Image und stößt Dockhand an. Von Hand: `docker compose -f compose.yaml up -d --build` (bzw. ohne Docker: neu bauen, `build/` ersetzen, Prozess neu starten).
 - **Directus:** Version in `compose.yaml` ist bewusst gepinnt. Vor einem Sprung Release Notes lesen (Lizenz- und Berechtigungsverhalten haben sich in v12 geändert), vorher Backup ziehen.
 - **Postgres** (`compose.db.yaml`): ebenfalls gepinnt. Ein Major-Upgrade braucht `pg_dump`/`pg_restore` — das Volume ist nicht versionsübergreifend lesbar.
 

@@ -1,0 +1,14 @@
+# Prod-Override für den Dockhand-Stack: Directus hängt zusätzlich im externen Netz
+# pgnet der Host-Postgres, und web läuft nur aus dem CI-Image (kein Build auf dem
+# Server). Eingebunden über compose.dockhand.yaml.
+
+services:
+  directus:
+    networks: [intern, pgnet]
+  web:
+    build: !reset null
+    pull_policy: always
+
+networks:
+  pgnet:
+    external: true

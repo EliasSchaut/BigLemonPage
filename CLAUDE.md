@@ -30,7 +30,7 @@ Lokal fängt **MailDev** (aus `compose.dev.yaml`) allen Versand ab: Postfach unt
 
 Termine, Drinks, Bars, Pakete und die Galeriebilder pflegt der Kunde in Directus (`http://localhost:8055`, läuft über `compose.yaml`; die Postgres dazu liefert lokal `compose.db.yaml`, im Deployment zeigt `DIRECTUS_DB_URL` auf eine bestehende Datenbank).
 
-- `docker compose up -d` — Postgres + Directus (+ MailDev) starten. Keine Override-Datei wird automatisch geladen: lokal listet `COMPOSE_FILE` in der `.env` alle drei Dateien (`compose.yaml:compose.db.yaml:compose.dev.yaml`, dazu `COMPOSE_PATH_SEPARATOR=:` für Windows), im Deployment gilt nur `compose.yaml` mit `DIRECTUS_DB_URL`. Die gebündelte Postgres (`compose.db.yaml`) nimmt `POSTGRES_USER`/`POSTGRES_PASSWORD` aus der `.env` und überschreibt den `DB_CONNECTION_STRING` von Directus
+- `docker compose up -d` — Postgres + Directus (+ MailDev) starten. Keine Override-Datei wird automatisch geladen: lokal listet `COMPOSE_FILE` in der `.env` alle drei Dateien (`compose.yaml:compose.db.yaml:compose.dev.yaml`, dazu `COMPOSE_PATH_SEPARATOR=:` für Windows), im Deployment zeigt Dockhand auf `compose.dockhand.yaml`, ein `include` von `compose.yaml` und dem Prod-Override `compose.prod.yaml`, und `DIRECTUS_DB_URL` zeigt dort auf die Postgres des Hosts. Die gebündelte Postgres (`compose.db.yaml`) nimmt `POSTGRES_USER`/`POSTGRES_PASSWORD` aus der `.env` und überschreibt den `DB_CONNECTION_STRING` von Directus
 - `node --env-file=.env scripts/setup-directus-schema.mjs` — Collections, Bild-Relationen, öffentliche Leserechte und die Rolle „Redaktion" anlegen (idempotent, ersetzt einen Schema-Snapshot)
 - `node --env-file=.env --experimental-strip-types scripts/seed-directus.ts` — Startwerte aus `content.ts` übertragen (überspringt befüllte Collections)
 
@@ -50,7 +50,7 @@ Zwei Fallstricke: Der Key bindet sich beim ersten Start **fest an Projekt und `P
 - **Mail-Versand**: `src/lib/server/mail/` — `index.ts` baut den (gepoolten) Nodemailer-Transport aus `$app/env/private` und verschickt; `template.ts` ersetzt `{{platzhalter}}` in den Vorlagen unter `templates/` (HTML-Werte werden escaped). Die Vorlagen werden per `?raw` in den Server-Build gebündelt und sind in `.prettierignore` ausgenommen. Aufgerufen von der Form-Action `anfrage` in `src/routes/+page.server.ts`.
 - **Imports**: `$lib` gibt es seit Kit 3 nicht mehr — stattdessen `#lib/...` (Subpath-Import aus `package.json#imports`). Node rät dabei keine Endungen: Imports brauchen die volle Dateiendung (`#lib/data/content.ts`, `#lib/server/cms/index.ts`).
 - **Umgebungsvariablen**: Jede Variable muss in `src/env.ts` (`defineEnvVars`) deklariert sein und wird einzeln aus `$app/env/private` importiert. `$env/*` ist deprecated. Alle Variablen sind dort optional; leere Strings werden zu `undefined` — Pflichtprüfung passiert erst beim Gebrauch (z. B. `requireEnv` im Mail-Versand), damit die Seite ohne SMTP-Konfiguration startet.
-- **Deployment target**: Node server (`@sveltejs/adapter-node`). In Produktion muss `ORIGIN` auf die öffentliche URL gesetzt sein, sonst lehnt der CSRF-Schutz die Formular-POSTs mit 403 ab.
+- **Deployment target**: Node server (`@sveltejs/adapter-node`). In Produktion muss `ORIGIN` auf die öffentliche URL gesetzt sein, sonst lehnt der CSRF-Schutz die Formular-POSTs mit 403 ab. Produktion läuft als Dockhand-Git-Stack auf `compose.dockhand.yaml`; das Image baut die CI (`.github/workflows/ci.yml`) bei jedem Push auf `main`, pusht es als `kidilias/biglemon:latest` nach Docker Hub und ruft den Dockhand-Webhook auf. Der Server baut nie selbst: `compose.prod.yaml` entfernt `build` per `!reset` und setzt `pull_policy: always`; Directus hängt dort zusätzlich im externen Netz `pgnet` der Host-Postgres.
 
 ## Fallstricke
 
@@ -62,6 +62,7 @@ Zwei Fallstricke: Der Key bindet sich beim ersten Start **fest an Projekt und `P
 - Termine liegen als Feldtyp `date` (nicht `datetime`), sonst verschiebt die Zeitzonenkonvertierung Datumsangaben um einen Tag.
 - Das Volume `directus_uploads` liegt nicht in Postgres und gehört separat ins Backup — sonst sind nach einem Restore alle Fotos weg.
 - `DB_CONNECTION_STRING: ${DIRECTUS_DB_URL:-}` in `compose.yaml` hat bewusst keine `:?`-Pflichtprüfung: Compose interpoliert die Basisdatei auch dann, wenn `compose.db.yaml` den Wert überschreibt — eine Pflichtprüfung würde jeden lokalen Start blockieren. Fehlt die URL im Deployment, scheitert erst Directus beim Start an der Datenbankverbindung.
+- Dockhand nimmt für Git-Stacks nur einen Compose-Pfad und hängt `compose.override.yaml` automatisch an, wenn die Basis `compose.yaml` heißt — deshalb heißt das Dev-Override `compose.dev.yaml`, und `compose.dockhand.yaml` ist ein `include`-Wrapper. Das Prod-Override muss in dessen `path`-Liste stehen, nicht im Wrapper selbst: `include` meldet jede Überschneidung mit eingebundenen Ressourcen als Fehler.
 
 - TypeScript bleibt auf 6.x: SvelteKit 3 und svelte-check verlangen als Peer `^6.0.0`; mit TS 7 bricht `svelte-kit sync` ab. `@types/node` bleibt auf 24.x passend zum `node:24-alpine`-Image.
 
