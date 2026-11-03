@@ -1,7 +1,7 @@
 services:
   directus:
     networks: [intern]
-    image: directus/directus:12.2.0
+    image: directus/directus:${DIRECTUS_VERSION:-12.2.0}
     restart: unless-stopped
     ports:
       # Von aussen kommt Directus nur ueber den Reverse Proxy (/cms).

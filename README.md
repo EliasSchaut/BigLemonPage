@@ -141,7 +141,7 @@ Das Override steht in der `path`-Liste und nicht im Wrapper selbst, weil `includ
 docker compose -f compose.dockhand.yaml config
 ```
 
-**Stack-Variablen in Dockhand:** `POSTGRES_USER` und `POSTGRES_PASSWORD` der Host-Postgres (erreichbar in `pgnet` unter `POSTGRES_HOST`, Standard `postgres`, Port `POSTGRES_PORT`, Standard `5432`, Datenbank `POSTGRES_DB`, Standard `biglemon`; alternativ ein kompletter `DIRECTUS_DB_URL`), `DIRECTUS_SECRET`, `DIRECTUS_ADMIN_EMAIL`, `DIRECTUS_ADMIN_PASSWORD`, `DIRECTUS_LICENSE_KEY`, `DIRECTUS_PUBLIC_URL`, `DIRECTUS_ASSET_URL`, `ORIGIN`, `WEB_PORT=8286`, die `SMTP_*`-Werte und die Keycloak-Werte aus dem nächsten Absatz. `DIRECTUS_TRUST_PROXY` steht im Prod-Override bereits auf `true`. `COMPOSE_FILE` dort nicht setzen.
+**Stack-Variablen in Dockhand:** `POSTGRES_USER` und `POSTGRES_PASSWORD` der Host-Postgres (erreichbar in `pgnet` unter `POSTGRES_HOST`, Standard `postgres`, Port `POSTGRES_PORT`, Standard `5432`, Datenbank `POSTGRES_DB`, Standard `biglemon`; alternativ ein kompletter `DIRECTUS_DB_URL`), `DIRECTUS_SECRET`, `DIRECTUS_ADMIN_EMAIL`, `DIRECTUS_ADMIN_PASSWORD`, `DIRECTUS_LICENSE_KEY`, `DIRECTUS_PUBLIC_URL`, `DIRECTUS_ASSET_URL`, `DIRECTUS_VERSION`, `ORIGIN`, `WEB_PORT=8286`, die `SMTP_*`-Werte und die Keycloak-Werte aus dem nächsten Absatz. `DIRECTUS_TRUST_PROXY` steht im Prod-Override bereits auf `true`. `COMPOSE_FILE` dort nicht setzen.
 
 **Anmeldung per Keycloak:** `compose.prod.yaml` registriert den OpenID-Provider `keycloak`. In Dockhand gehören dazu `AUTH_KEYCLOAK_CLIENT_ID`, `AUTH_KEYCLOAK_CLIENT_SECRET`, `AUTH_KEYCLOAK_ISSUER_URL` und `AUTH_KEYCLOAK_ROLE_MAPPING`. Das Mapping ordnet Keycloak-Gruppen Directus-Rollen zu, Format `json:{"biglemon-admin":"<Rollen-ID>","biglemon-redaktion":"<Rollen-ID>"}`. Die Rollen-IDs sind pro Instanz zufällig (Admin-Rolle beim Bootstrap, „Redaktion" durch `scripts/setup-directus-schema.mjs`) und stehen in Directus unter Einstellungen → Rollen; nach einem Neuaufsetzen der Datenbank muss das Mapping neu gesetzt werden. Im Keycloak-Client muss `<DIRECTUS_PUBLIC_URL>/auth/login/keycloak/callback` als Redirect-URI erlaubt sein. Optional dazu `AUTH_KEYCLOAK_ALLOW_PUBLIC_REGISTRATION` (Standard `true`), `AUTH_KEYCLOAK_DEFAULT_ROLE_ID` (Standard leer) und `AUTH_DISABLE_DEFAULT` (Standard `false`). Der lokale Login mit E-Mail und Passwort bleibt also aktiv, damit Admin-Konto und Setup-Skripte weiter funktionieren.
 
@@ -271,7 +271,7 @@ Fehlt das Volume im Backup, sind nach einem Restore alle Fotos weg, während die
 ### Updates
 
 - **Website:** Push auf `main`; die CI baut das Image und stößt Dockhand an. Von Hand: `docker compose -f compose.yaml up -d --build` (bzw. ohne Docker: neu bauen, `build/` ersetzen, Prozess neu starten).
-- **Directus:** Version in `compose.yaml` ist bewusst gepinnt. Vor einem Sprung Release Notes lesen (Lizenz- und Berechtigungsverhalten haben sich in v12 geändert), vorher Backup ziehen.
+- **Directus:** Version über `DIRECTUS_VERSION` gepinnt (Standard in `compose.yaml`, in Dockhand als Stack-Variable). Vor einem Sprung Release Notes lesen (Lizenz- und Berechtigungsverhalten haben sich in v12 geändert), vorher Backup ziehen.
 - **Postgres** (`compose.db.yaml`): ebenfalls gepinnt. Ein Major-Upgrade braucht `pg_dump`/`pg_restore` — das Volume ist nicht versionsübergreifend lesbar.
 
 ### Wenn die Seite plötzlich alte Inhalte zeigt
