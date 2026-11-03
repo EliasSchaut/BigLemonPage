@@ -61,6 +61,11 @@ export interface SectionRow {
 	lead: string | null;
 }
 
+export interface MarqueeRow {
+	sort?: number | null;
+	text: string | null;
+}
+
 export interface CmsSchema {
 	directus_files: FileRow[];
 	events: EventRow[];
@@ -69,6 +74,7 @@ export interface CmsSchema {
 	packages: PackageRow[];
 	gallery: GalleryRow[];
 	sections: SectionRow[];
+	marquee: MarqueeRow[];
 }
 
 export const FILE_FIELDS: (keyof FileRow)[] = [

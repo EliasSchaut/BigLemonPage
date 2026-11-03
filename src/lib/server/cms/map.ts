@@ -7,7 +7,15 @@ import type {
 	GalleryShot,
 	SectionTexts
 } from '#lib/data/types.ts';
-import type { BarRow, DrinkRow, EventRow, GalleryRow, PackageRow, SectionRow } from './schema';
+import type {
+	BarRow,
+	DrinkRow,
+	EventRow,
+	GalleryRow,
+	MarqueeRow,
+	PackageRow,
+	SectionRow
+} from './schema';
 import { SLOTS, toImage } from './assets';
 
 const ACCENTS = {
@@ -107,4 +115,8 @@ export function mapSections(rows: SectionRow[], defaults: SectionTexts): Section
 		};
 	}
 	return texts;
+}
+
+export function mapMarquee(rows: MarqueeRow[]): string[] {
+	return rows.map((row) => row.text?.trim() ?? '').filter(Boolean);
 }

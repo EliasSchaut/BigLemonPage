@@ -397,6 +397,38 @@ const COLLECTIONS = [
 				'Der Fliesstext unter dem Titel. Leer lassen, um ihn auszublenden.'
 			)
 		]
+	},
+	{
+		collection: 'marquee',
+		meta: {
+			icon: 'text_rotation_none',
+			note: 'Die Begriffe im gelben Laufband unter dem Startbild. Reihenfolge per Drag & Drop. Ohne Eintraege zeigt die Website die Standardbegriffe.',
+			display_template: '{{text}}',
+			sort: 7,
+			sort_field: 'sort',
+			translations: [
+				{
+					language: 'de-DE',
+					translation: 'Laufband',
+					singular: 'Laufband-Begriff',
+					plural: 'Laufband'
+				}
+			]
+		},
+		fields: [
+			pk,
+			sortField,
+			{
+				...text('text', 'Text', {
+					meta: {
+						required: true,
+						width: 'full',
+						note: 'Kurzer Begriff, z. B. HOCHZEITEN. Zwischen den Begriffen steht automatisch ein Stern.'
+					},
+					schema: { is_nullable: false }
+				})
+			}
+		]
 	}
 ];
 
@@ -484,6 +516,7 @@ const PUBLIC_READ = {
 	packages: ['*'],
 	gallery: ['*'],
 	sections: ['*'],
+	marquee: ['*'],
 	directus_files: [
 		'id',
 		'alt',
@@ -571,6 +604,7 @@ const EDITOR_ACTIONS = {
 	packages: CRUD,
 	gallery: CRUD,
 	sections: ['read', 'update'],
+	marquee: CRUD,
 	directus_files: CRUD
 };
 
@@ -628,7 +662,7 @@ async function ensureEditorRole() {
 		body: JSON.stringify({
 			name: 'Redaktion',
 			icon: 'edit_note',
-			description: 'Pflegt Termine, Drinks, Bars, Pakete, Bereichstexte und Fotos.',
+			description: 'Pflegt Termine, Drinks, Bars, Pakete, Bereichstexte, Laufband und Fotos.',
 			policies: [{ policy: policy.id }]
 		})
 	});

@@ -28,7 +28,7 @@ Lokal fängt **MailDev** (aus `compose.dev.yaml`) allen Versand ab: Postfach unt
 
 ### CMS (Directus)
 
-Termine, Drinks, Bars, Pakete, die Galeriebilder sowie Tagline, Titel und Untertitel der Startseiten-Bereiche (Collection `sections`) pflegt der Kunde in Directus (`http://localhost:8055`, läuft über `compose.yaml`; die Postgres dazu liefert lokal `compose.db.yaml`, im Deployment zeigt `DIRECTUS_DB_URL` auf eine bestehende Datenbank).
+Termine, Drinks, Bars, Pakete, die Galeriebilder, die Begriffe im Laufband (Collection `marquee`, Fallback `MARQUEE_ITEMS`; zu kurze Listen wiederholt `Marquee.svelte`, damit das Band die Breite füllt) sowie Tagline, Titel und Untertitel der Startseiten-Bereiche (Collection `sections`) pflegt der Kunde in Directus (`http://localhost:8055`, läuft über `compose.yaml`; die Postgres dazu liefert lokal `compose.db.yaml`, im Deployment zeigt `DIRECTUS_DB_URL` auf eine bestehende Datenbank).
 
 - `docker compose up -d` — Postgres + Directus (+ MailDev) starten. Keine Override-Datei wird automatisch geladen: lokal listet `COMPOSE_FILE` in der `.env` alle drei Dateien (`compose.yaml:compose.db.yaml:compose.dev.yaml`, dazu `COMPOSE_PATH_SEPARATOR=:` für Windows), im Deployment zeigt Dockhand auf `compose.dockhand.yaml`, ein `include` von `compose.yaml` und dem Prod-Override `compose.prod.yaml`, und `DIRECTUS_DB_URL` zeigt dort auf die Postgres des Hosts. Die gebündelte Postgres (`compose.db.yaml`) nimmt `POSTGRES_USER`/`POSTGRES_PASSWORD` aus der `.env` und überschreibt den `DB_CONNECTION_STRING` von Directus
 - `pnpm cms:setup` — Collections, Bild-Relationen, öffentliche Leserechte und die Rolle „Redaktion" anlegen (idempotent, ersetzt einen Schema-Snapshot)

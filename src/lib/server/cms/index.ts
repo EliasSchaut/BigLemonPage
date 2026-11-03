@@ -1,5 +1,13 @@
 import { readItems } from '@directus/sdk';
-import { BARS, DRINKS, EVENTS, GALLERY_SHOTS, PACKAGES, SECTIONS } from '#lib/data/content.ts';
+import {
+	BARS,
+	DRINKS,
+	EVENTS,
+	GALLERY_SHOTS,
+	MARQUEE_ITEMS,
+	PACKAGES,
+	SECTIONS
+} from '#lib/data/content.ts';
 import { allByMonth } from '#lib/data/events.ts';
 import type {
 	Bar,
@@ -11,7 +19,15 @@ import type {
 } from '#lib/data/types.ts';
 import { directus } from './client';
 import { cached } from './cache';
-import { mapBars, mapDrinks, mapEvents, mapGallery, mapPackages, mapSections } from './map';
+import {
+	mapBars,
+	mapDrinks,
+	mapEvents,
+	mapGallery,
+	mapMarquee,
+	mapPackages,
+	mapSections
+} from './map';
 import { FILE_FIELDS } from './schema';
 
 export interface SiteContent {
@@ -22,6 +38,7 @@ export interface SiteContent {
 	eventCount: number;
 	gallery: GalleryShot[];
 	sections: SectionTexts;
+	marquee: string[];
 }
 
 const CACHE_KEY = 'site';
@@ -36,12 +53,13 @@ export function fallbackContent(): SiteContent {
 		eventMonths: allByMonth(EVENTS),
 		eventCount: EVENTS.length,
 		gallery: GALLERY_SHOTS,
-		sections: SECTIONS
+		sections: SECTIONS,
+		marquee: MARQUEE_ITEMS
 	};
 }
 
 async function loadFromDirectus(): Promise<SiteContent> {
-	const [events, drinks, bars, packages, gallery, sections] = await Promise.all([
+	const [events, drinks, bars, packages, gallery, sections, marquee] = await Promise.all([
 		directus.request(
 			readItems('events', {
 				fields: ['name', 'city', 'date_start', 'date_end'],
@@ -82,10 +100,18 @@ async function loadFromDirectus(): Promise<SiteContent> {
 				fields: ['key', 'eyebrow', 'title', 'lead'],
 				limit: -1
 			})
+		),
+		directus.request(
+			readItems('marquee', {
+				fields: ['text'],
+				sort: ['sort'],
+				limit: -1
+			})
 		)
 	]);
 
 	const defaults = fallbackContent();
+	const marqueeItems = mapMarquee(marquee);
 
 	return {
 		drinks: drinks.length > 0 ? mapDrinks(drinks) : defaults.drinks,
@@ -94,7 +120,8 @@ async function loadFromDirectus(): Promise<SiteContent> {
 		eventMonths: allByMonth(mapEvents(events)),
 		eventCount: events.length,
 		gallery: gallery.length > 0 ? mapGallery(gallery) : defaults.gallery,
-		sections: mapSections(sections, defaults.sections)
+		sections: mapSections(sections, defaults.sections),
+		marquee: marqueeItems.length > 0 ? marqueeItems : defaults.marquee
 	};
 }
 

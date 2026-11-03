@@ -3,6 +3,7 @@ import {
 	DRINKS,
 	EVENTS,
 	GALLERY_SHOTS,
+	MARQUEE_ITEMS,
 	PACKAGES,
 	SECTIONS,
 	type SectionKey
@@ -127,6 +128,10 @@ const SEEDS: { collection: string; uniqueBy?: string; rows: Record<string, unkno
 			label: SECTION_LABELS[key],
 			...SECTIONS[key]
 		}))
+	},
+	{
+		collection: 'marquee',
+		rows: MARQUEE_ITEMS.map((text, index) => ({ sort: index + 1, text }))
 	}
 ];
 

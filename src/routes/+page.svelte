@@ -20,7 +20,7 @@
 <Seo title={SITE.title} jsonLd={localBusinessJsonLd(page.url.origin)} />
 
 <Hero text={data.sections.hero} eventCount={data.eventCount} drinkCount={data.drinks.length} />
-<Marquee />
+<Marquee items={data.marquee} />
 <WhyBar text={data.sections.warum} />
 <Drinks text={data.sections.drinks} drinks={data.drinks} />
 <Events text={data.sections.termine} months={data.eventMonths} />
