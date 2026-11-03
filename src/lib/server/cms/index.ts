@@ -1,10 +1,17 @@
 import { readItems } from '@directus/sdk';
-import { BARS, DRINKS, EVENTS, GALLERY_SHOTS, PACKAGES } from '#lib/data/content.ts';
+import { BARS, DRINKS, EVENTS, GALLERY_SHOTS, PACKAGES, SECTIONS } from '#lib/data/content.ts';
 import { allByMonth } from '#lib/data/events.ts';
-import type { Bar, BookingPackage, Drink, EventMonth, GalleryShot } from '#lib/data/types.ts';
+import type {
+	Bar,
+	BookingPackage,
+	Drink,
+	EventMonth,
+	GalleryShot,
+	SectionTexts
+} from '#lib/data/types.ts';
 import { directus } from './client';
 import { cached } from './cache';
-import { mapBars, mapDrinks, mapEvents, mapGallery, mapPackages } from './map';
+import { mapBars, mapDrinks, mapEvents, mapGallery, mapPackages, mapSections } from './map';
 import { FILE_FIELDS } from './schema';
 
 export interface SiteContent {
@@ -14,6 +21,7 @@ export interface SiteContent {
 	eventMonths: EventMonth[];
 	eventCount: number;
 	gallery: GalleryShot[];
+	sections: SectionTexts;
 }
 
 const CACHE_KEY = 'site';
@@ -27,12 +35,13 @@ export function fallbackContent(): SiteContent {
 		packages: PACKAGES,
 		eventMonths: allByMonth(EVENTS),
 		eventCount: EVENTS.length,
-		gallery: GALLERY_SHOTS
+		gallery: GALLERY_SHOTS,
+		sections: SECTIONS
 	};
 }
 
 async function loadFromDirectus(): Promise<SiteContent> {
-	const [events, drinks, bars, packages, gallery] = await Promise.all([
+	const [events, drinks, bars, packages, gallery, sections] = await Promise.all([
 		directus.request(
 			readItems('events', {
 				fields: ['name', 'city', 'date_start', 'date_end'],
@@ -67,6 +76,12 @@ async function loadFromDirectus(): Promise<SiteContent> {
 				sort: ['sort'],
 				limit: -1
 			})
+		),
+		directus.request(
+			readItems('sections', {
+				fields: ['key', 'eyebrow', 'title', 'lead'],
+				limit: -1
+			})
 		)
 	]);
 
@@ -78,7 +93,8 @@ async function loadFromDirectus(): Promise<SiteContent> {
 		packages: packages.length > 0 ? mapPackages(packages) : defaults.packages,
 		eventMonths: allByMonth(mapEvents(events)),
 		eventCount: events.length,
-		gallery: gallery.length > 0 ? mapGallery(gallery) : defaults.gallery
+		gallery: gallery.length > 0 ? mapGallery(gallery) : defaults.gallery,
+		sections: mapSections(sections, defaults.sections)
 	};
 }
 

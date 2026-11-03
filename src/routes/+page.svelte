@@ -19,12 +19,12 @@
 
 <Seo title={SITE.title} jsonLd={localBusinessJsonLd(page.url.origin)} />
 
-<Hero eventCount={data.eventCount} />
+<Hero text={data.sections.hero} eventCount={data.eventCount} drinkCount={data.drinks.length} />
 <Marquee />
-<WhyBar />
-<Drinks drinks={data.drinks} />
-<Events months={data.eventMonths} />
-<Gallery shots={data.gallery} />
-<Bars bars={data.bars} />
-<Booking packages={data.packages} bars={data.bars} />
-<Contact />
+<WhyBar text={data.sections.warum} />
+<Drinks text={data.sections.drinks} drinks={data.drinks} />
+<Events text={data.sections.termine} months={data.eventMonths} />
+<Gallery text={data.sections.galerie} shots={data.gallery} />
+<Bars text={data.sections.bars} bars={data.bars} />
+<Booking text={data.sections.buchen} packages={data.packages} bars={data.bars} />
+<Contact text={data.sections.kontakt} />

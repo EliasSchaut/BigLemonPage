@@ -1,8 +1,11 @@
 <script lang="ts">
 	import lemonFrei from '#lib/assets/images/lemon-frei.png';
 	import { CONTACT } from '#lib/data/content.ts';
+	import type { SectionText } from '#lib/data/types.ts';
 	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
 	import SocialIcon from '#lib/components/ui/SocialIcon.svelte';
+
+	let { text }: { text: SectionText } = $props();
 </script>
 
 <section
@@ -14,13 +17,10 @@
 	>
 		<div>
 			<SectionIntro
-				eyebrow="KONTAKT"
+				{...text}
 				eyebrowTone="muted"
-				lead="Ruft an oder schreibt uns. Wir sagen ehrlich, ob euer Termin noch frei ist — und was realistisch machbar ist."
 				class="mb-8 [&>p]:max-w-[480px] [&>p]:text-[17.5px] [&>p]:text-second/75"
-			>
-				Lieber direkt reden?
-			</SectionIntro>
+			/>
 
 			<div class="flex max-w-[440px] flex-col gap-3">
 				<a

@@ -1,14 +1,22 @@
 <script lang="ts">
 	import lemonFrei from '#lib/assets/images/lemon-frei.png';
-	import { HERO_STATS } from '#lib/data/content.ts';
+	import type { SectionText } from '#lib/data/types.ts';
 	import Button from '#lib/components/ui/Button.svelte';
 	import GlowBackdrop from '#lib/components/ui/GlowBackdrop.svelte';
+	import RichTitle from '#lib/components/ui/RichTitle.svelte';
 
-	let { eventCount = 0 }: { eventCount?: number } = $props();
+	interface Props {
+		text: SectionText;
+		eventCount?: number;
+		drinkCount?: number;
+	}
+
+	let { text, eventCount = 0, drinkCount = 0 }: Props = $props();
 
 	const stats = $derived([
 		{ value: String(eventCount), label: 'Feste im Kalender' },
-		...HERO_STATS
+		{ value: `${drinkCount}+`, label: 'verschiedene Cocktails' },
+		{ value: '0', label: 'Künstliche Aromen' }
 	]);
 </script>
 
@@ -37,25 +45,28 @@
 				alt="Die BigLemon — mobile Cocktailbar in Zitronenform"
 				class="mb-5 block w-[118px] drop-shadow-[0_14px_24px_rgb(0_0_0/.45)] max-[619px]:hidden min-[940px]:hidden"
 			/>
-			<div
-				class="mb-[22px] inline-flex items-center gap-[9px] rounded-full border border-lime/35 bg-lime/12 py-2 pr-[15px] pl-2.5"
-			>
-				<span class="block size-2 rounded-full bg-lime shadow-[0_0_12px_#C2E23F]"></span>
-				<span class="text-[12.5px] font-bold tracking-[.1em] text-lime">
-					TERMINE 2026 — JETZT SICHERN
-				</span>
-			</div>
+			{#if text.eyebrow}
+				<div
+					class="mb-[22px] inline-flex items-center gap-[9px] rounded-full border border-lime/35 bg-lime/12 py-2 pr-[15px] pl-2.5"
+				>
+					<span class="block size-2 rounded-full bg-lime shadow-[0_0_12px_#C2E23F]"></span>
+					<span class="text-[12.5px] font-bold tracking-[.1em] text-lime">
+						{text.eyebrow}
+					</span>
+				</div>
+			{/if}
 			<h1
 				class="m-0 mb-[22px] font-display text-[clamp(40px,6.6vw,74px)] leading-[.96] font-extrabold tracking-[-.035em] text-balance text-cream"
 			>
-				Die Zitrone,<br />die euer Fest<br /><span class="text-prime">unvergesslich</span> macht.
+				<RichTitle title={text.title} highlightClass="text-prime" />
 			</h1>
-			<p
-				class="m-0 mb-8 max-w-[520px] text-[clamp(16px,1.7vw,19.5px)] leading-[1.65] text-pretty text-second-200"
-			>
-				Eine 3 Meter große, fahrbare Riesenzitrone voller frisch gepresster Cocktails. Wir rollen
-				an, bauen auf, mixen — und ihr habt den Hingucker, über den am Montag noch alle reden.
-			</p>
+			{#if text.lead}
+				<p
+					class="m-0 mb-8 max-w-[520px] text-[clamp(16px,1.7vw,19.5px)] leading-[1.65] text-pretty text-second-200"
+				>
+					{text.lead}
+				</p>
+			{/if}
 			<div class="mb-[38px] flex flex-wrap gap-3.5">
 				<Button href="/#buchen" size="lg" class="shadow-glow-lg">Bar für euer Fest anfragen</Button>
 				<Button href="/#drinks" variant="outline-cream" size="lg">Drinkliste ansehen</Button>

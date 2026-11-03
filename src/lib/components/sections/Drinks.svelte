@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Drink } from '#lib/data/types.ts';
+	import type { Drink, SectionText } from '#lib/data/types.ts';
 	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
 	import Button from '#lib/components/ui/Button.svelte';
 	import Tag from '#lib/components/ui/Tag.svelte';
@@ -10,7 +10,7 @@
 
 	const SHOWCASE = 8;
 
-	let { drinks }: { drinks: Drink[] } = $props();
+	let { drinks, text }: { drinks: Drink[]; text: SectionText } = $props();
 
 	let section: HTMLElement;
 	let expanded = $state(false);
@@ -44,15 +44,7 @@
 	/>
 	<div class="relative mx-auto max-w-[1240px]">
 		<div class="mb-[clamp(30px,4vw,48px)] flex flex-wrap items-end justify-between gap-6">
-			<SectionIntro
-				eyebrow="DIE DRINKLISTE"
-				eyebrowTone="lime"
-				tone="light"
-				lead="Bei uns lässt sich alles mit allem mischen — mit Schuss oder ohne. Eine Auswahl aus dem, was am häufigsten über die Theke geht."
-				class="max-w-[640px]"
-			>
-				Erlaubt ist,<br />was schmeckt.
-			</SectionIntro>
+			<SectionIntro {...text} eyebrowTone="lime" tone="light" class="max-w-[640px]" />
 		</div>
 
 		<div id="drinks-liste" class="grid grid-cols-[repeat(auto-fill,minmax(255px,1fr))] gap-5">

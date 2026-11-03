@@ -54,6 +54,13 @@ export interface GalleryRow {
 	image: FileRow | null;
 }
 
+export interface SectionRow {
+	key: string;
+	eyebrow: string | null;
+	title: string | null;
+	lead: string | null;
+}
+
 export interface CmsSchema {
 	directus_files: FileRow[];
 	events: EventRow[];
@@ -61,6 +68,7 @@ export interface CmsSchema {
 	bars: BarRow[];
 	packages: PackageRow[];
 	gallery: GalleryRow[];
+	sections: SectionRow[];
 }
 
 export const FILE_FIELDS: (keyof FileRow)[] = [

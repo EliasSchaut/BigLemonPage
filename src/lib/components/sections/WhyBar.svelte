@@ -1,5 +1,8 @@
 <script lang="ts">
+	import type { SectionText } from '#lib/data/types.ts';
 	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
+
+	let { text }: { text: SectionText } = $props();
 
 	const lemonSlice = 'repeating-conic-gradient(from 12deg,#FFF8B4 0deg 36deg,#EFE24A 36deg 45deg)';
 </script>
@@ -9,13 +12,7 @@
 	class="scroll-mt-(--header-h) bg-cream px-5 py-[clamp(64px,8vw,110px)] text-second"
 >
 	<div class="mx-auto max-w-[1240px]">
-		<SectionIntro
-			eyebrow="WARUM DIE BIGLEMON"
-			lead="Durch ihre auffallende Form und das extravagante Design ist die BigLemon der Hingucker auf jedem Event — von der privaten Feier bis zur Großveranstaltung. Jeder kennt sie, jeder liebt sie."
-			class="mb-[clamp(34px,5vw,56px)] max-w-[720px]"
-		>
-			Kein Bier. Kein Wein. Eine Attraktion, die nebenbei Drinks macht.
-		</SectionIntro>
+		<SectionIntro {...text} class="mb-[clamp(34px,5vw,56px)] max-w-[720px]" />
 
 		<div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-[18px]">
 			<div class="flex min-h-[230px] flex-col gap-3 rounded-card bg-second p-[30px] text-cream">

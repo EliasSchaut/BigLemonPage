@@ -1,9 +1,12 @@
 const URL_BASE = process.env.DIRECTUS_URL ?? 'http://localhost:8055';
+const STATIC_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 const EMAIL = process.env.DIRECTUS_ADMIN_EMAIL;
 const PASSWORD = process.env.DIRECTUS_ADMIN_PASSWORD;
 
-if (!EMAIL || !PASSWORD) {
-	console.error('DIRECTUS_ADMIN_EMAIL und DIRECTUS_ADMIN_PASSWORD muessen gesetzt sein.');
+if (!STATIC_TOKEN && (!EMAIL || !PASSWORD)) {
+	console.error(
+		'DIRECTUS_ADMIN_TOKEN oder DIRECTUS_ADMIN_EMAIL und DIRECTUS_ADMIN_PASSWORD muessen gesetzt sein.'
+	);
 	process.exit(1);
 }
 
@@ -332,6 +335,68 @@ const COLLECTIONS = [
 				schema: { default_value: 'normal' }
 			}
 		]
+	},
+	{
+		collection: 'sections',
+		meta: {
+			icon: 'title',
+			note: 'Tagline, Titel und Untertitel der Bereiche auf der Startseite. Zeilenumbruch im Titel = neue Zeile, *Sternchen* heben ein Wort farbig hervor.',
+			display_template: '{{label}} — {{title}}',
+			sort: 6,
+			sort_field: 'sort',
+			translations: [
+				{
+					language: 'de-DE',
+					translation: 'Bereiche',
+					singular: 'Bereich',
+					plural: 'Bereiche'
+				}
+			]
+		},
+		fields: [
+			pk,
+			sortField,
+			{
+				...text('key', 'Technischer Schluessel', {
+					meta: {
+						required: true,
+						readonly: true,
+						hidden: true,
+						validation: { key: { _regex: '^[a-z0-9-]+$' } }
+					},
+					schema: { is_nullable: false, is_unique: true }
+				})
+			},
+			{
+				...text('label', 'Bereich', {
+					meta: { readonly: true, note: 'Wo der Text auf der Seite steht.' }
+				})
+			},
+			{
+				...text('eyebrow', 'Tagline', {
+					meta: {
+						note: 'Die kleine Zeile in Grossbuchstaben ueber dem Titel. Leer lassen, um sie auszublenden.'
+					}
+				})
+			},
+			{
+				field: 'title',
+				type: 'text',
+				meta: {
+					interface: 'input-multiline',
+					required: true,
+					translations: de('Titel'),
+					note: 'Enter erzeugt einen Zeilenumbruch. *Wort* wird farbig hervorgehoben.',
+					width: 'full'
+				},
+				schema: { is_nullable: false }
+			},
+			longText(
+				'lead',
+				'Untertitel',
+				'Der Fliesstext unter dem Titel. Leer lassen, um ihn auszublenden.'
+			)
+		]
 	}
 ];
 
@@ -418,6 +483,7 @@ const PUBLIC_READ = {
 	bars: ['*'],
 	packages: ['*'],
 	gallery: ['*'],
+	sections: ['*'],
 	directus_files: [
 		'id',
 		'alt',
@@ -496,14 +562,22 @@ async function ensurePublicRead() {
 	}
 }
 
-const EDITABLE = ['events', 'drinks', 'bars', 'packages', 'gallery'];
+const CRUD = ['create', 'read', 'update', 'delete'];
 
-async function ensureEditorRole() {
-	const roles = await api('/roles?limit=-1');
-	if (roles.some((r) => r.name === 'Redaktion')) {
-		console.log('  = Rolle "Redaktion" existiert bereits');
-		return;
-	}
+const EDITOR_ACTIONS = {
+	events: CRUD,
+	drinks: CRUD,
+	bars: CRUD,
+	packages: CRUD,
+	gallery: CRUD,
+	sections: ['read', 'update'],
+	directus_files: CRUD
+};
+
+async function ensureEditorPolicy() {
+	const policies = await api('/policies?limit=-1');
+	const existing = policies.find((p) => p.name === 'Redaktion');
+	if (existing) return existing;
 
 	const policy = await api('/policies', {
 		method: 'POST',
@@ -515,9 +589,19 @@ async function ensureEditorRole() {
 			app_access: true
 		})
 	});
+	console.log('  + Policy "Redaktion"');
+	return policy;
+}
 
-	for (const collection of EDITABLE) {
-		for (const action of ['create', 'read', 'update', 'delete']) {
+async function ensureEditorRole() {
+	const policy = await ensureEditorPolicy();
+
+	const existing = await api(`/permissions?limit=-1&filter[policy][_eq]=${policy.id}`);
+	const have = new Set(existing.map((p) => `${p.collection}:${p.action}`));
+
+	for (const [collection, actions] of Object.entries(EDITOR_ACTIONS)) {
+		for (const action of actions) {
+			if (have.has(`${collection}:${action}`)) continue;
 			await api('/permissions', {
 				method: 'POST',
 				body: JSON.stringify({
@@ -529,20 +613,14 @@ async function ensureEditorRole() {
 					validation: {}
 				})
 			});
+			console.log(`  + Recht ${collection}: ${action}`);
 		}
 	}
-	for (const action of ['create', 'read', 'update', 'delete']) {
-		await api('/permissions', {
-			method: 'POST',
-			body: JSON.stringify({
-				policy: policy.id,
-				collection: 'directus_files',
-				action,
-				fields: ['*'],
-				permissions: {},
-				validation: {}
-			})
-		});
+
+	const roles = await api('/roles?limit=-1');
+	if (roles.some((r) => r.name === 'Redaktion')) {
+		console.log('  = Rolle "Redaktion" existiert bereits');
+		return;
 	}
 
 	const role = await api('/roles', {
@@ -550,7 +628,7 @@ async function ensureEditorRole() {
 		body: JSON.stringify({
 			name: 'Redaktion',
 			icon: 'edit_note',
-			description: 'Pflegt Termine, Drinks, Bars, Pakete und Fotos.',
+			description: 'Pflegt Termine, Drinks, Bars, Pakete, Bereichstexte und Fotos.',
 			policies: [{ policy: policy.id }]
 		})
 	});
@@ -560,17 +638,30 @@ async function ensureEditorRole() {
 	console.log('    Sprache auf Deutsch stellen.');
 }
 
-const login = await fetch(`${URL_BASE}/auth/login`, {
-	method: 'POST',
-	headers: { 'Content-Type': 'application/json' },
-	body: JSON.stringify({ email: EMAIL, password: PASSWORD })
-}).then((r) => r.json());
+async function authenticate() {
+	if (STATIC_TOKEN) return STATIC_TOKEN;
 
-token = login.data?.access_token;
-if (!token) {
-	console.error('Login fehlgeschlagen:', login.errors?.[0]?.message ?? login);
-	process.exit(1);
+	const login = await fetch(`${URL_BASE}/auth/login`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ email: EMAIL, password: PASSWORD })
+	}).then((r) => r.json());
+
+	const accessToken = login.data?.access_token;
+	if (!accessToken) {
+		console.error('Login fehlgeschlagen:', login.errors?.[0]?.message ?? login);
+		process.exit(1);
+	}
+	return accessToken;
 }
+
+token = await authenticate();
+const me = await api('/users/me?fields=email,role.name').catch((error) => {
+	console.error('Anmeldung bei Directus fehlgeschlagen:', error.message);
+	process.exit(1);
+});
+console.log(`Angemeldet als ${me.email ?? 'Token-Benutzer'} (${me.role?.name ?? 'ohne Rolle'})
+`);
 
 console.log('Collections:');
 await ensureCollections();

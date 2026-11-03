@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { EventMonth } from '#lib/data/types.ts';
+	import type { EventMonth, SectionText } from '#lib/data/types.ts';
 	import { formatEventDate } from '#lib/data/events.ts';
 	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
 
-	let { months }: { months: EventMonth[] } = $props();
+	let { months, text }: { months: EventMonth[]; text: SectionText } = $props();
 
 	let showPast = $state(false);
 
@@ -25,13 +25,7 @@
 	class="scroll-mt-(--header-h) bg-cream px-5 py-[clamp(64px,8vw,110px)] text-second"
 >
 	<div class="mx-auto max-w-[1240px]">
-		<SectionIntro
-			eyebrow="AKTUELLES — SAISON 2026"
-			lead="Wir sind auch 2026 wieder einsatzbereit. Die Liste wird durchgängig aktualisiert — vielleicht sind wir bald in eurer Nähe. Freie Wochenenden vergeben wir nach Eingang."
-			class="mb-[clamp(30px,4vw,46px)] max-w-[680px]"
-		>
-			Hier findet ihr uns.
-		</SectionIntro>
+		<SectionIntro {...text} class="mb-[clamp(30px,4vw,46px)] max-w-[680px]" />
 
 		{#if pastCount > 0}
 			<button

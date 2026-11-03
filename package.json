@@ -15,7 +15,9 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"cms:setup": "infisical run --env=dev -- node scripts/setup-directus-schema.mjs",
+		"cms:seed": "infisical run --env=dev -- node --experimental-strip-types scripts/seed-directus.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^6.0.1",

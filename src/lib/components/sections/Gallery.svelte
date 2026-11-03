@@ -2,9 +2,9 @@
 	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
 	import ImageSlot from '#lib/components/ui/ImageSlot.svelte';
 	import GlowBackdrop from '#lib/components/ui/GlowBackdrop.svelte';
-	import type { GalleryShot } from '#lib/data/types.ts';
+	import type { GalleryShot, SectionText } from '#lib/data/types.ts';
 
-	let { shots }: { shots: GalleryShot[] } = $props();
+	let { shots, text }: { shots: GalleryShot[]; text: SectionText } = $props();
 </script>
 
 <section
@@ -19,14 +19,11 @@
 	/>
 	<div class="relative mx-auto max-w-[1240px]">
 		<SectionIntro
-			eyebrow="GALERIE"
+			{...text}
 			eyebrowTone="lime"
 			tone="light"
-			lead="Von der Kerwe bis zur Messe Frankfurt — ein paar Eindrücke aus den letzten Saisons."
 			class="mb-[clamp(28px,4vw,44px)] max-w-[640px]"
-		>
-			Bei uns ist immer was los.
-		</SectionIntro>
+		/>
 
 		<div
 			class="grid auto-rows-[170px] grid-cols-2 gap-3.5 min-[620px]:grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))]"

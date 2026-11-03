@@ -1,7 +1,7 @@
 <script lang="ts">
 	import barWall from '#lib/assets/images/bar-hintergrund.jpg';
 	import { CUSTOM_PACKAGE, OPEN_BAR } from '#lib/data/content.ts';
-	import type { Bar, BookingPackage } from '#lib/data/types.ts';
+	import type { Bar, BookingPackage, SectionText } from '#lib/data/types.ts';
 	import { booking } from '#lib/state/booking.svelte.ts';
 	import Eyebrow from '#lib/components/ui/Eyebrow.svelte';
 	import SectionIntro from '#lib/components/ui/SectionIntro.svelte';
@@ -9,7 +9,8 @@
 	import GlowBackdrop from '#lib/components/ui/GlowBackdrop.svelte';
 	import BookingForm from './BookingForm.svelte';
 
-	let { packages, bars }: { packages: BookingPackage[]; bars: Bar[] } = $props();
+	let { packages, bars, text }: { packages: BookingPackage[]; bars: Bar[]; text: SectionText } =
+		$props();
 
 	const activePackage = $derived(packages.find((p) => p.key === booking.pkg) ?? CUSTOM_PACKAGE);
 	const activeBar = $derived(bars.find((b) => b.key === booking.bar) ?? OPEN_BAR);
@@ -25,14 +26,11 @@
 	/>
 	<div class="relative mx-auto max-w-[1240px]">
 		<SectionIntro
-			eyebrow="DIE BIGLEMON KOMMT ZU EUCH"
+			{...text}
 			eyebrowTone="prime"
 			tone="light"
-			lead="Jedes Paket lässt sich nach euren Wünschen ergänzen. Passt nichts genau? Dann schickt uns die Eckdaten — wir kalkulieren ein Angebot, das auf eure Veranstaltung zugeschnitten ist."
 			class="mb-[clamp(28px,4vw,44px)] max-w-[700px]"
-		>
-			Vier Pakete — oder ein Angebot ganz nach euren Vorstellungen.
-		</SectionIntro>
+		/>
 
 		<div class="mb-[26px] flex flex-col gap-4">
 			<div>

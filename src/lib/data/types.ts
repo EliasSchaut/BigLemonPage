@@ -62,3 +62,14 @@ export interface GalleryShot {
 	tall?: boolean;
 	image?: Image;
 }
+
+export type SectionKey =
+	'hero' | 'warum' | 'drinks' | 'termine' | 'galerie' | 'bars' | 'buchen' | 'kontakt';
+
+export interface SectionText {
+	eyebrow: string;
+	title: string;
+	lead: string;
+}
+
+export type SectionTexts = Record<SectionKey, SectionText>;

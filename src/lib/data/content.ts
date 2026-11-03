@@ -1,4 +1,12 @@
-import type { Bar, BarSpec, BookingPackage, Drink, EventItem, GalleryShot } from './types';
+import type {
+	Bar,
+	BarSpec,
+	BookingPackage,
+	Drink,
+	EventItem,
+	GalleryShot,
+	SectionTexts
+} from './types';
 
 export type {
 	Bar,
@@ -8,7 +16,10 @@ export type {
 	EventItem,
 	EventMonth,
 	GalleryShot,
-	Image
+	Image,
+	SectionKey,
+	SectionText,
+	SectionTexts
 } from './types';
 
 export const CONTACT = {
@@ -265,7 +276,45 @@ export const GALLERY_SHOTS: GalleryShot[] = [
 	{ placeholder: 'Foto: Frisch gepresst' }
 ];
 
-export const HERO_STATS = [
-	{ value: '50+', label: 'verschiedene Cocktails' },
-	{ value: '0', label: 'Künstliche Aromen' }
-];
+export const SECTIONS: SectionTexts = {
+	hero: {
+		eyebrow: 'TERMINE 2026 — JETZT SICHERN',
+		title: 'Die Zitrone,\ndie euer Fest\n*unvergesslich* macht.',
+		lead: 'Eine 3 Meter große, fahrbare Riesenzitrone voller frisch gepresster Cocktails. Wir rollen an, bauen auf, mixen — und ihr habt den Hingucker, über den am Montag noch alle reden.'
+	},
+	warum: {
+		eyebrow: 'WARUM DIE BIGLEMON',
+		title: 'Kein Bier. Kein Wein. Eine Attraktion, die nebenbei Drinks macht.',
+		lead: 'Durch ihre auffallende Form und das extravagante Design ist die BigLemon der Hingucker auf jedem Event — von der privaten Feier bis zur Großveranstaltung. Jeder kennt sie, jeder liebt sie.'
+	},
+	drinks: {
+		eyebrow: 'DIE DRINKLISTE',
+		title: 'Erlaubt ist,\nwas schmeckt.',
+		lead: 'Bei uns lässt sich alles mit allem mischen — mit Schuss oder ohne. Eine Auswahl aus dem, was am häufigsten über die Theke geht.'
+	},
+	termine: {
+		eyebrow: 'AKTUELLES — SAISON 2026',
+		title: 'Hier findet ihr uns.',
+		lead: 'Wir sind auch 2026 wieder einsatzbereit. Die Liste wird durchgängig aktualisiert — vielleicht sind wir bald in eurer Nähe. Freie Wochenenden vergeben wir nach Eingang.'
+	},
+	galerie: {
+		eyebrow: 'GALERIE',
+		title: 'Bei uns ist immer was los.',
+		lead: 'Von der Kerwe bis zur Messe Frankfurt — ein paar Eindrücke aus den letzten Saisons.'
+	},
+	bars: {
+		eyebrow: 'DREI BARS, EIN TEAM',
+		title: 'Wählt die Bar, die zu eurem Fest passt.',
+		lead: 'Alle drei rollen mit derselben Crew und derselben Handpresse an — sie unterscheiden sich in Größe, Auftritt und Tempo. Bei der Paketauswahl könnt ihr die Bar direkt mit angeben.'
+	},
+	buchen: {
+		eyebrow: 'DIE BIGLEMON KOMMT ZU EUCH',
+		title: 'Vier Pakete — oder ein Angebot ganz nach euren Vorstellungen.',
+		lead: 'Jedes Paket lässt sich nach euren Wünschen ergänzen. Passt nichts genau? Dann schickt uns die Eckdaten — wir kalkulieren ein Angebot, das auf eure Veranstaltung zugeschnitten ist.'
+	},
+	kontakt: {
+		eyebrow: 'KONTAKT',
+		title: 'Lieber direkt reden?',
+		lead: 'Ruft an oder schreibt uns. Wir sagen ehrlich, ob euer Termin noch frei ist — und was realistisch machbar ist.'
+	}
+};

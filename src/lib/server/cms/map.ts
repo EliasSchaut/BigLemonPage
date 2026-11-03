@@ -4,9 +4,10 @@ import type {
 	BookingPackage,
 	Drink,
 	EventItem,
-	GalleryShot
+	GalleryShot,
+	SectionTexts
 } from '#lib/data/types.ts';
-import type { BarRow, DrinkRow, EventRow, GalleryRow, PackageRow } from './schema';
+import type { BarRow, DrinkRow, EventRow, GalleryRow, PackageRow, SectionRow } from './schema';
 import { SLOTS, toImage } from './assets';
 
 const ACCENTS = {
@@ -91,4 +92,19 @@ export function mapGallery(rows: GalleryRow[]): GalleryShot[] {
 			image: toImage(row.image, slot, caption)
 		};
 	});
+}
+
+export function mapSections(rows: SectionRow[], defaults: SectionTexts): SectionTexts {
+	const texts = { ...defaults };
+	for (const row of rows) {
+		const key = row.key?.trim() as keyof SectionTexts;
+		const fallback = defaults[key];
+		if (!fallback) continue;
+		texts[key] = {
+			eyebrow: row.eyebrow?.trim() ?? '',
+			title: row.title?.trim() || fallback.title,
+			lead: row.lead?.trim() ?? ''
+		};
+	}
+	return texts;
 }
