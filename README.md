@@ -25,13 +25,13 @@ pnpm dev                      # http://localhost:5173
 
 Der Stack ist auf mehrere Compose-Dateien verteilt, und keine davon lädt Docker von sich aus mit:
 
-| Datei                   | Inhalt                                                                                                                               |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `compose.yaml`          | Directus und Website — genau das, was im Deployment läuft                                                                            |
-| `compose.db.yaml`       | Gebündelte Postgres für Directus. Lokal nötig; im Deployment zeigt `DIRECTUS_DB_URL` auf eine bestehende Datenbank                   |
-| `compose.dev.yaml`      | MailDev als Mailfänger, kurze Cache-Zeiten für den `web`-Container                                                                   |
-| `compose.prod.yaml`     | Prod-Override: hängt Directus ins externe Netz `pgnet` der Host-Postgres, entfernt `build` bei `web` und setzt `pull_policy: always` |
-| `compose.dockhand.yaml` | `include` von `compose.yaml` und `compose.prod.yaml` — der eine Pfad, den Dockhand bekommt (siehe Deployment)                        |
+| Datei                   | Inhalt                                                                                                                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `compose.yaml`          | Directus und Website — genau das, was im Deployment läuft                                                                                                                 |
+| `compose.db.yaml`       | Gebündelte Postgres für Directus. Lokal nötig; im Deployment zeigt `DIRECTUS_DB_URL` auf eine bestehende Datenbank                                                        |
+| `compose.dev.yaml`      | MailDev als Mailfänger, kurze Cache-Zeiten für den `web`-Container                                                                                                        |
+| `compose.prod.yaml`     | Prod-Override: hängt Directus ins externe Netz `pgnet` der Host-Postgres, schaltet die Keycloak-Anmeldung ein, entfernt `build` bei `web` und setzt `pull_policy: always` |
+| `compose.dockhand.yaml` | `include` von `compose.yaml` und `compose.prod.yaml` — der eine Pfad, den Dockhand bekommt (siehe Deployment)                                                             |
 
 Damit `docker compose up` lokal trotzdem ohne drei `-f` auskommt, stehen in der `.env.example` zwei Zeilen, die alle drei Dateien laden: `COMPOSE_FILE` und `COMPOSE_PATH_SEPARATOR=:`, Letzteres, damit der Trenner auch unter Windows gilt. Wer die Website über `pnpm dev` entwickelt, braucht den `web`-Container nicht:
 
@@ -39,12 +39,12 @@ Damit `docker compose up` lokal trotzdem ohne drei `-f` auskommt, stehen in der 
 docker compose up -d postgres directus maildev
 ```
 
-| Dienst               | URL                                         |
-| -------------------- | ------------------------------------------- |
-| Website (`pnpm dev`) | http://localhost:5173                       |
-| Website (Container)  | http://localhost:3000, Port über `WEB_PORT` |
-| Directus             | http://localhost:8055                       |
-| MailDev-Postfach     | http://localhost:1080                       |
+| Dienst               | URL                                              |
+| -------------------- | ------------------------------------------------ |
+| Website (`pnpm dev`) | http://localhost:5173                            |
+| Website (Container)  | http://localhost:3000, Port über `WEB_PORT`      |
+| Directus             | http://localhost:8055, Port über `DIRECTUS_PORT` |
+| MailDev-Postfach     | http://localhost:1080                            |
 
 ### Mail beim Entwickeln
 
@@ -92,6 +92,7 @@ Alle Variablen sind in `.env.example` dokumentiert. Kurzübersicht, was wofür g
 | `ORIGIN`                                           | **ja, in Produktion** | Öffentliche URL, z. B. `https://biglemon.de`. Fehlt sie, lehnt der CSRF-Schutz die Formular-POSTs mit **403** ab.                                                                                        |
 | `PORT`                                             | nein                  | Standard `3000`.                                                                                                                                                                                         |
 | `WEB_PORT`                                         | nein                  | Nur Compose: Host-Port, auf den der `web`-Container gemappt wird, Standard `3000`. In Produktion `8286`. Der Node-Prozess im Container lauscht davon unabhängig auf 3000; `ORIGIN` folgt lokal dem Port. |
+| `DIRECTUS_PORT`                                    | nein                  | Nur Compose: Host-Port des Directus-Containers, Standard `8055`. Die lokalen Defaults von `DIRECTUS_PUBLIC_URL` und `DIRECTUS_ASSET_URL` folgen ihm.                                                     |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | für Mailversand       | Zugangsdaten des Postfachs.                                                                                                                                                                              |
 | `SMTP_FROM`                                        | für Mailversand       | Absender. Muss zum SMTP-Postfach passen, sonst greifen SPF/DMARC.                                                                                                                                        |
 | `CONTACT_EMAIL`                                    | nein                  | Empfänger der Anfragen. Ohne Angabe: die Adresse aus `src/lib/data/content.ts`.                                                                                                                          |
@@ -129,10 +130,10 @@ Der Server baut nichts selbst. Bei jedem Push auf `main` baut die CI (`.github/w
 
 Der Git-Stack in Dockhand zeigt auf **`compose.dockhand.yaml`**. Dockhand nimmt nur einen Compose-Pfad entgegen, deshalb ist die Datei ein reiner Wrapper, der per `include` die Basis mit dem Prod-Override zusammenführt:
 
-| Datei                   | Inhalt                                                                                                                                                                                      |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `compose.prod.yaml`     | Hängt Directus zusätzlich ins externe Docker-Netz `pgnet`, in dem die Postgres des Hosts läuft. Entfernt `build` bei `web` und setzt `pull_policy: always`, damit immer das CI-Image läuft. |
-| `compose.dockhand.yaml` | `include` mit der Pfadliste `compose.yaml`, `compose.prod.yaml`                                                                                                                             |
+| Datei                   | Inhalt                                                                                                                                                                                                                                   |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `compose.prod.yaml`     | Hängt Directus zusätzlich ins externe Docker-Netz `pgnet`, in dem die Postgres des Hosts läuft, und schaltet die Anmeldung per Keycloak ein. Entfernt `build` bei `web` und setzt `pull_policy: always`, damit immer das CI-Image läuft. |
+| `compose.dockhand.yaml` | `include` mit der Pfadliste `compose.yaml`, `compose.prod.yaml`                                                                                                                                                                          |
 
 Das Override steht in der `path`-Liste und nicht im Wrapper selbst, weil `include` Überschneidungen mit eingebundenen Ressourcen als Fehler meldet. Braucht Compose ab 2.24 (`include` mit Pfadliste, `!reset`). Das Ergebnis lässt sich lokal prüfen:
 
@@ -140,7 +141,9 @@ Das Override steht in der `path`-Liste und nicht im Wrapper selbst, weil `includ
 docker compose -f compose.dockhand.yaml config
 ```
 
-**Stack-Variablen in Dockhand:** `DIRECTUS_DB_URL` (Host ist der Containername der Postgres in `pgnet`), `DIRECTUS_SECRET`, `DIRECTUS_ADMIN_EMAIL`, `DIRECTUS_ADMIN_PASSWORD`, `DIRECTUS_LICENSE_KEY`, `DIRECTUS_PUBLIC_URL`, `DIRECTUS_ASSET_URL`, `DIRECTUS_TRUST_PROXY=true`, `ORIGIN`, `WEB_PORT=8286` und die `SMTP_*`-Werte. `COMPOSE_FILE` dort nicht setzen.
+**Stack-Variablen in Dockhand:** `POSTGRES_USER` und `POSTGRES_PASSWORD` der Host-Postgres (erreichbar in `pgnet` unter `POSTGRES_HOST`, Standard `postgres`, Port `POSTGRES_PORT`, Standard `5432`, Datenbank `POSTGRES_DB`, Standard `biglemon`; alternativ ein kompletter `DIRECTUS_DB_URL`), `DIRECTUS_SECRET`, `DIRECTUS_ADMIN_EMAIL`, `DIRECTUS_ADMIN_PASSWORD`, `DIRECTUS_LICENSE_KEY`, `DIRECTUS_PUBLIC_URL`, `DIRECTUS_ASSET_URL`, `ORIGIN`, `WEB_PORT=8286`, die `SMTP_*`-Werte und die Keycloak-Werte aus dem nächsten Absatz. `DIRECTUS_TRUST_PROXY` steht im Prod-Override bereits auf `true`. `COMPOSE_FILE` dort nicht setzen.
+
+**Anmeldung per Keycloak:** `compose.prod.yaml` registriert den OpenID-Provider `keycloak`. In Dockhand gehören dazu `AUTH_KEYCLOAK_CLIENT_ID`, `AUTH_KEYCLOAK_CLIENT_SECRET`, `AUTH_KEYCLOAK_ISSUER_URL` und `AUTH_KEYCLOAK_ROLE_MAPPING`. Das Mapping ordnet Keycloak-Gruppen Directus-Rollen zu, Format `json:{"biglemon-admin":"<Rollen-ID>","biglemon-redaktion":"<Rollen-ID>"}`. Die Rollen-IDs sind pro Instanz zufällig (Admin-Rolle beim Bootstrap, „Redaktion" durch `scripts/setup-directus-schema.mjs`) und stehen in Directus unter Einstellungen → Rollen; nach einem Neuaufsetzen der Datenbank muss das Mapping neu gesetzt werden. Im Keycloak-Client muss `<DIRECTUS_PUBLIC_URL>/auth/login/keycloak/callback` als Redirect-URI erlaubt sein. Optional dazu `AUTH_KEYCLOAK_ALLOW_PUBLIC_REGISTRATION` (Standard `true`), `AUTH_KEYCLOAK_DEFAULT_ROLE_ID` (Standard leer) und `AUTH_DISABLE_DEFAULT` (Standard `false`). Der lokale Login mit E-Mail und Passwort bleibt also aktiv, damit Admin-Konto und Setup-Skripte weiter funktionieren.
 
 **In GitHub:** Variablen `DOCKERHUB_USERNAME` und `DEPLOY_WEBHOOK_URL`, Secrets `DOCKERHUB_TOKEN` und `DEPLOY_WEBHOOK_SECRET`. Ohne `DEPLOY_WEBHOOK_URL` pusht die CI nur das Image. Der Webhook-Aufruf schickt das Secret dreifach: als HMAC-SHA256-Signatur des Bodys (`X-Hub-Signature-256`, das prüft Dockhand), als `X-Gitlab-Token` und als Bearer-Token, damit auch andere Empfänger damit zurechtkommen.
 

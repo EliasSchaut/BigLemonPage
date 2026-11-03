@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     ports:
       # Von aussen kommt Directus nur ueber den Reverse Proxy (/cms).
-      - 127.0.0.1:8055:8055
+      - 127.0.0.1:${DIRECTUS_PORT:-8055}:8055
     volumes:
       - directus_uploads:/directus/uploads
       - directus_extensions:/directus/extensions
@@ -20,7 +20,7 @@ services:
       DB_CONNECTION_STRING: ${DIRECTUS_DB_URL:-}
       ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
       ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
-      PUBLIC_URL: ${DIRECTUS_PUBLIC_URL:-http://localhost:8055}
+      PUBLIC_URL: ${DIRECTUS_PUBLIC_URL:-http://localhost:${DIRECTUS_PORT:-8055}}
       ASSETS_CACHE_TTL: 30d
       ASSETS_TRANSFORM_IMAGE_MAX_OUTPUT_DIMENSION: 6000
       WEBSOCKETS_ENABLED: 'false'
@@ -41,7 +41,7 @@ services:
     environment:
       ORIGIN: ${ORIGIN:-http://localhost:${WEB_PORT:-3000}}
       DIRECTUS_URL: http://directus:8055
-      DIRECTUS_ASSET_URL: ${DIRECTUS_ASSET_URL:-http://localhost:8055}
+      DIRECTUS_ASSET_URL: ${DIRECTUS_ASSET_URL:-http://localhost:${DIRECTUS_PORT:-8055}}
       DIRECTUS_TOKEN: ${DIRECTUS_TOKEN:-}
       CMS_CACHE_TTL: ${CMS_CACHE_TTL:-60}
       SMTP_HOST: ${SMTP_HOST:-}

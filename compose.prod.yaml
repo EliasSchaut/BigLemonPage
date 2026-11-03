@@ -1,10 +1,25 @@
 # Prod-Override für den Dockhand-Stack: Directus hängt zusätzlich im externen Netz
-# pgnet der Host-Postgres, und web läuft nur aus dem CI-Image (kein Build auf dem
-# Server). Eingebunden über compose.dockhand.yaml.
+# pgnet der Host-Postgres und meldet Redaktion und Admins per Keycloak an; web läuft
+# nur aus dem CI-Image (kein Build auf dem Server). Eingebunden über compose.dockhand.yaml.
 
 services:
   directus:
     networks: [intern, pgnet]
+    environment:
+      DB_CONNECTION_STRING: ${DIRECTUS_DB_URL:-postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST:-postgres}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-biglemon}}
+      IP_TRUST_PROXY: ${DIRECTUS_TRUST_PROXY:-true}
+      AUTH_PROVIDERS: 'keycloak'
+      AUTH_KEYCLOAK_DRIVER: 'openid'
+      AUTH_KEYCLOAK_CLIENT_ID: ${AUTH_KEYCLOAK_CLIENT_ID}
+      AUTH_KEYCLOAK_CLIENT_SECRET: ${AUTH_KEYCLOAK_CLIENT_SECRET}
+      AUTH_KEYCLOAK_ISSUER_URL: ${AUTH_KEYCLOAK_ISSUER_URL}
+      AUTH_KEYCLOAK_SCOPE: 'openid email profile groups'
+      AUTH_KEYCLOAK_IDENTIFIER_KEY: 'email'
+      AUTH_KEYCLOAK_GROUP_CLAIM_NAME: 'groups'
+      AUTH_KEYCLOAK_ROLE_MAPPING: ${AUTH_KEYCLOAK_ROLE_MAPPING}
+      AUTH_KEYCLOAK_ALLOW_PUBLIC_REGISTRATION: ${AUTH_KEYCLOAK_ALLOW_PUBLIC_REGISTRATION:-true}
+      AUTH_KEYCLOAK_DEFAULT_ROLE_ID: ${AUTH_KEYCLOAK_DEFAULT_ROLE_ID:-}
+      AUTH_DISABLE_DEFAULT: ${AUTH_DISABLE_DEFAULT:-false}
   web:
     build: !reset null
     pull_policy: always
